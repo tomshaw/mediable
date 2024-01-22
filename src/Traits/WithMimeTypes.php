@@ -8,7 +8,6 @@ trait WithMimeTypes
      * Determine if the given mime type is an image.
      *
      * @param  string  $mimeType
-     * @return bool
      */
     public function mimeTypeImage($mimeType): bool
     {
@@ -19,7 +18,6 @@ trait WithMimeTypes
      * Determine if the given mime type is a video.
      *
      * @param  string  $mimeType
-     * @return bool
      */
     public function mimeTypeAudio($mimeType): bool
     {
@@ -30,7 +28,6 @@ trait WithMimeTypes
      * Determine if the given mime type is a video.
      *
      * @param  string  $mimeType
-     * @return bool
      */
     public function mimeTypeVideo($mimeType): bool
     {
@@ -41,7 +38,6 @@ trait WithMimeTypes
      * Determine if the given mime type is a document.
      *
      * @param  string  $mimeType
-     * @return bool
      */
     public function mimeTypeDocument($mimeType): bool
     {
@@ -52,7 +48,6 @@ trait WithMimeTypes
      * Determine if the given mime type is a archive.
      *
      * @param  string  $mimeType
-     * @return bool
      */
     public function mimeTypeArchive($mimeType): bool
     {

@@ -7,9 +7,9 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Enums\ModalTypes;
-use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
 use TomShaw\Mediable\Traits\WithEvents;
@@ -151,7 +151,7 @@ class MediaBrowser extends Component
 
     public function toggleSidebar(): self
     {
-        $this->showSidebar = !$this->showSidebar;
+        $this->showSidebar = ! $this->showSidebar;
 
         return $this;
     }
@@ -189,7 +189,7 @@ class MediaBrowser extends Component
             'modelId' => null,
             'title' => '',
             'caption' => '',
-            'description' => ''
+            'description' => '',
         ]);
 
         $this->dispatchAlert('success', 'Item successfully deleted!');
@@ -215,7 +215,7 @@ class MediaBrowser extends Component
         $this->caption = $item['caption'];
         $this->description = $item['description'];
 
-        if (!$this->showSidebar) {
+        if (! $this->showSidebar) {
             $this->toggleSidebar();
         }
     }
@@ -236,7 +236,7 @@ class MediaBrowser extends Component
             'modelId' => null,
             'title' => '',
             'caption' => '',
-            'description' => ''
+            'description' => '',
         ]);
     }
 
@@ -268,7 +268,7 @@ class MediaBrowser extends Component
 
     public function expandModal(): void
     {
-        $this->fullScreen = !$this->fullScreen;
+        $this->fullScreen = ! $this->fullScreen;
     }
 
     public function updatedFiles(): void
@@ -297,7 +297,7 @@ class MediaBrowser extends Component
 
     private function renderView(LengthAwarePaginator $paginator)
     {
-        return view('mediable::' . $this->theme . '.modal', [
+        return view('mediable::'.$this->theme.'.modal', [
             'data' => $paginator,
         ]);
     }

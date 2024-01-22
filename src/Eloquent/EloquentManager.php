@@ -14,7 +14,7 @@ class EloquentManager
     ) {
     }
 
-    public function query(string $orderBy, string $orderDir, string $mimeType = null): void
+    public function query(string $orderBy, string $orderDir, ?string $mimeType = null): void
     {
         if ($mimeType) {
             $this->query = Attachment::where('file_type', '=', $mimeType)->orderBy($orderBy, $orderDir);

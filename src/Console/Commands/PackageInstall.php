@@ -27,19 +27,19 @@ class PackageInstall extends Command
     {
         $this->call('vendor:publish', [
             '--provider' => 'TomShaw\Mediable\Providers\MediableServiceProvider',
-            '--tag' => 'config'
+            '--tag' => 'config',
         ]);
-    
+
         $this->call('vendor:publish', [
             '--provider' => 'TomShaw\Mediable\Providers\MediableServiceProvider',
-            '--tag' => 'views'
+            '--tag' => 'views',
         ]);
-    
+
         $this->call('vendor:publish', [
             '--provider' => 'TomShaw\Mediable\Providers\MediableServiceProvider',
-            '--tag' => 'images'
+            '--tag' => 'images',
         ]);
-    
+
         $this->info('Mediable assets successfully installed!');
     }
 }
