@@ -51,14 +51,14 @@
   @else
 
   <form>
-    <div class="h-auto py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-2 border-red-500': enter }" x-on:click.prevent="handleFileClick($event)">
+    <div class="h-auto py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-2 border-red-500': enter }" x-on:click.prevent="fileClick($event)">
       <div class="m-0 flex items-center text-left">
         <span class="text-blue-500 leading-none" wire:loading.hidden wire.target="files">
           <img src="{{ asset("vendor/mediable/images/upload.png") }}" class="w-full h-full object-cover" alt="Upload files" />
         </span>
         <div class="ml-4">
           <h3 class="text-gray-900 font-bold text-lg mb-1">Drop files here or click to upload.</h3>
-          <span class="text-gray-400 font-semibold text-sm">Upload up to 10 files</span>
+          <span class="text-gray-400 font-semibold text-sm">Upload up to {{ $this->getMaxFileUploads() }} files maximum {{ $this->getMaxUploadSize() }} MB.</span>
         </div>
       </div>
     </div>
@@ -86,19 +86,14 @@
           e.preventDefault();
           let files = e.dataTransfer.files;
           if (files.length > 0) {
-            this.handleTransferFiles(files)
+            this.transferFiles(files)
           }
           this.dropingFile = false;
         },
-        handleFileClick(event) {
+        fileClick(event) {
           document.getElementById('fileInput').click();
         },
-        handleFileDrop(event) {
-          if (event.dataTransfer.files.length > 0) {
-            this.handleTransferFiles(event.dataTransfer.files)
-          }
-        },
-        handleTransferFiles(files) {
+        transferFiles(files) {
           this.$wire.uploadMultiple('files', files,
             (uploadedFilename) => {
               this.isUploading = false;
