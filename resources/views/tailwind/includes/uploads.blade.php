@@ -58,7 +58,7 @@
         </span>
         <div class="ml-4">
           <h3 class="text-gray-900 font-bold text-lg mb-1">Drop files here or click to upload.</h3>
-          <span class="text-gray-400 font-semibold text-sm">Upload up to {{ $this->getMaxFileUploads() }} files maximum {{ $this->getMaxUploadSize() }} MB.</span>
+          <span class="text-gray-400 font-semibold text-sm">Upload up to {{ $this->getMaxFileUploads() }} files using a maximum of {{ $this->getMaxUploadSize() }} MB.</span>
         </div>
       </div>
     </div>
