@@ -28,13 +28,10 @@ Run the database migration
 php artisan migrate.
 ```
 
-Make sure to add the styles and scripts components or directives to your layout.
+Make sure to add the styles and scripts directives to your layout.
 
 ```html
 @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-<x-mediable::scripts />
-<x-mediable::styles />
 
 @mediableStyles
 @mediableScripts
