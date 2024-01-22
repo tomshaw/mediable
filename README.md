@@ -61,19 +61,6 @@ Step one is to add Mediable somewhere in your blade template.
 <livewire:mediable theme="tailwind" fullScreen />
 ```
 
-## Props
-
-The Mediable component accepts the following additional properties:
-
-- `showPagination`: Controls the visibility of the pagination. Accepts a boolean value. Example usage: `:showPagination="false"`
-- `showPerPage`: Controls the visibility of the per page option. Accepts a boolean value. Example usage: `:showPerPage="false"`
-- `showOrderBy`: Controls the visibility of the order by option. Accepts a boolean value. Example usage: `:showOrderBy="false"`
-- `showOrderDir`: Controls the visibility of the order direction option. Accepts a boolean value. Example usage: `:showOrderDir="false"`
-- `showColumnWidth`: Controls the visibility of the column width option. Accepts a boolean value. Example usage: `:showColumnWidth="false"`
-- `showSidebar`: Controls the visibility of the sidebar. Accepts a boolean value. Example usage: `:showSidebar="true"`
-
-You can customize the component by setting these properties to `true` or `false` as needed.
-
 Launching Mediable is done by dispatching the `mediable:open` event.
 
 > Note: This is typically executed with a button click in your application.
@@ -141,6 +128,19 @@ You can change the `disk` option to use a different disk for file uploads. For e
 ```
 
 Remember to configure the chosen disk correctly in your `config/filesystems.php` file and to clear your config cache after making changes by running `php artisan config:clear` in your terminal.
+
+## Component Props
+
+The Mediable component accepts the following additional properties:
+
+- `showPagination`: Controls the visibility of the pagination. Accepts a boolean value. Example usage: `:showPagination="false"`
+- `showPerPage`: Controls the visibility of the per page option. Accepts a boolean value. Example usage: `:showPerPage="false"`
+- `showOrderBy`: Controls the visibility of the order by option. Accepts a boolean value. Example usage: `:showOrderBy="false"`
+- `showOrderDir`: Controls the visibility of the order direction option. Accepts a boolean value. Example usage: `:showOrderDir="false"`
+- `showColumnWidth`: Controls the visibility of the column width option. Accepts a boolean value. Example usage: `:showColumnWidth="false"`
+- `showSidebar`: Controls the visibility of the sidebar. Accepts a boolean value. Example usage: `:showSidebar="true"`
+
+You can customize the component by setting these properties to `true` or `false` as needed.
 
 
 ## Requirements
