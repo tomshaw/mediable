@@ -1,4 +1,4 @@
-<div @class(['flex items-center justify-center p-0 m-0 w-full', sizeof($files) ? 'h-auto' : 'h-full' ]) x-data="mediaUploadHandler()">
+<div @class(['flex items-center justify-center p-0 m-0 w-full', sizeof($files) ? 'h-auto' : 'h-full' ]) x-data="handleUploads()">
 
   @if (sizeof($files))
 
@@ -51,7 +51,7 @@
   @else
 
   <form>
-    <div class="h-auto py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" x-on:drop="dropingFile = false" x-on:drop.prevent="handleFileDrop($event)" x-on:dragover.prevent="dropingFile = true" x-on:dragleave.prevent="dropingFile = false" x-on:click.prevent="handleFileClick($event)">
+    <div class="h-auto py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-2 border-red-500': enter }" x-on:click.prevent="handleFileClick($event)">
       <div class="m-0 flex items-center text-left">
         <span class="text-blue-500 leading-none" wire:loading.hidden wire.target="files">
           <img src="{{ asset("vendor/mediable/images/upload.png") }}" class="w-full h-full object-cover" alt="Upload files" />
@@ -68,35 +68,53 @@
   </form>
 
   <script>
-    function mediaUploadHandler() {
+    function handleUploads() {
       return {
+        enter: false,
+        leave: false,
         dropingFile: false,
         isUploading: false,
         progress: 0,
         error: null,
+        dragEnter(e) {
+          this.enter = true;
+        },
+        dragLeave(e) {
+          this.leave = false;
+        },
+        drop(e) {
+          e.preventDefault();
+          let files = e.dataTransfer.files;
+          if (files.length > 0) {
+            this.handleTransferFiles(files)
+          }
+          this.dropingFile = false;
+        },
         handleFileClick(event) {
           document.getElementById('fileInput').click();
         },
         handleFileDrop(event) {
           if (event.dataTransfer.files.length > 0) {
-            handleTransferFiles(event.dataTransfer.files)
+            this.handleTransferFiles(event.dataTransfer.files)
           }
         },
         handleTransferFiles(files) {
-          this.uploadMultiple('files', files,
-            function(success) {
-              $this.isUploading = false
-              $this.progress = 0
+          this.$wire.uploadMultiple('files', files,
+            (uploadedFilename) => {
+              this.isUploading = false;
+              this.progress = 0;
             },
-            function(error) {
-              $this.error = error;
-              $this.isUploading = false
-              $this.progress = 0
+            (error) => {
+              this.error = error;
+              this.isUploading = false;
+              this.progress = 0;
             },
-            function(event) {
-              $this.progress = event.detail.progress
+            (event) => {
+              if (event.detail.progress) {
+                this.progress = event.detail.progress;
+              }
             }
-          )
+          );
         }
       };
     }
