@@ -16,11 +16,25 @@ Run the installation command.
 php artisan mediable:install
 ```
 
-Alternatively you can publish selected assets manually.
+When you install the application assets are copied to the following locations:
 
-```
-php artisan vendor:publish --provider="TomShaw\Mediable\Providers\MediableServiceProvider" --tag=images
-```
+1. The config file is published to your project's config directory as `mediable.php`. 
+
+    ```bash
+    config/mediable.php
+    ```
+
+2. Views are published to the `views/vendor/mediable` directory in your project's `resources` directory.
+
+    ```bash
+    resources/views/vendor/mediable
+    ```
+
+3. Images are published to the `vendor/mediable/images` directory in your project's `public` directory.
+
+    ```bash
+    public/vendor/mediable/images
+    ```
 
 Run the database migration
 
@@ -80,40 +94,6 @@ To handle selected attachments listen for the `mediable:on` event.
 on(['mediable:on' => function ($files) {
   // Handle selected files...
 }]);
-```
-
-## Asset Publishing
-
-When you publish the package's assets, they are copied to specific locations in your Laravel project:
-
-1. **Configuration**: The `config.php` file is published to your project's `config` directory as `mediable.php`. You can modify this file to customize the package's configuration.
-
-    ```bash
-    config/mediable.php
-    ```
-
-2. **Views**: The package's views are published to the `views/vendor/mediable` directory in your project's `resources` directory. You can modify these views to customize the package's appearance.
-
-    ```bash
-    resources/views/vendor/mediable
-    ```
-
-3. **Images**: The package's images are published to the `vendor/mediable/images` directory in your project's `public` directory. You can replace these images with your own if you want to customize the package's visuals.
-
-    ```bash
-    public/vendor/mediable/images
-    ```
-
-To publish these assets, you can use the `vendor:publish` Artisan command:
-
-```bash
-php artisan vendor:publish --provider="Mediable\MediableServiceProvider"
-```
-
-You can also choose to publish only one type of asset by using the `--tag` option with either `config`, `views`, or `images`:
-
-```bash
-php artisan vendor:publish --provider="Mediable\MediableServiceProvider" --tag=config
 ```
 
 ## Validation
