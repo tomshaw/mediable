@@ -1,0 +1,6 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Undefined variable\\: \\$this$#"
+			count: 4
+			path: tests/MediableTest.php
