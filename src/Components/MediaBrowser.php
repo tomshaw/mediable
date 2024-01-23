@@ -100,7 +100,8 @@ class MediaBrowser extends Component
 
     public ?int $memoryLimit = null;
 
-    public function mount(?string $theme = null) {
+    public function mount(?string $theme = null)
+    {
         $this->theme = $theme ?? config('mediable.theme');
 
         $this->maxUploadSize = $this->getMaxUploadSize();
@@ -112,9 +113,9 @@ class MediaBrowser extends Component
         $this->resetModal();
     }
 
-    public function boot() 
+    public function boot()
     {
-        $this->dispatch('app:config', maxUploadSize: $this->maxUploadSize, maxFileUploads: $this->maxFileUploads, maxUploadFileSize: $this->maxUploadFileSize, postMaxSize: $this->postMaxSize, memoryLimit: $this->memoryLimit); 
+        $this->dispatch('app:config', maxUploadSize: $this->maxUploadSize, maxFileUploads: $this->maxFileUploads, maxUploadFileSize: $this->maxUploadFileSize, postMaxSize: $this->postMaxSize, memoryLimit: $this->memoryLimit);
     }
 
     #[On('modal:type')]

@@ -4,8 +4,6 @@ namespace TomShaw\Mediable\Traits;
 
 /**
  * Trait ServerLimits
- *
- * @package TomShaw\Mediable\Traits
  */
 trait ServerLimits
 {
@@ -89,7 +87,7 @@ trait ServerLimits
      * same byte value. If the string does not end with 'K', 'M', or 'G', it is assumed
      * to be a byte value and is simply cast to an integer.
      *
-     * @param string $value The shorthand byte value to convert.
+     * @param  string  $value  The shorthand byte value to convert.
      * @return int The byte value as an integer.
      */
     private function convertToBytes(string $value): int
