@@ -115,11 +115,11 @@ class MediaBrowser extends Component
 
     public function boot()
     {
-        $this->dispatch('server:limits', 
-            maxUploadSize: $this->maxUploadSize, 
-            maxFileUploads: $this->maxFileUploads, 
-            maxUploadFileSize: $this->maxUploadFileSize, 
-            postMaxSize: $this->postMaxSize, 
+        $this->dispatch('server:limits',
+            maxUploadSize: $this->maxUploadSize,
+            maxFileUploads: $this->maxFileUploads,
+            maxUploadFileSize: $this->maxUploadFileSize,
+            postMaxSize: $this->postMaxSize,
             memoryLimit: $this->memoryLimit
         );
     }
