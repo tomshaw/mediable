@@ -2,6 +2,7 @@
 
 namespace TomShaw\Mediable\Tests\Support;
 
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -14,7 +15,7 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        config()->set('app.key', 'base64:'.base64_encode(\Illuminate\Support\Str::random(32)));
+        config()->set('app.key', 'base64:'.base64_encode(Str::random(32)));
 
         $this->registerLivewireComponents();
     }
