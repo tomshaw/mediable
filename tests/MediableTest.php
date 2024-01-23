@@ -1,7 +1,7 @@
 <?php
 
 use Livewire\Livewire;
-use TomShaw\Mediable\MediaBrowser;
+use TomShaw\Mediable\Components\MediaBrowser;
 use TomShaw\Mediable\Models\Attachment;
 
 beforeEach(function () {
