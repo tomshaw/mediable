@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\View;
 use Livewire\Livewire;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use TomShaw\Mediable\MediaBrowser;
+use TomShaw\Mediable\Components\MediaBrowser;
 use TomShaw\Mediable\Providers\MediableServiceProvider;
 
 class TestCase extends Orchestra
@@ -15,9 +15,9 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        config()->set('app.key', '6rE9Nz59bGRbeMATftriyQjrpF7DcOQm');
+        $randomKey = base64_encode(random_bytes(32));
 
-        //View::addNamespace('test', __DIR__ . '/resources/views');
+        config()->set('app.key', $randomKey);
 
         $this->registerLivewireComponents();
     }
