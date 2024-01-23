@@ -112,7 +112,7 @@
 
           if (this.error) {
             console.warn('error', this.error);
-            
+
             this.$wire.dispatch('mediable:alert', {
               type: 'error',
               message: this.error,
@@ -146,7 +146,7 @@
         individualFileSizeCheck(files) {
           for (let i = 0; i < files.length; i++) {
             if (files[i].size > this.maxUploadSize) {
-              this.error = 'The file ' + files[i].name + ' exceeds the maximum upload size of ' + this.maxUploadSize + ' bytes';
+              this.error = 'The file ' + files[i].name + ' exceeds the maximum upload size of ' + this.formatBytes(this.maxUploadSize) + ' bytes';
               return;
             }
           }
@@ -159,9 +159,21 @@
           }
 
           if (totalSize > this.maxUploadSize) {
-            this.error = 'The maximum upload size of ' + this.maxUploadSize + ' bytes has been exceeded.'
+            this.error = 'The maximum upload size of ' + this.formatBytes(this.maxUploadSize) + ' bytes has been exceeded.'
             return;
           }
+        },
+
+        formatBytes(bytes, decimals = 2) {
+          if (bytes === 0) return '0 Bytes';
+
+          const k = 1024;
+          const dm = decimals < 0 ? 0 : decimals;
+          const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+          const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+          return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
         },
 
         boot() {

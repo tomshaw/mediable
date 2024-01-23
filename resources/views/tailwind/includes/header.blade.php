@@ -6,11 +6,13 @@
     </div>
   </div>
 
+  @if(!$uploadMode)
   <div class="flex items-center justify-start w-full">
     <div class="p-0 m-0 w-full md:w-72">
       <input type="text" class="control-input" wire:model.live="searchTerm" spellcheck="false" placeholder="Search">
     </div>
   </div>
+  @endif
 
   <div class="flex items-center justify-end w-full">
     <div class="flex items-center gap-2 whitespace-nowrap">
