@@ -1,6 +1,6 @@
 {
     "name": "tomshaw/mediable",
-    "description": "A comprehensive media management application",
+    "description": "Mediable is a light weight easy to use Laravel Livewire Media Manager",
     "keywords": [
         "laravel",
         "livewire"

@@ -51,7 +51,7 @@
   @else
 
   <form>
-    <div class="h-auto py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-2 border-red-500': enter }" x-on:click.prevent="fileClick($event)">
+    <div class="h-auto py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-red-500': enter }" x-on:click.prevent="fileClick($event)">
       <div class="m-0 flex items-center text-left">
         <span class="text-blue-500 leading-none">
           <img src="{{ asset("vendor/mediable/images/upload.png") }}" class="w-full h-full object-cover" alt="Upload files" />
