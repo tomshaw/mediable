@@ -14,9 +14,7 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $randomKey = base64_encode(random_bytes(32));
-
-        config()->set('app.key', $randomKey);
+        config()->set('app.key', 'base64:'.base64_encode(\Illuminate\Support\Str::random(32)));
 
         $this->registerLivewireComponents();
     }
