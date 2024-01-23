@@ -12,12 +12,14 @@ use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Enums\ModalTypes;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
+use TomShaw\Mediable\Traits\WithConfig;
 use TomShaw\Mediable\Traits\WithEvents;
 use TomShaw\Mediable\Traits\WithFileSize;
 use TomShaw\Mediable\Traits\WithMimeTypes;
 
 class MediaBrowser extends Component
 {
+    use WithConfig;
     use WithEvents;
     use WithFileSize;
     use WithFileUploads;
@@ -313,19 +315,5 @@ class MediaBrowser extends Component
         $paginator = Eloquent::paginate($this->perPage);
 
         return $this->renderView($paginator);
-    }
-
-    public function getMaxUploadSize()
-    {
-        $maxUpload = (int) (ini_get('upload_max_filesize'));
-        $maxPost = (int) (ini_get('post_max_size'));
-        $memoryLimit = (int) (ini_get('memory_limit'));
-
-        return min($maxUpload, $maxPost, $memoryLimit);
-    }
-
-    public function getMaxFileUploads()
-    {
-        return ini_get('max_file_uploads');
     }
 }
