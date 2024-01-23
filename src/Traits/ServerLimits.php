@@ -33,9 +33,9 @@ trait ServerLimits
      * The 'max_file_uploads' configuration directive limits the number of files that can be
      * uploaded in one request.
      *
-     * @return int The maximum number of files that can be uploaded simultaneously.
+     * @return string|false The maximum number of files that can be uploaded simultaneously.
      */
-    public function getMaxFileUploads(): int
+    public function getMaxFileUploads(): string|false
     {
         return ini_get('max_file_uploads');
     }

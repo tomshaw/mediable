@@ -92,7 +92,7 @@ class MediaBrowser extends Component
 
     public ?int $maxUploadSize = null;
 
-    public ?int $maxFileUploads = null;
+    public string|false|null $maxFileUploads = null;
 
     public ?int $maxUploadFileSize = null;
 
