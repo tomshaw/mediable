@@ -165,7 +165,7 @@
         },
 
         boot() {
-          window.addEventListener('app:config', event => {
+          window.addEventListener('server:limits', event => {
             this.maxUploadSize = event.detail.maxUploadSize;
             this.maxFileUploads = event.detail.maxFileUploads;
             this.maxUploadFileSize = event.detail.maxUploadFileSize;
