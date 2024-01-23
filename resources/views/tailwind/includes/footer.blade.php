@@ -8,7 +8,7 @@
     @endif
     <ul class="flex items-center justify-start ml-4 gap-x-2">
       @foreach($selected as $item)
-      <li @class(['preview-current'=> $item['id'] == $this->modelId]) data-id={{$item['id']}}>
+      <li @class(['shadow-[inset_0_0_0_1px_#fff,_inset_0_0_0_3px_#00b5d2]'=> $item['id'] == $this->modelId]) data-id={{$item['id']}}>
         <div class="border border-black shadow-md w-10 h-10 overflow-hidden">
           @if ($this->mimeTypeImage($item['file_type']))
           <img src="{{ $item['file_url'] }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />

@@ -1,6 +1,6 @@
 # Mediable 🎥📸🎵📂 
 
-Mediable is a light weight easy to use [Laravel](https://laravel.com)/[Livewire](https://livewire.laravel.com/) media browser. Inspired by Wordpress attachments this project aims to make file upload management a breeze. Mediable is awesome for injecting content into blog posts, carousels, product previews or similar applications.
+Mediable is a light weight easy to use Laravel Livewire Media Manager. Mediable is awesome for injecting content into blog posts, carousels, product previews or similar applications.
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/tomshaw/mediable/run-tests.yml?branch=master&style=flat-square&label=tests)
 ![issues](https://img.shields.io/github/issues/tomshaw/mediable?style=flat&logo=appveyor)
