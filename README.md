@@ -2,6 +2,12 @@
 
 Mediable is a light weight easy to use [Laravel](https://laravel.com)/[Livewire](https://livewire.laravel.com/) media browser. Inspired by Wordpress attachments this project aims to make file upload management a breeze. Mediable is awesome for injecting content into blog posts, carousels, product previews or similar applications.
 
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/tomshaw/mediable/run-tests.yml?branch=master&style=flat-square&label=tests)
+![issues](https://img.shields.io/github/issues/tomshaw/mediable?style=flat&logo=appveyor)
+![forks](https://img.shields.io/github/forks/tomshaw/mediable?style=flat&logo=appveyor)
+![stars](https://img.shields.io/github/stars/tomshaw/mediable?style=flat&logo=appveyor)
+[![GitHub license](https://img.shields.io/github/license/tomshaw/mediable)](https://github.com/tomshaw/mediable/blob/master/LICENSE)
+
 ## Installation
 
 You can install the package via composer:
@@ -141,7 +147,6 @@ The Mediable component accepts the following additional properties:
 - `showSidebar`: Controls the visibility of the sidebar. Accepts a boolean value. Example usage: `:showSidebar="true"`
 
 You can customize the component by setting these properties to `true` or `false` as needed.
-
 
 ## Requirements
 
