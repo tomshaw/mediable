@@ -139,12 +139,12 @@ Remember to configure the chosen disk correctly in your `config/filesystems.php`
 
 The Mediable component accepts the following additional properties:
 
-- `showPagination`: Controls the visibility of the pagination. Accepts a boolean value. Example usage: `:showPagination="false"`
-- `showPerPage`: Controls the visibility of the per page option. Accepts a boolean value. Example usage: `:showPerPage="false"`
-- `showOrderBy`: Controls the visibility of the order by option. Accepts a boolean value. Example usage: `:showOrderBy="false"`
-- `showOrderDir`: Controls the visibility of the order direction option. Accepts a boolean value. Example usage: `:showOrderDir="false"`
-- `showColumnWidth`: Controls the visibility of the column width option. Accepts a boolean value. Example usage: `:showColumnWidth="false"`
-- `showSidebar`: Controls the visibility of the sidebar. Accepts a boolean value. Example usage: `:showSidebar="true"`
+- `showPagination`: Controls the visibility of the pagination. Example usage: `:showPagination="false"`
+- `showPerPage`: Controls the visibility of the per page option. Example usage: `:showPerPage="false"`
+- `showOrderBy`: Controls the visibility of the order by option. Example usage: `:showOrderBy="false"`
+- `showOrderDir`: Controls the visibility of the order direction option. Example usage: `:showOrderDir="false"`
+- `showColumnWidth`: Controls the visibility of the column width option. Example usage: `:showColumnWidth="false"`
+- `showSidebar`: Controls the visibility of the sidebar. Example usage: `:showSidebar="true"`
 
 You can customize the component by setting these properties to `true` or `false` as needed.
 
