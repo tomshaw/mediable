@@ -79,8 +79,8 @@
           }
         }
       },
-      alert(options) {
-        console.warn('alert', options);
+      alert(event) {
+        console.warn('alert:warning', event);
       }
     }
   };

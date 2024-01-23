@@ -1,4 +1,4 @@
-<div @class(['flex items-center justify-center p-0 m-0 w-full', sizeof($files) ? 'h-auto' : 'h-full' ]) x-data="handleUploads()">
+<div @class(['flex items-center justify-center p-0 m-0 w-full', sizeof($files) ? 'h-auto' : 'h-full' ]) x-data="handleUploads()" x-init="boot">
 
   @if (sizeof($files))
 
@@ -53,7 +53,7 @@
   <form>
     <div class="h-auto py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-2 border-red-500': enter }" x-on:click.prevent="fileClick($event)">
       <div class="m-0 flex items-center text-left">
-        <span class="text-blue-500 leading-none" wire:loading.hidden wire.target="files">
+        <span class="text-blue-500 leading-none">
           <img src="{{ asset("vendor/mediable/images/upload.png") }}" class="w-full h-full object-cover" alt="Upload files" />
         </span>
         <div class="ml-4">
@@ -63,25 +63,33 @@
       </div>
     </div>
     <div class="hidden">
-      <input type="file" wire:model="files" multiple id="fileInput">
+      <input type="file" id="fileInput" wire:model="files" multiple>
     </div>
   </form>
 
   <script>
     function handleUploads() {
       return {
+        error: null,
         enter: false,
         leave: false,
-        dropingFile: false,
-        isUploading: false,
         progress: 0,
-        error: null,
+        dropingFile: false,
+
+        maxFileUploads: 0,
+        maxUploadFileSize: 0,
+        maxUploadSize: 0,
+        memoryLimit: 0,
+        postMaxSize: 0,
+
         dragEnter(e) {
           this.enter = true;
         },
+
         dragLeave(e) {
           this.leave = false;
         },
+
         drop(e) {
           e.preventDefault();
           let files = e.dataTransfer.files;
@@ -89,20 +97,43 @@
             this.transferFiles(files)
           }
           this.dropingFile = false;
+          this.enter = false;
         },
+
         fileClick(event) {
           document.getElementById('fileInput').click();
         },
+
         transferFiles(files) {
+          this.error = null;
+
+          this.individualFileSizeCheck(files);
+          this.maxUploadFileSizeCheck(files);
+
+          if (this.error) {
+            console.warn('error', this.error);
+            
+            this.$wire.dispatch('mediable:alert', {
+              type: 'error',
+              message: this.error,
+            });
+            return;
+          }
+
           this.$wire.uploadMultiple('files', files,
             (uploadedFilename) => {
-              this.isUploading = false;
               this.progress = 0;
             },
             (error) => {
+              console.warn('uploadMultipleError', error);
+
               this.error = error;
-              this.isUploading = false;
               this.progress = 0;
+
+              this.$wire.dispatch('mediable:alert', {
+                type: 'error',
+                message: error || 'An error occurred while uploading the file'
+              });
             },
             (event) => {
               if (event.detail.progress) {
@@ -110,6 +141,46 @@
               }
             }
           );
+        },
+
+        individualFileSizeCheck(files) {
+          for (let i = 0; i < files.length; i++) {
+            if (files[i].size > this.maxUploadSize) {
+              this.error = 'The file ' + files[i].name + ' exceeds the maximum upload size of ' + this.maxUploadSize + ' bytes';
+              return;
+            }
+          }
+        },
+
+        maxUploadFileSizeCheck(files) {
+          let totalSize = 0;
+          for (let i = 0; i < files.length; i++) {
+            totalSize += files[i].size;
+          }
+
+          if (totalSize > this.maxUploadSize) {
+            this.error = 'The maximum upload size of ' + this.maxUploadSize + ' bytes has been exceeded.'
+            return;
+          }
+        },
+
+        boot() {
+          window.addEventListener('app:config', event => {
+            this.maxUploadSize = event.detail.maxUploadSize;
+            this.maxFileUploads = event.detail.maxFileUploads;
+            this.maxUploadFileSize = event.detail.maxUploadFileSize;
+            this.postMaxSize = event.detail.postMaxSize;
+            this.memoryLimit = event.detail.memoryLimit;
+          });
+
+          let fileInput = document.querySelector('#fileInput');
+
+          fileInput.addEventListener('change', () => {
+            let files = fileInput.files;
+            if (files.length > 0) {
+              this.transferFiles(files);
+            }
+          });
         }
       };
     }

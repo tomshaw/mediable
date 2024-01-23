@@ -12,14 +12,14 @@ use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Enums\ModalTypes;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\WithConfig;
+use TomShaw\Mediable\Traits\ServerLimits;
 use TomShaw\Mediable\Traits\WithEvents;
 use TomShaw\Mediable\Traits\WithFileSize;
 use TomShaw\Mediable\Traits\WithMimeTypes;
 
 class MediaBrowser extends Component
 {
-    use WithConfig;
+    use ServerLimits;
     use WithEvents;
     use WithFileSize;
     use WithFileUploads;
@@ -90,12 +90,31 @@ class MediaBrowser extends Component
 
     public ?int $audioElementId = null;
 
-    public function mount(
-        ?string $theme = null,
-    ) {
+    public ?int $maxUploadSize = null;
+
+    public ?int $maxFileUploads = null;
+
+    public ?int $maxUploadFileSize = null;
+
+    public ?int $postMaxSize = null;
+
+    public ?int $memoryLimit = null;
+
+    public function mount(?string $theme = null) {
         $this->theme = $theme ?? config('mediable.theme');
 
+        $this->maxUploadSize = $this->getMaxUploadSize();
+        $this->maxFileUploads = $this->getMaxFileUploads();
+        $this->maxUploadFileSize = $this->getMaxUploadFileSize();
+        $this->postMaxSize = $this->getPostMaxSize();
+        $this->memoryLimit = $this->getMemoryLimit();
+
         $this->resetModal();
+    }
+
+    public function boot() 
+    {
+        $this->dispatch('app:config', maxUploadSize: $this->maxUploadSize, maxFileUploads: $this->maxFileUploads, maxUploadFileSize: $this->maxUploadFileSize, postMaxSize: $this->postMaxSize, memoryLimit: $this->memoryLimit); 
     }
 
     #[On('modal:type')]
@@ -116,6 +135,12 @@ class MediaBrowser extends Component
         if ($this->audioElementId == $id) {
             $this->audioElementId = null;
         }
+    }
+
+    #[On('media:alert')]
+    public function alert($event): void
+    {
+        dd($event);
     }
 
     public function enableThumbMode(): self
@@ -173,11 +198,7 @@ class MediaBrowser extends Component
 
     public function updateAttachment(): void
     {
-        $this->dispatch('loadingStart');
-
         Eloquent::update($this->modelId, $this->title, $this->caption, $this->description);
-
-        $this->dispatch('loadingEnd');
 
         $this->dispatchAlert('success', 'Item successfully updated!');
     }
