@@ -87,10 +87,6 @@
         color: #686868;
     }
 
-    .mediable .preview-current {
-        box-shadow: 0 0 0 1px #fff, 0 0 0 3px #00b5d2;
-    }
-
     .mediable table {
         min-width: 100%;
         text-align: center;
