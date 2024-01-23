@@ -2,7 +2,6 @@
 
 namespace TomShaw\Mediable\Tests\Support;
 
-use Illuminate\Support\Facades\View;
 use Livewire\Livewire;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
