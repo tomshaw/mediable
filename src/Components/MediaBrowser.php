@@ -252,6 +252,24 @@ class MediaBrowser extends Component
         }
     }
 
+    public function setActiveAttachment(Attachment $item): void
+    {
+        $found = in_array($item['id'], array_column($this->selected, 'id'));
+
+        if (! $found) {
+            return;
+        }
+
+        $this->modelId = $item['id'];
+        $this->title = $item['title'];
+        $this->caption = $item['caption'];
+        $this->description = $item['description'];
+
+        if (! $this->showSidebar) {
+            $this->toggleSidebar();
+        }
+    }
+
     public function clearSelected(): void
     {
         $this->selected = [];
@@ -293,7 +311,7 @@ class MediaBrowser extends Component
 
     public function closeModal(): void
     {
-        $this->dispatch(BrowserEvents::CLOSE);
+        $this->dispatch(BrowserEvents::CLOSE->value);
 
         $this->resetModal();
     }
@@ -329,7 +347,7 @@ class MediaBrowser extends Component
 
     private function renderView(LengthAwarePaginator $paginator)
     {
-        return view('mediable::'.$this->theme.'.modal', [
+        return view('mediable::'.$this->theme.'.media-browser', [
             'data' => $paginator,
         ]);
     }

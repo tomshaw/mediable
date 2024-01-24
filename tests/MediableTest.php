@@ -50,7 +50,7 @@ it('has the correct component instance', function () {
 
 // Test that the component has the correct view
 it('has the correct view', function () {
-    Livewire::test(MediaBrowser::class)->assertViewIs('mediable::'.$this->theme.'.modal');
+    Livewire::test(MediaBrowser::class)->assertViewIs('mediable::'.$this->theme.'.media-browser');
 });
 
 // Test that the component has the correct initial properties

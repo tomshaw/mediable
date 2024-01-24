@@ -44,9 +44,7 @@
 
     @if ($data->count())
     @foreach($data as $item)
-    <li @class([ 'relative flex m-0 p-2 cursor-pointer list-none text-center select-none w-[20%]' , 'selected shadow-[inset_0_0_0_2px_#fff,_inset_0_0_0_7px_#00b5d2]'=> in_array($item->id, array_column($this->selected, 'id')),
-      'details' => $item->id == $this->modelId
-      ])
+    <li @class([ 'relative flex m-0 p-2 cursor-pointer list-none text-center select-none w-[20%]', 'selected shadow-[inset_0_0_0_2px_#fff,_inset_0_0_0_7px_#00b5d2]'=> in_array($item->id, array_column($this->selected, 'id')), 'details' => $item->id == $this->modelId])
       wire:click="toggleAttachment({{$item}})"
       style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
 
