@@ -14,9 +14,8 @@ trait WithEvents
      * (like 'error', 'warning', 'info', etc.), and the message parameter can be used to
      * specify the text of the alert message.
      *
-     * @param string $type The type of the alert.
-     * @param string $message The alert message.
-     * @return void
+     * @param  string  $type  The type of the alert.
+     * @param  string  $message  The alert message.
      */
     public function dispatchAlert(string $type, string $message): void
     {
@@ -29,9 +28,8 @@ trait WithEvents
      * This method dispatches a browser event of the specified type, with the specified options.
      * The options are passed as an array, and are spread into the dispatch method.
      *
-     * @param BrowserEvents $type The type of the event to dispatch.
-     * @param array $options An array of options for the event.
-     * @return void
+     * @param  BrowserEvents  $type  The type of the event to dispatch.
+     * @param  array  $options  An array of options for the event.
      */
     public function dispatchEvent(BrowserEvents $type, array $options = []): void
     {

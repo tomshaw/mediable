@@ -122,6 +122,8 @@ class MediaBrowser extends Component
             postMaxSize: $this->postMaxSize,
             memoryLimit: $this->memoryLimit
         );
+
+        $this->uniqueMimeTypes = Eloquent::uniqueMimes();
     }
 
     #[On('modal:type')]
@@ -334,8 +336,6 @@ class MediaBrowser extends Component
 
     public function render()
     {
-        $this->uniqueMimeTypes = Eloquent::uniqueMimes();
-
         Eloquent::query($this->orderBy, $this->orderDir, $this->selectedMimeType);
 
         Eloquent::search($this->searchTerm, $this->searchColumns);
