@@ -2,10 +2,13 @@
 
 use Livewire\Livewire;
 use TomShaw\Mediable\Components\MediaBrowser;
+use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Models\Attachment;
 
 beforeEach(function () {
     $this->artisan('migrate');
+
+    $this->theme = config('mediable.theme');
 
     Attachment::create([
         'file_name' => 'temp_file_name.jpg',
@@ -24,10 +27,50 @@ beforeEach(function () {
     $this->component = Livewire::test(MediaBrowser::class);
 });
 
+// Test that the component renders successfully without throwing any exceptions
 it('can render a mediable component', function () {
     $this->component->assertSuccessful();
 });
 
+// Test that the component renders a file with the name 'temp_file_name.jpg'
 it('can render a mediable file type', function () {
     $this->component->assertSee('temp_file_name.jpg');
+});
+
+// Test that the attachment was created successfully
+it('creates an attachment', function () {
+    $attachment = Attachment::first();
+    expect($attachment->file_name)->toBe('temp_file_name.jpg');
+});
+
+// Test that the component has the correct instance
+it('has the correct component instance', function () {
+    expect(get_class($this->component->instance()))->toBe(MediaBrowser::class);
+});
+
+// Test that the component has the correct view
+it('has the correct view', function () {
+    Livewire::test(MediaBrowser::class)->assertViewIs('mediable::'.$this->theme.'.modal');
+});
+
+// Test that the component has the correct initial properties
+it('has the correct initial properties', function () {
+    expect($this->component->get('modalType'))->toBe('array');
+});
+
+// Test that the 'deleteAttachment' method removes the attachment from the database
+it('can delete an attachment', function () {
+    $this->component->call('deleteAttachment', 1);
+    $this->assertDatabaseMissing('attachments', ['id' => 1]);
+});
+
+// Test that the 'closeModal' method dispatches the 'CLOSE' event
+it('dispatched the correct event', function () {
+    $this->component->call('closeModal')->assertDispatched(BrowserEvents::CLOSE->value);
+});
+
+// Test that the 'set' method correctly updates the 'file_name' property of the component
+it('sets the correct data', function () {
+    $this->component->set('file_name', 'new_file_name.jpg');
+    expect($this->component->get('file_name'))->toBe('new_file_name.jpg');
 });
