@@ -1,7 +1,13 @@
 <script>
-  const mediable = () => {
-
-    const insertAtCursor = (inputEl, inputString) => {
+  const mediable = {
+    
+    /**
+     * Inserts a string at the cursor position in a given input element.
+     *
+     * @param {HTMLElement} inputEl - The input element.
+     * @param {string} inputString - The string to insert.
+     */
+    insertAtCursor: (inputEl, inputString) => {
       let text = inputString.replaceAll('\\n', String.fromCharCode(13, 10));
       let cursorPosition = inputEl.selectionStart;
       let start = (inputEl.value).substring(0, cursorPosition);
@@ -11,77 +17,26 @@
       inputEl.selectionStart = cursorPosition;
       inputEl.selectionEnd = cursorPosition;
       inputEl.focus();
-    };
+    },
 
-    return {
-      show: false,
-      inputId: '',
-      init() {
-        window.addEventListener('mediable:alert', event => this.alert(event?.detail));
-        window.addEventListener('mediable:insert', event => this.insert(event?.detail?.selected));
-        window.addEventListener('mediable:open', event => this.open(event?.detail?.id));
-        window.addEventListener('mediable:close', event => this.close());
-        window.addEventListener('audio:start', event => this.audioStart(event?.detail?.id));
-        window.addEventListener('audio:pause', event => this.audioPause(event?.detail?.id));
-      },
-      audioStart(id) {
-        const audio = document.getElementById('audioPlayer' + id);
+    /**
+     * Formats a number of bytes into a string with a unit. The unit is chosen
+     * based on the size of the number.
+     *
+     * @param {number} bytes - The number of bytes.
+     * @param {number} [decimals=2] - The number of decimal places to include in the output.
+     * @returns {string} The formatted string.
+     */
+    formatBytes: (bytes, decimals = 2) => {
+      if (bytes === 0) return '0 Bytes';
 
-        if (audio) {
-          audio.play();
-        }
-      },
-      audioPause(id) {
-        const audio = document.getElementById('audioPlayer' + id);
+      const k = 1024;
+      const dm = decimals < 0 ? 0 : decimals;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
-        if (audio) {
-          audio.pause();
-        }
-      },
-      open(inputId) {
-        if (inputId) {
-          this.inputId = inputId;
-          Livewire.dispatch('modal:type', {
-            modalType: 'attachment'
-          });
-        } else {
-          this.inputId = '';
-          Livewire.dispatch('modal:typel', {
-            modalType: 'default'
-          });
-        }
-      },
-      close() {
-        this.show = false;
-      },
-      insert(selected) {
-        let insert = [];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-        for (let i = 0; i < selected.length; i++) {
-          let mediaType = selected[i].file_type.toLowerCase();
-
-          let fileTitle = (selected[i].file_title) ? selected[i].file_title : selected[i].file_name;
-
-          if (mediaType.indexOf('image') != -1) {
-            insert.push('<a href="' + selected[i].file_url + '"><img src="' + selected[i].file_url + '" alt="' + fileTitle + '"></a>\n');
-          } else if (mediaType.indexOf('audio') != -1) {
-            insert.push('<audio controls autoplay><source src="' + selected[i].file_url + '" type="' + selected[i].file_type + '"></audio>\n');
-          } else if (mediaType.indexOf('video') != -1) {
-            insert.push('<video controls autoplay><source src="' + selected[i].file_url + '" type="' + selected[i].file_type + '"></video>\n');
-          } else {
-            insert.push('<a href="' + selected[i].file_url + '">' + fileTitle + '</a>');
-          }
-        }
-        if (insert.length) {
-          const el = document.getElementById(this.inputId);
-          if (el) {
-            insertAtCursor(el, insert.join(' '));
-          }
-        }
-      },
-      alert(event) {
-        console.warn('alert:warning', event);
-      }
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     }
   };
 </script>
