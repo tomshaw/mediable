@@ -57,9 +57,8 @@
           <img src="{{ asset("vendor/mediable/images/upload.png") }}" class="w-full h-full object-cover" alt="Upload files" />
         </span>
         <div class="ml-4">
-          <h3 class="text-gray-900 font-bold text-lg mb-1">Drop files here or click to upload.</h3>
-          <span class="text-gray-400 font-semibold text-sm">
-            Upload up to <span x-text="maxFileUploads"></span> files not to exceed <span x-text="mediable.formatBytes(maxUploadSize)"></span>. Maximum single file size is <span x-text="mediable.formatBytes(maxUploadFileSize)"></span>.</span>
+          <h3 class="text-gray-800 font-bold text-lg mb-1">Drop files here or click to upload.</h3>
+          <span class="text-gray-400 font-semibold text-sm">Upload up to <span x-text="maxFileUploads"></span> files not to exceed <span x-text="mediable.formatBytes(maxUploadSize)"></span>. Maximum single file size is <span x-text="mediable.formatBytes(maxUploadFileSize)"></span>.</span>
         </div>
       </div>
     </div>
