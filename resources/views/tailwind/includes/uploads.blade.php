@@ -151,7 +151,7 @@
     maxUploadFileSizeCheck(files) {
       for (let i = 0; i < files.length; i++) {
         if (files[i].size > this.maxUploadFileSize) {
-          this.error = 'The file ' + files[i].name + ' exceeds the maximum upload size of ' + mediable.formatBytes(this.maxUploadFileSize) + ' bytes';
+          this.error = 'File upload ' + files[i].name + ' exceeds maximum upload size of ' + mediable.formatBytes(this.maxUploadFileSize) + ' bytes.';
           return;
         }
       }
@@ -164,7 +164,7 @@
       }
 
       if (totalSize > this.maxUploadSize) {
-        this.error = 'The maximum upload size of ' + mediable.formatBytes(this.maxUploadSize) + ' bytes has been exceeded.'
+        this.error = 'Maximum upload size of ' + mediable.formatBytes(this.maxUploadSize) + ' bytes has been exceeded.'
         return;
       }
     },

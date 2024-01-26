@@ -115,7 +115,8 @@ class MediaBrowser extends Component
 
     public function boot()
     {
-        $this->dispatch('server:limits',
+        $this->dispatch(
+            'server:limits',
             maxUploadSize: $this->maxUploadSize,
             maxFileUploads: $this->maxFileUploads,
             maxUploadFileSize: $this->maxUploadFileSize,
@@ -343,6 +344,18 @@ class MediaBrowser extends Component
     public function clearFiles(): void
     {
         $this->files = [];
+    }
+
+    /**
+     * Handle page pagination updating event.
+     *
+     * Called when the page property is about to be updated.
+     */
+    public function updatingPage(): void
+    {
+        if ($this->audioElementId) {
+            $this->audioElementId = null;
+        }
     }
 
     private function renderView(LengthAwarePaginator $paginator)
