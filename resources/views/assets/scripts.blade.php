@@ -1,5 +1,5 @@
 <script>
-  const mediable = {
+  window.Mediable = {
     
     /**
      * Inserts a string at the cursor position in a given input element.

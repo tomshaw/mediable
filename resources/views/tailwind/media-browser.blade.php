@@ -121,7 +121,7 @@
       if (insert.length) {
         const el = document.getElementById(this.inputId);
         if (el) {
-          mediable.insertAtCursor(el, insert.join(' '));
+          Mediable.insertAtCursor(el, insert.join(' '));
         }
       }
     },
