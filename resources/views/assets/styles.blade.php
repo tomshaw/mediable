@@ -32,34 +32,6 @@
         color: #fff;
     }
 
-    /* .mediable .pagination button {
-        display: inline-block;
-        vertical-align: middle;
-        width: 22px;
-        color: #7a7a7a;
-        text-align: center;
-        font-size: 10px;
-        padding: 3px 0 2px;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-        margin: 0 2px;
-        border-radius: 4px;
-        border: 1px solid #E3E3E3;
-        cursor: pointer;
-        box-shadow: inset 0 1px #fff, 0 1px 2px #666;
-        text-shadow: 0 1px 1px #FFF;
-        background-color: #e6e6e6;
-        background-image: -webkit-linear-gradient(top, #F3F3F3, #D7D7D7);
-    }
-
-    .mediable .pagination .current button {
-        border: 1px solid #E9E9E9;
-        box-shadow: 0 1px 1px #999;
-        background-color: #dfdfdf;
-        background-image: -webkit-linear-gradient(top, #D0D0D0, #EBEBEB);
-    } */
-
     .mediable .btn {
         display: inline-block;
         vertical-align: middle;

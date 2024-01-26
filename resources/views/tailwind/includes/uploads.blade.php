@@ -59,7 +59,7 @@
         <div class="ml-4">
           <h3 class="text-gray-900 font-bold text-lg mb-1">Drop files here or click to upload.</h3>
           <span class="text-gray-400 font-semibold text-sm">
-            Upload up to <span x-text="maxFileUploads"></span> files using a maximum of <span x-text="maxUploadSize"></span>.</span>
+            Upload up to <span x-text="maxFileUploads"></span> files using a maximum of <span x-text="mediable.formatBytes(maxUploadSize)"></span>.</span>
         </div>
       </div>
     </div>
@@ -112,7 +112,7 @@
     transferFiles(files) {
       this.error = null;
 
-      this.fileSizeCheck(files);
+      this.maxUploadFileSizeCheck(files);
       this.maxUploadSizeCheck(files);
 
       if (this.error) {
@@ -148,10 +148,10 @@
       );
     },
 
-    fileSizeCheck(files) {
+    maxUploadFileSizeCheck(files) {
       for (let i = 0; i < files.length; i++) {
-        if (files[i].size > this.maxUploadSize) {
-          this.error = 'The file ' + files[i].name + ' exceeds the maximum upload size of ' + mediable.formatBytes(this.maxUploadSize) + ' bytes';
+        if (files[i].size > this.maxUploadFileSize) {
+          this.error = 'The file ' + files[i].name + ' exceeds the maximum upload size of ' + mediable.formatBytes(this.maxUploadFileSize) + ' bytes';
           return;
         }
       }
@@ -171,7 +171,7 @@
 
     init() {
       window.addEventListener('server:limits', event => {
-        this.maxUploadSize = mediable.formatBytes(event.detail.maxUploadSize);
+        this.maxUploadSize = event.detail.maxUploadSize;
         this.maxFileUploads = event.detail.maxFileUploads;
         this.maxUploadFileSize = event.detail.maxUploadFileSize;
         this.postMaxSize = event.detail.postMaxSize;
