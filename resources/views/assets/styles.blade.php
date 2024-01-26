@@ -32,7 +32,7 @@
         color: #fff;
     }
 
-    .mediable .pagination button {
+    /* .mediable .pagination button {
         display: inline-block;
         vertical-align: middle;
         width: 22px;
@@ -58,7 +58,7 @@
         box-shadow: 0 1px 1px #999;
         background-color: #dfdfdf;
         background-image: -webkit-linear-gradient(top, #D0D0D0, #EBEBEB);
-    }
+    } */
 
     .mediable .btn {
         display: inline-block;
