@@ -28,7 +28,7 @@
       </span>
     </div>
 
-    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+    <div class="hidden gap-x-2 sm:flex-1 sm:flex sm:items-center sm:justify-between">
 
       <div>
         <span class="relative z-0 inline-flex rounded-md shadow-sm">
@@ -99,15 +99,15 @@
         </span>
       </div>
 
-      <div class="ml-4">
-        <p class="text-sm text-gray-700 leading-5>
+      <div>
+        <p class="text-sm text-gray-700 leading-5">
           <span>{!! __('Showing') !!}</span>
           <span class="font-medium">{{ $paginator->firstItem() }}</span>
           <span>{!! __('to') !!}</span>
           <span class="font-medium">{{ $paginator->lastItem() }}</span>
           <span>{!! __('of') !!}</span>
           <span class="font-medium">{{ $paginator->total() }}</span>
-          <span>{!! __('results') !!}</span>
+          <span>{!! __('results') !!}.</span>
         </p>
       </div>
 
