@@ -91,7 +91,7 @@ on(['mediable:on' => function ($files) {
 
 ## Validation
 
-You can customize the allowable file types and sizes for uploads in the `mediable.php` config file.
+You can customize allowable file types and max file size in the `mediable.php` config file.
 
 Here's how:
 
