@@ -51,15 +51,15 @@
   @else
 
   <form>
-    <div class="h-auto py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-red-500': enter }" x-on:click.prevent="fileClick($event)">
-      <div class="m-0 flex items-center text-left">
+    <div class="h-auto max-w-[500px] py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-red-500': enter }" x-on:click.prevent="fileClick($event)">
+      <div class="m-0 p-2 flex items-center text-left">
         <span class="text-blue-500 leading-none">
           <img src="{{ asset("vendor/mediable/images/upload.png") }}" class="w-full h-full object-cover" alt="Upload files" />
         </span>
         <div class="ml-4">
           <h3 class="text-gray-900 font-bold text-lg mb-1">Drop files here or click to upload.</h3>
           <span class="text-gray-400 font-semibold text-sm">
-            Upload up to <span x-text="maxFileUploads"></span> files using a maximum of <span x-text="mediable.formatBytes(maxUploadSize)"></span>.</span>
+            Upload up to <span x-text="maxFileUploads"></span> files not to exceed <span x-text="mediable.formatBytes(maxUploadSize)"></span>. Maximum single file size is <span x-text="mediable.formatBytes(maxUploadFileSize)"></span>.</span>
         </div>
       </div>
     </div>
