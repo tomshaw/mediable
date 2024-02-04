@@ -3,8 +3,7 @@
 namespace TomShaw\Mediable\Tests\Support;
 
 use Illuminate\Support\Str;
-use Livewire\Livewire;
-use Livewire\LivewireServiceProvider;
+use Livewire\{Livewire, LivewireServiceProvider};
 use Orchestra\Testbench\TestCase as Orchestra;
 use TomShaw\Mediable\Components\MediaBrowser;
 use TomShaw\Mediable\Providers\MediableServiceProvider;

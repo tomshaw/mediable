@@ -4,18 +4,12 @@ namespace TomShaw\Mediable\Components;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use Livewire\WithPagination;
+use Livewire\{Component, WithFileUploads, WithPagination};
 use TomShaw\Mediable\Eloquent\Eloquent;
-use TomShaw\Mediable\Enums\BrowserEvents;
-use TomShaw\Mediable\Enums\ModalTypes;
+use TomShaw\Mediable\Enums\{BrowserEvents, ModalTypes};
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\ServerLimits;
-use TomShaw\Mediable\Traits\WithEvents;
-use TomShaw\Mediable\Traits\WithFileSize;
-use TomShaw\Mediable\Traits\WithMimeTypes;
+use TomShaw\Mediable\Traits\{ServerLimits, WithEvents, WithFileSize, WithMimeTypes};
 
 class MediaBrowser extends Component
 {

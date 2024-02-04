@@ -1,3 +1,7 @@
 {
-    "preset": "laravel"
+    "preset": "laravel",
+    "rules": {
+        "single_import_per_statement": false,
+        "group_import": true
+    }
 }
