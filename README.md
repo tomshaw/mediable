@@ -22,6 +22,12 @@ Run the installation command.
 php artisan mediable:install
 ```
 
+After updates run the update command.
+
+```
+php artisan mediable:update
+```
+
 When you install the application assets are copied to the following locations:
 
 1. The config file is published to your project's config directory as `mediable.php`. 
@@ -150,8 +156,7 @@ You can customize the component by setting these properties to `true` or `false`
 
 ## Requirements
 
-- `Laravel 10` (https://laravel.com/) 
-- `PHP 8.2` (https://php.net)
+The package is compatible with Laravel 10 and PHP 8.1.
 
 ## Testing
 
