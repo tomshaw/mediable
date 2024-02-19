@@ -3,6 +3,8 @@
 namespace TomShaw\Mediable\Console\Commands;
 
 use Illuminate\Console\Command;
+use RuntimeException;
+use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
@@ -34,6 +36,28 @@ class InstallCommand extends Command
         $this->comment('Publishing Mediable Images...');
         $this->callSilent('vendor:publish', ['--tag' => 'mediable.images']);
 
+        $this->comment('Building Mediable Assets...');
+        $this->buildAssets();
+
         $this->info('Mediable installed successfully!');
+    }
+
+    private function buildAssets()
+    {
+        $process = new Process(['npm', 'run', 'build']);
+
+        $process->setWorkingDirectory(base_path())
+            ->setTimeout(null)
+            ->run(function ($type, $buffer) {
+                if ($type === Process::ERR) {
+                    $this->error($buffer);
+                } else {
+                    $this->line($buffer);
+                }
+            });
+
+        if (! $process->isSuccessful()) {
+            throw new RuntimeException($process->getErrorOutput());
+        }
     }
 }
