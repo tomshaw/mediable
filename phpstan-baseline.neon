@@ -1,6 +1,2 @@
 parameters:
-	ignoreErrors:
-		-
-			message: "#^Parameter \\#1 \\$paginator of method TomShaw\\\\Mediable\\\\Components\\\\MediaBrowser\\:\\:renderView\\(\\) expects Illuminate\\\\Pagination\\\\LengthAwarePaginator, Illuminate\\\\Contracts\\\\Pagination\\\\LengthAwarePaginator given\\.$#"
-			count: 1
-			path: src/Components/MediaBrowser.php
+	ignoreErrors: []

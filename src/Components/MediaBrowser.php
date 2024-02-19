@@ -2,7 +2,7 @@
 
 namespace TomShaw\Mediable\Components;
 
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithFileUploads, WithPagination};
 use TomShaw\Mediable\Eloquent\Eloquent;
