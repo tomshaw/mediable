@@ -81,7 +81,9 @@ Launching Mediable is done by dispatching the `mediable:open` event.
 $this->dispatch('mediable:open');
 ```
 
-Insert attachments directly into form inputs using the named parameter `id`. 
+Insert attachments directly into form inputs typically a `textarea` using the named parameter `id`. 
+
+> This example launches the modal with the intention of injecting attachments directly into an html input that has an `id` of `description`.
 
 ```php
 $this->dispatch('mediable:open', id: 'description');
