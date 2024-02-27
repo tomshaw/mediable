@@ -222,8 +222,14 @@ class MediaBrowser extends Component
         $this->dispatchAlert('success', 'Item successfully deleted!');
     }
 
-    public function toggleAttachment(Attachment $item): void
+    public function toggleAttachment(int $id): void
     {
+        $item = Attachment::find($id);
+
+        if (! $item) {
+            throw new MediaBrowserException("No attachment found with id: $id");
+        }
+
         $found = in_array($item['id'], array_column($this->selected, 'id'));
 
         if ($found) {

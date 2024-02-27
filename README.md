@@ -54,13 +54,25 @@ Run the database migration
 php artisan migrate.
 ```
 
-Make sure to add the styles and scripts directives to your layout.
+Add layout styles and scripts directives.
 
 ```html
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 @mediableStyles
 @mediableScripts
+```
+
+Link `public/storage` to `storage/app/public`.
+
+```bash
+php artisan storage:link
+```
+
+Finally make sure your `.env` `APP_URL` is correctly set.
+
+```env
+APP_URL=https://mydomain.com
 ```
 
 ## Usage
@@ -70,7 +82,7 @@ Step one is to add Mediable somewhere in your blade template.
 > Note: The following parameters are optional. Boolean options can be provided by only specifying the key.
 
 ```html
-<livewire:mediable theme="tailwind" fullScreen />
+<livewire:mediable fullScreen />
 ```
 
 Launching Mediable is done by dispatching the `mediable:open` event.

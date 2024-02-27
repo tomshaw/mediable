@@ -39,9 +39,8 @@
         text-align: center;
         font-size: 11px;
         font-weight: 500;
-        padding: 3px 9px;
-        -webkit-user-select: none;
-        -moz-user-select: none;
+        line-height: 1;
+        padding: 6px 9px;
         user-select: none;
         margin: 0 2px;
         border-radius: 4px;
