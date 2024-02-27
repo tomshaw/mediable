@@ -16,45 +16,25 @@ You can install the package via composer:
 composer require tomshaw/mediable
 ```
 
-Run the installation command.
+Mediable comes with both install and update commands.
 
-```
+```bash
 php artisan mediable:install
 ```
 
-After updates run the update command.
-
-```
+```bash
 php artisan mediable:update
 ```
 
-When you install the application assets are copied to the following locations:
+Run the included database migration.
 
-1. The config file is published to your project's config directory as `mediable.php`. 
+> This creates an attachments table that stores upload information.
 
-    ```bash
-    config/mediable.php
-    ```
-
-2. Views are published to the `views/vendor/mediable` directory in your project's `resources` directory.
-
-    ```bash
-    resources/views/vendor/mediable
-    ```
-
-3. Images are published to the `vendor/mediable/images` directory in your project's `public` directory.
-
-    ```bash
-    public/vendor/mediable/images
-    ```
-
-Run the database migration
-
-```
-php artisan migrate.
+```bash
+php artisan migrate
 ```
 
-Add layout styles and scripts directives.
+Add Mediable styles and scripts directives to your layout.
 
 ```html
 @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -63,23 +43,17 @@ Add layout styles and scripts directives.
 @mediableScripts
 ```
 
-Link `public/storage` to `storage/app/public`.
+Finally make uploaded files accessible from the web.
 
 ```bash
 php artisan storage:link
 ```
 
-Finally make sure your `.env` `APP_URL` is correctly set.
-
-```env
-APP_URL=https://mydomain.com
-```
-
 ## Usage
 
-Step one is to add Mediable somewhere in your blade template.
+Add the Mediable component to your blade template.
 
-> Note: The following parameters are optional. Boolean options can be provided by only specifying the key.
+> Boolean options can be provided by only specifying the key.
 
 ```html
 <livewire:mediable fullScreen />
@@ -87,13 +61,13 @@ Step one is to add Mediable somewhere in your blade template.
 
 Launching Mediable is done by dispatching the `mediable:open` event.
 
-> Note: This is typically executed with a button click in your application.
+> This is typically executed with a button click.
 
 ```php
 $this->dispatch('mediable:open');
 ```
 
-Insert attachments directly into form inputs typically a `textarea` using the named parameter `id`. 
+Insert attachments directly into form inputs using named parameters. 
 
 > This example launches the modal with the intention of injecting attachments directly into an html input that has an `id` of `description`.
 
@@ -101,7 +75,7 @@ Insert attachments directly into form inputs typically a `textarea` using the na
 $this->dispatch('mediable:open', id: 'description');
 ```
 
-To handle selected attachments listen for the `mediable:on` event.
+Use the `mediable:on` event to handle selected attachments.
 
 ```php
 on(['mediable:on' => function ($files) {
@@ -113,29 +87,23 @@ on(['mediable:on' => function ($files) {
 
 You can customize allowable file types and max file size in the `mediable.php` config file.
 
-Here's how:
+```php
+'validation' => [
+    'files.*' => 'required|mimes:jpeg,png,jpg,gif,mp3,mp4,m4a,ogg,wav,webm,avi,mov,wmv,txt,pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar|max:10240',
+],
+```
 
-1. Open the `mediable.php` config file.
+The `mimes` rule specifies the allowable file types. To add a new file type, simply add its mime type to the list. For example, to allow SVG files, you would change it to:
 
-2. Look for the `validation` array. It should look something like this:
+```php
+'mimes:jpeg,png,jpg,gif,mp3,mp4,m4a,ogg,wav,webm,avi,mov,wmv,txt,pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,svg'
+```
 
-    ```php
-    'validation' => [
-        'files.*' => 'required|mimes:jpeg,png,jpg,gif,mp3,mp4,m4a,ogg,wav,webm,avi,mov,wmv,txt,pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar|max:10240',
-    ],
-    ```
+The `max` rule specifies the maximum file size, in kilobytes. To change the maximum file size, simply change the number. For example, to allow files up to 50MB, you would change it to:
 
-3. The `mimes` rule specifies the allowable file types. To add a new file type, simply add its mime type to the list. For example, to allow SVG files, you would change it to:
-
-    ```php
-    'mimes:jpeg,png,jpg,gif,mp3,mp4,m4a,ogg,wav,webm,avi,mov,wmv,txt,pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,svg'
-    ```
-
-4. The `max` rule specifies the maximum file size, in kilobytes. To change the maximum file size, simply change the number. For example, to allow files up to 50MB, you would change it to:
-
-    ```php
-    'max:51200'
-    ```
+```php
+'max:51200'
+```
 
 ## Storage Disk
 
@@ -155,32 +123,9 @@ You can change the `disk` option to use a different disk for file uploads. For e
 
 Remember to configure the chosen disk correctly in your `config/filesystems.php` file and to clear your config cache after making changes by running `php artisan config:clear` in your terminal.
 
-## Component Props
-
-The Mediable component accepts the following additional properties:
-
-- `showPagination`: Controls the visibility of the pagination. Example usage: `:showPagination="false"`
-- `showPerPage`: Controls the visibility of the per page option. Example usage: `:showPerPage="false"`
-- `showOrderBy`: Controls the visibility of the order by option. Example usage: `:showOrderBy="false"`
-- `showOrderDir`: Controls the visibility of the order direction option. Example usage: `:showOrderDir="false"`
-- `showColumnWidth`: Controls the visibility of the column width option. Example usage: `:showColumnWidth="false"`
-- `showSidebar`: Controls the visibility of the sidebar. Example usage: `:showSidebar="true"`
-
-You can customize the component by setting these properties to `true` or `false` as needed.
-
 ## Requirements
 
 The package is compatible with Laravel 10 and PHP 8.1.
-
-## Testing
-
-``` bash
-composer test
-```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
 ## Contributing
 
