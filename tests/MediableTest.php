@@ -55,7 +55,7 @@ it('has the correct view', function () {
 
 // Test that the component has the correct initial properties
 it('has the correct initial properties', function () {
-    expect($this->component->get('modalType'))->toBe('array');
+    expect($this->component->get('insertMode'))->toBe(false);
 });
 
 // Test that the 'deleteAttachment' method removes the attachment from the database

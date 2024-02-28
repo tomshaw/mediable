@@ -2,9 +2,7 @@
 
   <div class="absolute inset-0 bg-black bg-opacity-40" @click="show = false"></div>
 
-  <div @class([ 'bg-white rounded-lg shadow-lg flex justify-start fixed top-8 left-8 right-8 bottom-8 overflow-hidden'=> !$fullScreen,
-    'bg-white rounded-none shadow-none flex justify-start fixed top-0 left-0 right-0 bottom-0 overflow-hidden' => $fullScreen
-    ])>
+  <div @class(['bg-white rounded-lg shadow-lg flex justify-start fixed top-8 left-8 right-8 bottom-8 overflow-hidden'=> !$fullScreen, 'bg-white rounded-none shadow-none flex justify-start fixed top-0 left-0 right-0 bottom-0 overflow-hidden' => $fullScreen])>
 
     <div class="flex h-full bg-white flex-grow">
       <div class="relative flex flex-col justify-between w-full h-full overflow-hidden">
@@ -14,24 +12,18 @@
         </div>
 
         <div class="bg-white h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
+
           <div class="flex flex-col w-full">
-
             @include("mediable::tailwind.includes.toolbar")
-
             <div class="relative p-0 m-0 h-full w-full">
-
               <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $thumbMode || $tableMode])>
                 @include("mediable::tailwind.includes.attachments")
               </div>
-
               <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $uploadMode])>
                 @include("mediable::tailwind.includes.uploads")
               </div>
-
             </div>
-
             @include("mediable::tailwind.includes.pager")
-
           </div>
 
           @if(!$this->uploadMode && $this->showSidebar)
@@ -55,6 +47,7 @@
 <script>
   Alpine.data('initMediableBrowser', () => ({
     show: false,
+    
     inputId: '',
 
     init() {
@@ -85,14 +78,6 @@
     open(inputId) {
       if (inputId) {
         this.inputId = inputId;
-        Livewire.dispatch('modal:type', {
-          modalType: 'attachment'
-        });
-      } else {
-        this.inputId = '';
-        Livewire.dispatch('modal:typel', {
-          modalType: 'default'
-        });
       }
     },
 

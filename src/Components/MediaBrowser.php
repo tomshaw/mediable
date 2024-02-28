@@ -6,7 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithFileUploads, WithPagination};
 use TomShaw\Mediable\Eloquent\Eloquent;
-use TomShaw\Mediable\Enums\{BrowserEvents, ModalTypes};
+use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
 use TomShaw\Mediable\Traits\{ServerLimits, WithEvents, WithFileSize, WithMimeTypes};
@@ -22,7 +22,7 @@ class MediaBrowser extends Component
 
     public string $theme = 'tailwind';
 
-    public string $modalType = 'array';
+    public bool $insertMode = false;
 
     public bool $fullScreen = false;
 
@@ -121,10 +121,10 @@ class MediaBrowser extends Component
         $this->uniqueMimeTypes = Eloquent::uniqueMimes();
     }
 
-    #[On('modal:type')]
-    public function setModalType($modalType): void
+    #[On('mediable:open')]
+    public function open(?string $id = null): void
     {
-        $this->modalType = $modalType;
+        $this->insertMode = ($id) ? true : false;
     }
 
     #[On('audio:start')]
@@ -301,7 +301,7 @@ class MediaBrowser extends Component
 
     public function insertMedia(): void
     {
-        if ($this->modalType == ModalTypes::ATTACHMENT->value) {
+        if ($this->insertMode) {
             $this->dispatch(BrowserEvents::INSERT->value, selected: $this->selected);
         } else {
             $this->dispatch(BrowserEvents::DEFAULT->value, $this->selected);

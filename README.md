@@ -43,6 +43,12 @@ Add Mediable styles and scripts directives to your layout.
 @mediableScripts
 ```
 
+Make sure your `.env` `APP_URL` is correctly set.
+
+```env
+APP_URL=https://mydomain.com
+```
+
 Finally make uploaded files accessible from the web.
 
 ```bash
