@@ -67,26 +67,26 @@ Add the Mediable component to your blade template.
 <livewire:mediable fullScreen />
 ```
 
-Launching Mediable is done by dispatching the `mediable:open` event.
+Launching Mediable is done by dispatching the `mediable.open` event.
 
 > This is typically executed with a button click.
 
 ```php
-$this->dispatch('mediable:open');
+$this->dispatch('mediable.open');
 ```
 
-Insert attachments directly into form inputs using named parameters. 
+Insert attachments directly into form inputs using PHP 8 named parameters. 
 
 > This example launches the modal with the intention of injecting attachments directly into an html input that has an `id` of `description`.
 
 ```php
-$this->dispatch('mediable:open', id: 'description');
+$this->dispatch('mediable.open', id: 'description');
 ```
 
-Use the `mediable:on` event to handle selected attachments.
+Use the `mediable.on` event to handle selected attachments.
 
 ```php
-on(['mediable:on' => function ($files) {
+on(['mediable.on' => function ($files) {
   // Handle selected files...
 }]);
 ```
