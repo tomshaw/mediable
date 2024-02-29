@@ -52,8 +52,8 @@
         init() {
             Livewire.on('mediable:alert', event => this.alert(event?.detail));
             Livewire.on('mediable:insert', event => this.insert(event?.selected));
-            Livewire.on('audio:start', event => this.audioStart(event?.detail?.id));
-            Livewire.on('audio:pause', event => this.audioPause(event?.detail?.id));
+            Livewire.on('audio:start', event => this.audioStart(event?.id));
+            Livewire.on('audio:pause', event => this.audioPause(event?.id));
         },
 
         audioStart(id) {
