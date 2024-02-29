@@ -27,8 +27,6 @@ class MediaBrowser extends Component
         'elementId' => '',
     ];
 
-    public string $elementId = '';
-
     public bool $fullScreen = false;
 
     public array $files = [];
