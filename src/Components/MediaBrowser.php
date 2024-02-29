@@ -5,6 +5,7 @@ namespace TomShaw\Mediable\Components;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithFileUploads, WithPagination};
+use TomShaw\Mediable\Concerns\ModalState;
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
@@ -22,10 +23,7 @@ class MediaBrowser extends Component
 
     public string $theme = 'tailwind';
 
-    public array $state = [
-        'show' => false,
-        'elementId' => '',
-    ];
+    public ModalState $state;
 
     public bool $fullScreen = false;
 
@@ -99,6 +97,8 @@ class MediaBrowser extends Component
 
     public function mount(?string $theme = null)
     {
+        $this->state = new ModalState();
+
         $this->theme = $theme ?? config('mediable.theme');
 
         $this->maxUploadSize = $this->getMaxUploadSize();
@@ -124,28 +124,25 @@ class MediaBrowser extends Component
         $this->uniqueMimeTypes = Eloquent::uniqueMimes();
     }
 
-    #[On('mediable:open')]
+    #[On('mediable.open')]
     public function open(?string $id = null): void
     {
-        $this->state = [
-            'show' => true,
-            'elementId' => $id ?? '',
-        ];
+        $this->state = new ModalState(true, $id ?? '');
     }
 
-    #[On('mediable:close')]
+    #[On('mediable.close')]
     public function close(): void
     {
         $this->closeModal();
     }
 
-    #[On('audio:start')]
+    #[On('audio.start')]
     public function playAudio($id): void
     {
         $this->audioElementId = $id;
     }
 
-    #[On('audio:pause')]
+    #[On('audio.pause')]
     public function pauseAudio($id): void
     {
         if ($this->audioElementId == $id) {
@@ -153,10 +150,9 @@ class MediaBrowser extends Component
         }
     }
 
-    #[On('media:alert')]
+    #[On('media.alert')]
     public function alert($event): void
     {
-        dd($event);
     }
 
     public function enableThumbMode(): self
@@ -313,7 +309,7 @@ class MediaBrowser extends Component
 
     public function insertMedia(): void
     {
-        if (isset($this->state['elementId']) && ! empty($this->state['elementId'])) {
+        if ($this->state->hasElementId()) {
             $this->dispatch(BrowserEvents::INSERT->value, selected: $this->selected);
         } else {
             $this->dispatch(BrowserEvents::DEFAULT->value, $this->selected);
@@ -324,10 +320,10 @@ class MediaBrowser extends Component
 
     public function closeModal(): void
     {
-        $this->state = [
-            'show' => false,
-            'elementId' => '',
-        ];
+        $this->state = new ModalState(
+            show: false,
+            elementId: ''
+        );
 
         $this->resetModal();
     }

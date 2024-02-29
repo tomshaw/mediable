@@ -120,7 +120,7 @@
       if (this.error) {
         console.warn('error', this.error);
 
-        this.$wire.dispatch('mediable:alert', {
+        this.$wire.dispatch('mediable.alert', {
           type: 'error',
           message: this.error,
         });
@@ -137,7 +137,7 @@
           this.error = error;
           this.progress = 0;
 
-          this.$wire.dispatch('mediable:alert', {
+          this.$wire.dispatch('mediable.alert', {
             type: 'error',
             message: error || 'An error occurred while uploading the file'
           });

@@ -55,10 +55,9 @@ it('has the correct view', function () {
 
 // Test that the component has the correct initial properties
 it('has the correct initial properties', function () {
-    expect($this->component->get('state'))->toBe([
-        'show' => false,
-        'elementId' => '',
-    ]);
+    $state = $this->component->get('state');
+    expect($state->show)->toBe(false);
+    expect($state->elementId)->toBe('');
 });
 
 // Test that the 'deleteAttachment' method removes the attachment from the database
