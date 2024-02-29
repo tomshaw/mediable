@@ -22,7 +22,12 @@ class MediaBrowser extends Component
 
     public string $theme = 'tailwind';
 
-    public bool $insertMode = false;
+    public array $state = [
+        'show' => false,
+        'elementId' => '',
+    ];
+
+    public string $elementId = '';
 
     public bool $fullScreen = false;
 
@@ -124,7 +129,16 @@ class MediaBrowser extends Component
     #[On('mediable:open')]
     public function open(?string $id = null): void
     {
-        $this->insertMode = ($id) ? true : false;
+        $this->state = [
+            'show' => true,
+            'elementId' => $id ?? '',
+        ];
+    }
+
+    #[On('mediable:close')]
+    public function close(): void
+    {
+        $this->closeModal();
     }
 
     #[On('audio:start')]
@@ -301,7 +315,7 @@ class MediaBrowser extends Component
 
     public function insertMedia(): void
     {
-        if ($this->insertMode) {
+        if (isset($this->state['elementId']) && ! empty($this->state['elementId'])) {
             $this->dispatch(BrowserEvents::INSERT->value, selected: $this->selected);
         } else {
             $this->dispatch(BrowserEvents::DEFAULT->value, $this->selected);
@@ -312,7 +326,10 @@ class MediaBrowser extends Component
 
     public function closeModal(): void
     {
-        $this->dispatch(BrowserEvents::CLOSE->value);
+        $this->state = [
+            'show' => false,
+            'elementId' => '',
+        ];
 
         $this->resetModal();
     }

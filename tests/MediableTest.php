@@ -55,7 +55,10 @@ it('has the correct view', function () {
 
 // Test that the component has the correct initial properties
 it('has the correct initial properties', function () {
-    expect($this->component->get('insertMode'))->toBe(false);
+    expect($this->component->get('state'))->toBe([
+        'show' => false,
+        'elementId' => '',
+    ]);
 });
 
 // Test that the 'deleteAttachment' method removes the attachment from the database
@@ -64,9 +67,9 @@ it('can delete an attachment', function () {
     $this->assertDatabaseMissing('attachments', ['id' => 1]);
 });
 
-// Test that the 'closeModal' method dispatches the 'CLOSE' event
+// Test that the 'insertMedia' method dispatches the 'DEFAULT' event
 it('dispatched the correct event', function () {
-    $this->component->call('closeModal')->assertDispatched(BrowserEvents::CLOSE->value);
+    $this->component->call('insertMedia')->assertDispatched(BrowserEvents::DEFAULT->value);
 });
 
 // Test that the 'set' method correctly updates the 'file_name' property of the component
