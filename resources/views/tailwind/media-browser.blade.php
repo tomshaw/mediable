@@ -50,7 +50,7 @@
         state: @entangle('state').live,
 
         init() {
-            Livewire.on('mediable:alert', event => this.alert(event?.detail));
+            Livewire.on('mediable:alert', event => this.alert(event));
             Livewire.on('mediable:insert', event => this.insert(event?.selected));
             Livewire.on('audio:start', event => this.audioStart(event?.id));
             Livewire.on('audio:pause', event => this.audioPause(event?.id));
@@ -103,7 +103,7 @@
         },
 
         alert(event) {
-            console.warn('alert:warning', event);
+            console.log('alert:warning', event);
         }
     }))
 </script>
