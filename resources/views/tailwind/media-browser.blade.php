@@ -61,11 +61,11 @@
 
             if (audio) {
                 audio.play();
-            }
 
-            audio.addEventListener('ended', () => this.$dispatch('audio.pause', {
-                id: id
-            }));
+                audio.addEventListener('ended', () => this.$dispatch('audio.pause', {
+                    id: id
+                }));
+            }
         },
 
         audioPause(id) {
