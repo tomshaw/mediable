@@ -54,6 +54,6 @@ return [
     */
     'create_webp' => env('MEDIABLE_CREATE_WEBP', true),
     'create_avif' => env('MEDIABLE_CREATE_AVIF', true),
-    'webp_quality' => env('MEDIABLE_WEBP_QUALITY', 80),
-    'avif_quality' => env('MEDIABLE_AVIF_QUALITY', 80),
+    'webp_quality' => env('MEDIABLE_WEBP_QUALITY', 70),
+    'avif_quality' => env('MEDIABLE_AVIF_QUALITY', 70),
 ];

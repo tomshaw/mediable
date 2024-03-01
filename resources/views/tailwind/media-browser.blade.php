@@ -23,7 +23,9 @@
                                 @include("mediable::tailwind.includes.uploads")
                             </div>
                         </div>
+                        @if(!$this->uploadMode)
                         @include("mediable::tailwind.includes.pager")
+                        @endif
                     </div>
 
                     @if(!$this->uploadMode && $this->showSidebar)
@@ -34,9 +36,11 @@
 
                 </div>
 
+                @if(!$this->uploadMode && count($this->selected))
                 <div class="bg-gray-100 h-[60px] max-h-[60px] min-h-[60px] w-full">
                     @include("mediable::tailwind.includes.footer")
                 </div>
+                @endif
 
             </div>
         </div>

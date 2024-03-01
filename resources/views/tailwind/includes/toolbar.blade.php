@@ -54,7 +54,7 @@
     </div>
   </div>
   <div class="flex items-center justify-end gap-2">
-    <button type="button" wire:click="enableTableMode"><x-icons.tables /></button>
+    <button type="button" wire:click="enableTableMode" class="text-[#555]"><x-icons.tables /></button>
     <button type="button" wire:click="enableUploadMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">File Uploads</button>
   </div>
   @endif
