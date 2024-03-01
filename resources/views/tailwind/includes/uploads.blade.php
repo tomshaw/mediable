@@ -36,7 +36,7 @@
 
           <td class="whitespace-nowrap pe-6 py-2 text-right">
             <div>
-              <button type="button" class="btn" wire:click="clearFile({{$index}})">Remove</button>
+              <button type="button" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="clearFile({{$index}})">Remove</button>
             </div>
           </td>
 
