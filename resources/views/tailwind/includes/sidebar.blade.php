@@ -25,21 +25,14 @@
           <textarea class="control-input focus:ring-0" wire:model="description" rows="4" spellcheck="false"></textarea>
         </div>
       </div>
-      <div class="flex items-center justify-between">
-        <button type="button" class="btn" wire:click="deleteAttachment({{$modelId}})">Delete</button>
-        <div>
-          <button type="reset" class="btn">Reset</button>
-          <button type="submit" class="btn">Submit</button>
-        </div>
+      <div class="flex items-center justify-between flex-nowrap px-0 py-1">
+        <button type="reset" class="relative flex items-center justify-center px-3 py-1.5 bg-[#555] text-white rounded-md text-xs font-normal cursor-pointer transition-all duration-100 ease-in hover:text-white focus:outline-none">Reset</button>
+        <button type="submit" class="relative flex items-center justify-center px-3 py-1.5 bg-[#555] text-white rounded-md text-xs font-normal cursor-pointer transition-all duration-100 ease-in hover:text-white focus:outline-none">Update</button>
       </div>
     </form>
   </div>
 
   <div class="absolute bottom-0 bg-[#E6E6E6] border-t border-[#ccc] w-full h-[50px] min-h-[50px]">
-    <div class="flex items-center justify-start px-4 h-full w-full gap-x-2">
-      <div wire:loading class="hidden">
-        <div class="border-gray-300 h-6 w-6 animate-spin rounded-full border-2 border-t-blue-600"></div>
-      </div>
-    </div>
+    <div class="flex items-center justify-start px-4 h-full w-full gap-x-2"></div>
   </div>
 </div>

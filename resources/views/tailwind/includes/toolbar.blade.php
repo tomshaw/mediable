@@ -46,6 +46,9 @@
     </select>
     @endif
 
+    <div wire:loading class="hidden">
+      <div class="border-gray-300 h-6 w-6 animate-spin rounded-full border-2 border-t-blue-600"></div>
+    </div>
   </div>
   <div class="flex items-center justify-end gap-2">
     <button type="button" wire:click="enableTableMode"><x-icons.tables /></button>
@@ -81,6 +84,9 @@
     </select>
     @endif
 
+    <div wire:loading class="hidden">
+      <div class="border-gray-300 h-6 w-6 animate-spin rounded-full border-2 border-t-blue-600"></div>
+    </div>
   </div>
   <div class="flex items-center justify-end gap-2">
     <button type="button" wire:click="enableThumbMode"><x-icons.attachments /></button>

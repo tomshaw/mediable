@@ -3,8 +3,8 @@
   @if(!$uploadMode)
   <div class="flex items-center justify-start gap-2">
     @if (count($selected))
-    <button type="button" class="btn" wire:click="deleteSelected()">Delete Selected</button>
-    <button type="button" class="btn" wire:click="clearSelected()">Clear Selected</button>
+    <button type="button" class="relative flex items-center justify-center px-3 py-1.5 bg-[#555] text-white rounded-md text-xs font-normal cursor-pointer transition-all duration-100 ease-in hover:text-white focus:outline-none" wire:click="deleteSelected()">Delete Selected</button>
+    <button type="button" class="relative flex items-center justify-center px-3 py-1.5 bg-[#555] text-white rounded-md text-xs font-normal cursor-pointer transition-all duration-100 ease-in hover:text-white focus:outline-none" wire:click="clearSelected()">Clear Selected</button>
     @endif
     <ul class="flex items-center justify-start ml-4 gap-x-2">
       @foreach($selected as $item)
@@ -26,7 +26,7 @@
   </div>
   <div class="flex items-center justify-start gap-2">
     @if (count($selected))
-    <button type="button" class="btn" wire:click="insertMedia()">Add Attachments</button>
+    <button type="button" class="relative flex items-center justify-center px-3 py-1.5 bg-[#555] text-white rounded-md text-xs font-normal cursor-pointer transition-all duration-100 ease-in hover:text-white focus:outline-none" wire:click="insertMedia()">Submit Attachments</button>
     @endif
   </div>
   @endif
