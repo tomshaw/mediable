@@ -54,7 +54,7 @@
         <div class="hidden lg:block absolute top-0 right-0">
           <span class="text-right text-xs font-normal text-[#777] bg-transparent py-1 px-2">{{$this->formatBytes($item->file_size)}} &dash; {{ strtoupper(collect(explode('/', $item->file_type))->last()) }}</span>
         </div>
-        
+
         <div class="hidden lg:block absolute top-[1px] left-0">
           <span class="text-left text-xs font-normal text-[#777] bg-transparent py-1 px-2">{{$item->id}}</span>
         </div>
@@ -95,7 +95,8 @@
 
         @if ($item->title)
         <div class="hidden lg:block absolute inset-x-0 bottom-0 overflow-hidden max-h-full whitespace-nowrap text-left text-xs font-normal bg-[#444] px-1.5">
-          <span class="inline-block align-middle text-white text-xs font-light py-1">{!! $item->title !!}</span>
+          <div class="absolute inset-y-0 left-0 h-full w-0 bg-blue-500 z-0" id="audioProgress{{$item->id}}"></div>
+          <span class="inline-block align-middle text-white text-xs font-light py-1 relative z-10">{!! $item->title !!}</span>
         </div>
         @endif
 

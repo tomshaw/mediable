@@ -67,7 +67,7 @@ class EloquentManager
                     } catch (MediaBrowserException $e) {
                         continue;
                     }
-                    
+
                     $create = $this->createDataArray($file, $path, $driver);
 
                     $create['file_type'] = 'image/webp';
@@ -94,7 +94,7 @@ class EloquentManager
                     if (Storage::exists($path)) {
                         $create['file_size'] = Storage::size($path);
                     }
-                    
+
                     Attachment::create($create);
                 }
 

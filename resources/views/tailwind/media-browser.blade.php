@@ -2,7 +2,7 @@
 
     <div class="absolute inset-0 bg-black bg-opacity-40" @click="show = false"></div>
 
-    <div @class(['bg-white flex justify-start fixed overflow-hidden' => true, 'rounded-lg shadow-lg top-8 left-8 right-8 bottom-8' => !$fullScreen, 'rounded-none shadow-none top-0 left-0 right-0 bottom-0' => $fullScreen])>
+    <div @class(['bg-white flex justify-start fixed overflow-hidden'=> true, 'rounded-lg shadow-lg top-8 left-8 right-8 bottom-8' => !$fullScreen, 'rounded-none shadow-none top-0 left-0 right-0 bottom-0' => $fullScreen])>
         <div class="flex h-full bg-white flex-grow">
             <div class="relative flex flex-col justify-between w-full h-full overflow-hidden">
 
@@ -59,13 +59,24 @@
 
         audioStart(id) {
             const audio = document.getElementById('audioPlayer' + id);
+            const progressBar = document.getElementById('audioProgress' + id);
 
             if (audio) {
                 audio.play();
 
-                audio.addEventListener('ended', () => this.$dispatch('audio.pause', {
-                    id: id
-                }));
+                audio.addEventListener('timeupdate', () => {
+                    if (audio.duration) {
+                        const progress = (audio.currentTime / audio.duration) * 100;
+                        progressBar.style.width = progress + '%';
+                    }
+                });
+
+                audio.addEventListener('ended', () => {
+                    this.$dispatch('audio.pause', {
+                        id: id
+                    });
+                    progressBar.style.width = '0%';
+                });
             }
         },
 
