@@ -56,17 +56,23 @@ class EloquentManager
                 $image = imagecreatefromstring(file_get_contents($file->getRealPath()));
 
                 if (config('mediable.create_webp')) {
-                    $webpPath = $this->createImageResource($image, $store, $disk, 'image/webp', config('mediable.webp_quality'));
-                    $webpCreate = $this->createDataArray($file, $webpPath, $driver);
-                    $webpCreate['file_type'] = 'image/webp';
-                    Attachment::create($webpCreate);
+                    $path = $this->createImageResource($image, $store, $disk, 'image/webp', config('mediable.webp_quality'));
+                    $create = $this->createDataArray($file, $path, $driver);
+                    $create['file_type'] = 'image/webp';
+                    if (Storage::exists($path)) {
+                        $create['file_size'] = Storage::size($path);
+                    }
+                    Attachment::create($create);
                 }
 
                 if (config('mediable.create_avif')) {
-                    $avifPath = $this->createImageResource($image, $store, $disk, 'image/avif', config('mediable.avif_quality'));
-                    $avifCreate = $this->createDataArray($file, $avifPath, $driver);
-                    $avifCreate['file_type'] = 'image/avif';
-                    Attachment::create($avifCreate);
+                    $path = $this->createImageResource($image, $store, $disk, 'image/avif', config('mediable.avif_quality'));
+                    $create = $this->createDataArray($file, $path, $driver);
+                    $create['file_type'] = 'image/avif';
+                    if (Storage::exists($path)) {
+                        $create['file_size'] = Storage::size($path);
+                    }
+                    Attachment::create($create);
                 }
 
                 imagedestroy($image);
