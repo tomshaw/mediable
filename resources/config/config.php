@@ -3,6 +3,17 @@
 return [
     /*
     |--------------------------------------------------------------------------
+    | Default Theme
+    |--------------------------------------------------------------------------
+    |
+    | This configuration option allows you to change the default theme for the
+    | application. By default, we use the Tailwind theme.
+    |
+    */
+    'theme' => 'tailwind',
+
+    /*
+    |--------------------------------------------------------------------------
     | Validation Allowable File Types/Max File Size
     |--------------------------------------------------------------------------
     |
@@ -29,12 +40,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Theme
+    | Mediable Image Conversion Settings
     |--------------------------------------------------------------------------
     |
-    | This configuration option allows you to change the default theme for the
-    | application. By default, we use the Tailwind theme.
+    | These settings control the creation of WebP and AVIF versions of image uploads.
+    |
+    | 'create_webp' and 'create_avif' determine whether to create WebP and AVIF versions, respectively.
+    | These can be set to true or false. By default, both are set to true.
+    |
+    | 'webp_quality' and 'avif_quality' control the quality of the WebP and AVIF versions, respectively.
+    | These can be set to any integer between 0 and 100. By default, both are set to 80.
     |
     */
-    'theme' => 'tailwind',
+    'create_webp' => env('MEDIABLE_CREATE_WEBP', true),
+    'create_avif' => env('MEDIABLE_CREATE_AVIF', true),
+    'webp_quality' => env('MEDIABLE_WEBP_QUALITY', 80),
+    'avif_quality' => env('MEDIABLE_AVIF_QUALITY', 80),
 ];

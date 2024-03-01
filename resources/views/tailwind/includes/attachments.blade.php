@@ -51,6 +51,10 @@
 
       <div class="relative bg-[#e5e7eb] cursor-pointer py-4 md:py-8 lg:py-12 xl:py-16 px-4 md:px-8 flex items-center justify-center min-w-full">
 
+        <div class="hidden lg:block absolute top-0 right-0">
+          <span class="text-right text-xs font-normal text-[#777] bg-transparent py-1 px-2">{{$this->formatBytes($item->file_size)}} &dash; {{ strtoupper(collect(explode('/', $item->file_type))->last()) }}</span>
+        </div>
+        
         <div class="hidden lg:block absolute top-[1px] left-0">
           <span class="text-left text-xs font-normal text-[#777] bg-transparent py-1 px-2">{{$item->id}}</span>
         </div>

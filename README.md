@@ -131,6 +131,29 @@ You can change the `disk` option to use a different disk for file uploads. For e
 
 Remember to configure the chosen disk correctly in your `config/filesystems.php` file and to clear your config cache after making changes by running `php artisan config:clear` in your terminal.
 
+### Image Conversion Settings
+
+Mediable can automatically create WebP and AVIF versions of your image uploads. You can control this behavior with the following environment variables:
+
+- `MEDIABLE_CREATE_WEBP`: Set this to `true` to create a WebP version of each image upload, or `false` to disable this feature. By default, this is set to `true`.
+
+- `MEDIABLE_CREATE_AVIF`: Set this to `true` to create an AVIF version of each image upload, or `false` to disable this feature. By default, this is set to `true`.
+
+You can also control the quality of the WebP and AVIF versions with the following environment variables:
+
+- `MEDIABLE_WEBP_QUALITY`: Set this to any integer between 0 and 100 to control the quality of the WebP versions. A higher number means better quality but larger file size. By default, this is set to 80.
+
+- `MEDIABLE_AVIF_QUALITY`: Set this to any integer between 0 and 100 to control the quality of the AVIF versions. A higher number means better quality but larger file size. By default, this is set to 80.
+
+Here's an example of how you might set these environment variables in your `.env` file:
+
+```env
+MEDIABLE_CREATE_WEBP=true 
+MEDIABLE_CREATE_AVIF=true 
+MEDIABLE_WEBP_QUALITY=80 
+MEDIABLE_AVIF_QUALITY=80
+```
+
 ## Requirements
 
 The package is compatible with Laravel 10 and PHP 8.1.

@@ -2,8 +2,11 @@
 
 namespace TomShaw\Mediable\Eloquent;
 
+use GdImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
 
@@ -39,23 +42,70 @@ class EloquentManager
                 continue;
             }
 
-            $stored = $file->store($disk);
+            $store = $file->store($disk);
 
-            $create = [];
-            $create['file_name'] = $file->getFilename();
-            $create['file_original_name'] = $file->getClientOriginalName();
-            $create['file_type'] = $file->getMimeType();
-            $create['file_size'] = $file->getSize();
-            $create['file_dir'] = $stored;
-            $create['file_url'] = $driver['url'].'/'.basename($stored);
-            $create['title'] = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $create = $this->createDataArray($file, $store, $driver);
 
             try {
                 Attachment::create($create);
             } catch (MediaBrowserException $e) {
                 throw new MediaBrowserException($e->getMessage());
             }
+
+            if (str_starts_with($file->getMimeType(), 'image/')) {
+                $image = imagecreatefromstring(file_get_contents($file->getRealPath()));
+
+                if (config('mediable.create_webp')) {
+                    $webpPath = $this->createImageResource($image, $store, $disk, 'image/webp', config('mediable.webp_quality'));
+                    $webpCreate = $this->createDataArray($file, $webpPath, $driver);
+                    $webpCreate['file_type'] = 'image/webp';
+                    Attachment::create($webpCreate);
+                }
+
+                if (config('mediable.create_avif')) {
+                    $avifPath = $this->createImageResource($image, $store, $disk, 'image/avif', config('mediable.avif_quality'));
+                    $avifCreate = $this->createDataArray($file, $avifPath, $driver);
+                    $avifCreate['file_type'] = 'image/avif';
+                    Attachment::create($avifCreate);
+                }
+
+                imagedestroy($image);
+            }
         }
+    }
+
+    private function createDataArray(TemporaryUploadedFile $file, string $store, array $driver): array
+    {
+        return [
+            'file_name' => $file->getFilename(),
+            'file_original_name' => $file->getClientOriginalName(),
+            'file_type' => $file->getMimeType(),
+            'file_size' => $file->getSize(),
+            'file_dir' => $store,
+            'file_url' => $driver['url'].'/'.basename($store),
+            'title' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
+        ];
+    }
+
+    private function createImageResource(GdImage $image, string $stored, string $disk, string $type = 'image/webp', int $quality = -1)
+    {
+        $extension = ($type === 'image/webp') ? 'webp' : 'avif';
+
+        $path = pathinfo($stored, PATHINFO_FILENAME).'.'.$extension;
+
+        ob_start();
+        if ($type === 'image/webp') {
+            imagewebp($image, null, $quality);
+        } else {
+            imageavif($image, null, $quality);
+        }
+        $content = ob_get_clean();
+
+        Storage::disk($disk)->put($path, $content);
+
+        $path = dirname($stored).'/'.pathinfo($stored, PATHINFO_FILENAME).'.'.$extension;
+
+        return $path;
     }
 
     public function update(int $id, string $title, string $caption, string $description): void
