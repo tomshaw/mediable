@@ -63,7 +63,9 @@
                 audio.play();
             }
 
-            audio.addEventListener('ended', () => this.$dispatch('audio.pause', { id: id }));
+            audio.addEventListener('ended', () => this.$dispatch('audio.pause', {
+                id: id
+            }));
         },
 
         audioPause(id) {
@@ -79,22 +81,20 @@
                 return;
             }
 
-            let insert = [];
-            for (let i = 0; i < selected.length; i++) {
-                let mediaType = selected[i].file_type.toLowerCase();
+            let insert = selected.map(item => {
+                let mediaType = item.file_type.toLowerCase();
+                let fileTitle = item.file_title || item.file_name;
 
-                let fileTitle = (selected[i].file_title) ? selected[i].file_title : selected[i].file_name;
-
-                if (mediaType.indexOf('image') != -1) {
-                    insert.push('<a href="' + selected[i].file_url + '"><img src="' + selected[i].file_url + '" alt="' + fileTitle + '"></a>\n');
-                } else if (mediaType.indexOf('audio') != -1) {
-                    insert.push('<audio controls autoplay><source src="' + selected[i].file_url + '" type="' + selected[i].file_type + '"></audio>\n');
-                } else if (mediaType.indexOf('video') != -1) {
-                    insert.push('<video controls autoplay><source src="' + selected[i].file_url + '" type="' + selected[i].file_type + '"></video>\n');
+                if (mediaType.includes('image')) {
+                    return `<a href="${item.file_url}"><img src="${item.file_url}" alt="${fileTitle}"></a>\n`;
+                } else if (mediaType.includes('audio')) {
+                    return `<audio controls autoplay><source src="${item.file_url}" type="${item.file_type}"></audio>\n`;
+                } else if (mediaType.includes('video')) {
+                    return `<video controls autoplay><source src="${item.file_url}" type="${item.file_type}"></video>\n`;
                 } else {
-                    insert.push('<a href="' + selected[i].file_url + '">' + fileTitle + '</a>');
+                    return `<a href="${item.file_url}">${fileTitle}</a>`;
                 }
-            }
+            });
 
             if (insert.length) {
                 const el = document.getElementById(this.state.elementId);
