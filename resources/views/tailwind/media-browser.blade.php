@@ -2,8 +2,7 @@
 
     <div class="absolute inset-0 bg-black bg-opacity-40" @click="show = false"></div>
 
-    <div @class(['bg-white rounded-lg shadow-lg flex justify-start fixed top-8 left-8 right-8 bottom-8 overflow-hidden'=> !$fullScreen, 'bg-white rounded-none shadow-none flex justify-start fixed top-0 left-0 right-0 bottom-0 overflow-hidden' => $fullScreen])>
-
+    <div @class(['bg-white flex justify-start fixed overflow-hidden' => true, 'rounded-lg shadow-lg top-8 left-8 right-8 bottom-8' => !$fullScreen, 'rounded-none shadow-none top-0 left-0 right-0 bottom-0' => $fullScreen])>
         <div class="flex h-full bg-white flex-grow">
             <div class="relative flex flex-col justify-between w-full h-full overflow-hidden">
 
@@ -12,7 +11,6 @@
                 </div>
 
                 <div class="bg-white h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
-
                     <div class="flex flex-col w-full">
                         @include("mediable::tailwind.includes.toolbar")
                         <div class="relative p-0 m-0 h-full w-full">
@@ -33,7 +31,6 @@
                         @include("mediable::tailwind.includes.sidebar")
                     </div>
                     @endif
-
                 </div>
 
                 @if(!$this->uploadMode && count($this->selected))

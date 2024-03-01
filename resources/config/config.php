@@ -40,7 +40,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Mediable Image Conversion Settings
+    | Image Conversion Settings
     |--------------------------------------------------------------------------
     |
     | These settings control the creation of WebP and AVIF versions of image uploads.
