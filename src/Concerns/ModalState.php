@@ -30,6 +30,6 @@ final class ModalState implements Wireable
 
     public function hasElementId(): bool
     {
-        return isset($this->elementId) && ! empty($this->elementId);
+        return ! empty($this->elementId);
     }
 }

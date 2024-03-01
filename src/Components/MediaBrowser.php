@@ -21,9 +21,9 @@ class MediaBrowser extends Component
     use WithMimeTypes;
     use WithPagination;
 
-    public string $theme = 'tailwind';
-
     public ModalState $state;
+
+    public string $theme = 'tailwind';
 
     public bool $fullScreen = false;
 

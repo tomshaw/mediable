@@ -92,6 +92,22 @@
         background-color: #f2f2f2;
     }
 
+    .attachment .attachment-item {
+        animation: fadeIn 200ms forwards;
+        animation-delay: 600ms;
+        opacity: 0;
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
     .audio-animation {
         animation: audio-animation 1.2s ease infinite alternate;
     }

@@ -47,9 +47,7 @@
 
     @if ($data->count())
     @foreach($data as $item)
-    <li @class([ 'relative flex m-0 p-2 cursor-pointer list-none text-center select-none w-[20%]' , 'selected shadow-[inset_0_0_0_2px_#fff,_inset_0_0_0_7px_#00b5d2]'=> in_array($item->id, array_column($this->selected, 'id')), 'details' => $item->id == $this->modelId])
-      wire:click="toggleAttachment({{$item->id}})"
-      style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
+    <li @class(['attachment relative flex m-0 p-2 cursor-pointer list-none text-center select-none w-[20%]' , 'selected shadow-[inset_0_0_0_2px_#fff,_inset_0_0_0_7px_#00b5d2]'=> in_array($item->id, array_column($this->selected, 'id')), 'details' => $item->id == $this->modelId]) wire:click="toggleAttachment({{$item->id}})" style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
 
       <div class="relative bg-[#e5e7eb] cursor-pointer py-4 md:py-8 lg:py-12 xl:py-16 px-4 md:px-8 flex items-center justify-center min-w-full">
 
@@ -58,9 +56,9 @@
         </div>
 
         @if ($this->mimeTypeImage($item->file_type))
-        <img src="{{ asset($item->file_url) }}" class="object-contain shadow border border-black" alt="{{ $item->file_original_name }}">
+        <img src="{{ asset($item->file_url) }}" class="attachment-item object-contain shadow border border-black" alt="{{ $item->file_original_name }}">
         @elseif ($this->mimeTypeVideo($item->file_type))
-        <video src="{{ asset($item->file_url) }}" alt="{{ $item->file_original_name }}" controls></video>
+        <video src="{{ asset($item->file_url) }}" class="attachment-item" alt="{{ $item->file_original_name }}" controls></video>
         @elseif ($this->mimeTypeAudio($item->file_type))
         <div class="relative object-contain overflow-hidden">
 
