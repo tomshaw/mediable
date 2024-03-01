@@ -66,17 +66,13 @@
             <source src="{{ asset($item->file_url) }}" type="{{ $item->file_type }}">
           </audio>
 
-          <button wire:click.stop="$dispatch('audio.start', { id: {{ $item->id }} })" id="playIcon{{ $item->id }}" @class([ 'w-12 h-12 bg-[#444] rounded-full flex items-center justify-center cursor-pointer'=> $item->id != $this->audioElementId,
-            'w-12 h-12 bg-[#444] rounded-full hidden items-center justify-center cursor-pointer' => $item->id == $this->audioElementId
-            ])>
+          <button wire:click.stop="$dispatch('audio.start', { id: {{ $item->id }} })" id="playIcon{{ $item->id }}" @class(['w-12 h-12 bg-[#444] rounded-full items-center justify-center cursor-pointer', ($item->id === $this->audioElementId) ? 'hidden' : 'flex'])>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-white">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
             </svg>
           </button>
 
-          <button wire:click.stop="$dispatch('audio.pause', { id: {{ $item->id }} })" id="pauseIcon{{ $item->id }}" @class([ 'bg-white bg-opacity-10 w-12 h-12 rounded-md hidden justify-between items-end p-2 box-border cursor-pointer gap-x-[1px]'=> $item->id != $this->audioElementId,
-            'bg-white bg-opacity-10 w-12 h-12 flex justify-between items-end p-2 box-border cursor-pointer gap-x-[1px]' => $item->id == $this->audioElementId
-            ])>
+          <button wire:click.stop="$dispatch('audio.pause', { id: {{ $item->id }} })" id="pauseIcon{{ $item->id }}" @class(['bg-white bg-opacity-10 w-12 h-12 justify-between items-end p-2 box-border cursor-pointer gap-x-[1px]', ($item->id === $this->audioElementId) ? 'flex' : 'hidden'])>
             <span class="audio-animation inline-block bg-[#444] w-1/3 h-[60%]" style="animation-delay: 0;"></span>
             <span class="audio-animation inline-block bg-[#444] w-1/3 h-[30%]" style="animation-delay: -2.2s;"></span>
             <span class="audio-animation inline-block bg-[#444] w-1/3 h-[75%]" style="animation-delay: -3.7s"></span>

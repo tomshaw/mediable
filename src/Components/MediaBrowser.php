@@ -358,9 +358,7 @@ class MediaBrowser extends Component
     }
 
     /**
-     * Handle page pagination updating event.
-     *
-     * Called when the page property is about to be updated.
+     * Called when the pagination property is about to be updated.
      */
     public function updatingPage(): void
     {
