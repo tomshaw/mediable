@@ -63,6 +63,11 @@
 
   @if($previewMode)
   <div class="flex items-center justify-start gap-2">
+    @if ($this->mimeTypeImage($this->fileType))
+    <div>
+      <input type="range" min="1" max="100" value="{{ $this->imageWidth }}" wire:model.live="imageWidth">
+    </div>
+    @endif
     <div wire:loading class="hidden">
       <div class="border-gray-300 h-6 w-6 animate-spin rounded-full border-2 border-t-blue-600"></div>
     </div>

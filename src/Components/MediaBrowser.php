@@ -99,6 +99,8 @@ class MediaBrowser extends Component
 
     public ?int $memoryLimit = null;
 
+    public int $imageWidth = 100;
+
     public function mount(?string $theme = null)
     {
         $this->state = new ModalState();
@@ -176,6 +178,7 @@ class MediaBrowser extends Component
             'thumbMode' => false,
             'previewMode' => true,
             'uploadMode' => false,
+            'imageWidth' => 100,
         ]);
 
         return $this;
@@ -282,7 +285,7 @@ class MediaBrowser extends Component
         $this->fileUrl = $item['file_url'];
         $this->fileType = $item['file_type'];
 
-        if (! $this->showSidebar) {
+        if ($this->showSidebar) {
             $this->toggleSidebar();
         }
 
@@ -292,6 +295,10 @@ class MediaBrowser extends Component
     public function clearSelected(): void
     {
         $this->selected = [];
+
+        if ($this->previewMode) {
+            $this->enableThumbMode();
+        }
     }
 
     public function deleteSelected(): void
@@ -382,6 +389,11 @@ class MediaBrowser extends Component
         if ($this->audioElementId) {
             $this->audioElementId = null;
         }
+    }
+
+    public function updatedImageWidth($value)
+    {
+        $this->imageWidth = $value;
     }
 
     private function renderView(LengthAwarePaginator $paginator)
