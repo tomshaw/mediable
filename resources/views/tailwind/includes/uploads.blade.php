@@ -1,9 +1,7 @@
 <div @class(['flex items-center justify-center p-0 m-0 w-full', sizeof($files) ? 'h-auto' : 'h-full' ]) x-data="initMediableUploads()">
 
   @if (sizeof($files))
-
   <div class="overflow-hidden w-full">
-
     <table class="min-w-full text-center text-sm font-light">
       <tbody>
         @foreach($files as $index => $file)
@@ -45,11 +43,8 @@
         @endforeach
       </tbody>
     </table>
-
   </div>
-
   @else
-
   <form>
     <div class="h-auto max-w-[500px] py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-red-500': enter }" x-on:click.prevent="fileClick($event)">
       <div class="m-0 p-2 flex items-center text-left">

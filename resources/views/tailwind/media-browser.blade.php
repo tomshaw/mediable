@@ -14,14 +14,17 @@
                     <div class="flex flex-col w-full">
                         @include("mediable::tailwind.includes.toolbar")
                         <div class="relative p-0 m-0 h-full w-full">
-                            <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $thumbMode || $tableMode])>
+                            <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $thumbMode])>
                                 @include("mediable::tailwind.includes.attachments")
+                            </div>
+                            <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $previewMode])>
+                                @include("mediable::tailwind.includes.previews")
                             </div>
                             <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $uploadMode])>
                                 @include("mediable::tailwind.includes.uploads")
                             </div>
                         </div>
-                        @if(!$this->uploadMode)
+                        @if(!$this->uploadMode && !$this->previewMode)
                         @include("mediable::tailwind.includes.pager")
                         @endif
                     </div>
@@ -67,6 +70,7 @@
                 audio.addEventListener('timeupdate', () => {
                     if (audio.duration) {
                         const progress = (audio.currentTime / audio.duration) * 100;
+
                         progressBar.style.width = progress + '%';
                     }
                 });
@@ -75,6 +79,7 @@
                     this.$dispatch('audio.pause', {
                         id: id
                     });
+
                     progressBar.style.width = '0%';
                 });
             }

@@ -1,48 +1,4 @@
 <div class="flex items-center justify-center p-0 m-0 w-full">
-
-  @if($tableMode)
-  <div class="overflow-hidden w-full">
-    <table class="border border-collapse">
-      @if ($data->count())
-      <tbody>
-        @foreach($data as $item)
-        <tr @class([ 'selected'=> in_array($item->id, array_column($this->selected, 'id')), 'details' => $item->id == $this->modelId])>
-          <td class="center">
-            <span class="whitespace-nowrap">{{ $item->id }}</span>
-          </td>
-          <td class="text-left relative">
-            <span class="whitespace-nowrap font-medium">{{ $item->title }}</span>
-          </td>
-          <td class="text-left">
-            <span class="whitespace-nowrap">{{ $item->file_original_name }}</span>
-          </td>
-          <td>
-            <span class="whitespace-nowrap">{{ $item->file_type }}</span>
-          </td>
-          <td>
-            <span class="whitespace-nowrap">{{ $this->formatBytes($item->file_size) }}</span>
-          </td>
-          <td>
-            <span class="whitespace-nowrap">{{ $item->created_at }}</span>
-          </td>
-          <td>
-            <span class="whitespace-nowrap">{{ $item->updated_at }}</span>
-          </td>
-          <td>
-            <div class="flex items-center justify-center gap-x-2">
-              <button class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="toggleAttachment({{$item->id}})">Toggle</button>
-              <button class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click.prevent="deleteAttachment({{$item->id}})">Delete</button>
-            </div>
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-      @endif
-    </table>
-  </div>
-
-  @elseif($thumbMode)
-
   <ul class="flex flex-wrap m-0 p-0 w-full">
 
     @if ($data->count())
@@ -60,9 +16,9 @@
         </div>
 
         @if ($this->mimeTypeImage($item->file_type))
-        <img src="{{ asset($item->file_url) }}" class="attachment-item object-contain shadow border border-black" alt="{{ $item->file_original_name }}">
+        <img src="{{ asset($item->file_url) }}" class="attachment__item object-contain shadow border border-black" alt="{{ $item->file_original_name }}">
         @elseif ($this->mimeTypeVideo($item->file_type))
-        <video src="{{ asset($item->file_url) }}" class="attachment-item" alt="{{ $item->file_original_name }}" controls></video>
+        <video src="{{ asset($item->file_url) }}" class="attachment__item" alt="{{ $item->file_original_name }}" controls></video>
         @elseif ($this->mimeTypeAudio($item->file_type))
         <div class="relative object-contain overflow-hidden">
 
@@ -106,7 +62,4 @@
     @endif
 
   </ul>
-
-  @endif
-
 </div>

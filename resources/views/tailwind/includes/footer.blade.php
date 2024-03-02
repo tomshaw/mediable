@@ -6,8 +6,8 @@
     @endif
     <ul class="flex items-center justify-start ml-4 gap-x-2">
       @foreach($selected as $item)
-      <li @class(['cursor-pointer', 'shadow-[inset_0px_0px_0px_3px_#fff,0px_0px_4px_2px_#4299e1]'=> $item['id'] == $this->modelId]) wire:click="setActiveAttachment({{$item}})">
-        <div class="border border-black shadow-md w-10 h-10 overflow-hidden">
+      <li class="cursor-pointer shadow-md shadow-emerald-900" wire:click="setActiveAttachment({{$item}})">
+        <div class="border border-black w-10 h-10 overflow-hidden">
           @if ($this->mimeTypeImage($item['file_type']))
           <img src="{{ $item['file_url'] }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
           @elseif ($this->mimeTypeVideo($item['file_type']))

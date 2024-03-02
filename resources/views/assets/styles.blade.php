@@ -92,7 +92,7 @@
         background-color: #f2f2f2;
     }
 
-    .attachment .attachment-item {
+    .attachment .attachment__item {
         animation: fadeIn 200ms forwards;
         animation-delay: 600ms;
         opacity: 0;

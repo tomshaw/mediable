@@ -43,6 +43,10 @@ class MediaBrowser extends Component
 
     public ?string $description = '';
 
+    public ?string $fileUrl = '';
+
+    public ?string $fileType = '';
+
     public string $searchTerm = '';
 
     public array $searchColumns = ['title', 'caption', 'description', 'file_original_name'];
@@ -61,7 +65,7 @@ class MediaBrowser extends Component
 
     public bool $thumbMode = true;
 
-    public bool $tableMode = false;
+    public bool $previewMode = false;
 
     public bool $uploadMode = false;
 
@@ -159,18 +163,18 @@ class MediaBrowser extends Component
     {
         $this->fill([
             'thumbMode' => true,
-            'tableMode' => false,
+            'previewMode' => false,
             'uploadMode' => false,
         ]);
 
         return $this;
     }
 
-    public function enableTableMode(): self
+    public function enablePreviewMode(): self
     {
         $this->fill([
             'thumbMode' => false,
-            'tableMode' => true,
+            'previewMode' => true,
             'uploadMode' => false,
         ]);
 
@@ -181,7 +185,7 @@ class MediaBrowser extends Component
     {
         $this->fill([
             'thumbMode' => false,
-            'tableMode' => false,
+            'previewMode' => false,
             'uploadMode' => true,
         ]);
 
@@ -255,6 +259,8 @@ class MediaBrowser extends Component
         $this->title = $item['title'];
         $this->caption = $item['caption'];
         $this->description = $item['description'];
+        $this->fileUrl = $item['file_url'];
+        $this->fileType = $item['file_type'];
 
         if (! $this->showSidebar) {
             $this->toggleSidebar();
@@ -273,10 +279,14 @@ class MediaBrowser extends Component
         $this->title = $item['title'];
         $this->caption = $item['caption'];
         $this->description = $item['description'];
+        $this->fileUrl = $item['file_url'];
+        $this->fileType = $item['file_type'];
 
         if (! $this->showSidebar) {
             $this->toggleSidebar();
         }
+
+        $this->enablePreviewMode();
     }
 
     public function clearSelected(): void
