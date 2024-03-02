@@ -32,66 +32,6 @@
         color: #fff;
     }
 
-    .mediable .btn {
-        display: inline-block;
-        vertical-align: middle;
-        color: #4e4e4e;
-        text-align: center;
-        font-size: 11px;
-        font-weight: 500;
-        line-height: 1;
-        padding: 6px 9px;
-        user-select: none;
-        margin: 0 2px;
-        border-radius: 4px;
-        border: 1px solid #E3E3E3;
-        cursor: pointer;
-        box-shadow: inset 0 1px #fff, 0 1px 2px #666;
-        text-shadow: 0 1px 1px #FFF;
-        background-color: #e6e6e6;
-        background-image: -webkit-linear-gradient(top, #F3F3F3, #D7D7D7);
-        white-space: nowrap;
-    }
-
-    .mediable .btn:hover,
-    .mediable .btn:focus {
-        color: #686868;
-    }
-
-    .mediable table {
-        min-width: 100%;
-        text-align: center;
-        font-size: 0.875rem;
-        font-weight: 300;
-        padding: 0 !important;
-        border-collapse: collapse;
-    }
-
-    .mediable table>thead>tr>th,
-    .mediable table>tbody>tr>td {
-        padding: 8px;
-        line-height: 1.42857143;
-        vertical-align: middle;
-    }
-
-    .mediable table>tbody>tr {
-        border-top: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
-        cursor: pointer;
-    }
-
-    .mediable table>tbody>tr:first-of-type {
-        border-top: 1px solid transparent;
-    }
-
-    .mediable table>tbody>tr:last-of-type {
-        border-bottom: 1px solid transparent;
-    }
-
-    .mediable table>tbody>tr.selected {
-        background-color: #f2f2f2;
-    }
-
     .attachment .attachment__item {
         animation: fadeIn 200ms forwards;
         animation-delay: 600ms;

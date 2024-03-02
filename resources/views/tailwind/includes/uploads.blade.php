@@ -1,48 +1,45 @@
 <div @class(['flex items-center justify-center p-0 m-0 w-full', sizeof($files) ? 'h-auto' : 'h-full' ]) x-data="initMediableUploads()">
 
   @if (sizeof($files))
-  <div class="overflow-hidden w-full">
-    <table class="min-w-full text-center text-sm font-light">
-      <tbody>
-        @foreach($files as $index => $file)
-        @if(!is_null($file))
-        <tr class="border-b border-dashed">
-
-          <td class="whitespace-nowrap px-4 py-2 text-left w-[8px] max-w-[8px]">
-            <span class="text-gray-700">
-              {{ $index+1 }}
-            </span>
-          </td>
-
-          <td class="whitespace-nowrap px-4 py-2 text-left">
-            <span class="text-gray-700 font-normal">
-              {!! \Illuminate\Support\Str::limit($file->getClientOriginalName(), 40, '...') !!}
-            </span>
-          </td>
-
-          <td class="whitespace-nowrap px-4 py-2 text-left">
-            <span class="text-gray-700">
-              {{ $file->getMimeType() }}
-            </span>
-          </td>
-
-          <td class="whitespace-nowrap px-4 py-2 text-left">
-            <span class="text-gray-700">
-              ({{round($file->getSize() / 1024, 2)}}) KB
-            </span>
-          </td>
-
-          <td class="whitespace-nowrap pe-6 py-2 text-right">
-            <div>
-              <button type="button" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="clearFile({{$index}})">Remove</button>
-            </div>
-          </td>
-
-        </tr>
-        @endif
-        @endforeach
-      </tbody>
-    </table>
+  <div class="flex flex-col items-center justify-center h-auto w-full max-w-screen-lg p-4 md:p-6 lg:p-8 m-0">
+    <div class="w-full">
+      @if(count($files) >= 1)
+      <div class="flex justify-between gap-2 mb-2">
+        <span class="text-sm text-gray-500">{{ count($files) }} total files selected.</span>
+        <span class="text-sm text-gray-500">{{ $this->formatBytes($this->getTotalUploadSize()) }} total upload size.</span>
+      </div>
+      @endif
+      <div class="overflow-x-auto md:overflow-visible">
+        <table class="border-collapse table-fixed w-full text-sm shadow-md">
+          <thead class="bg-[#E6E6E6]">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-[20px]">Id</th>
+              <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-[200px]">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Type</th>
+              <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Size</th>
+              <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Progress</th>
+              <th class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            @foreach($files as $index => $file)
+            <tr>
+              <td class="px-6 py-2">{{ $index+1 }}</td>
+              <td class="px-6 py-2 w-[200px]">{!! \Illuminate\Support\Str::limit($file->getClientOriginalName(), 40, '...') !!}</td>
+              <td class="px-6 py-2">{{ $file->getMimeType() }}</td>
+              <td class="px-6 py-2">{{$this->formatBytes($file->getSize())}}</td>
+              <td class="px-6 py-2 hidden lg:table-cell">Pending</td>
+              <td class="px-6 py-2 hidden lg:table-cell">0%</td>
+              <td class="px-6 py-2 whitespace-nowrap flex items-center justify-center">
+                <button type="button" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="clearFile({{$index}})">Remove</button>
+              </td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
   @else
   <form>

@@ -4,6 +4,7 @@
   <div class="flex items-center justify-start gap-2">
     <button type="button" wire:click="enableThumbMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Close</button>
   </div>
+  @if(count($files) >= 1)
   <div class="flex items-center justify-end gap-2">
     <button type="button" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="clearFiles()">Reset</button>
     <button type="button" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="createAttachments()" wire:loading.attr="disabled">
@@ -11,6 +12,7 @@
       <span wire:loading wire:target="createAttachments">Processing...</span>
     </button>
   </div>
+  @endif
   @endif
 
   @if($thumbMode)

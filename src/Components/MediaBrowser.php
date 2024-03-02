@@ -367,6 +367,13 @@ class MediaBrowser extends Component
         $this->files = [];
     }
 
+    public function getTotalUploadSize()
+    {
+        return array_reduce($this->files, function ($carry, $file) {
+            return $carry + $file->getSize();
+        }, 0);
+    }
+
     /**
      * Called when the pagination property is about to be updated.
      */
