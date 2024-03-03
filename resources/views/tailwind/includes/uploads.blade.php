@@ -1,20 +1,20 @@
 <div @class(['flex items-center justify-center p-0 m-0 w-full', sizeof($files) ? 'h-auto' : 'h-full' ]) x-data="initMediableUploads()">
 
   @if (sizeof($files))
-  <div class="flex flex-col items-center justify-center h-auto w-full max-w-screen-lg p-4 md:p-6 lg:p-8 m-0">
+  <div class="flex flex-col items-center justify-center h-auto w-full max-w-screen-2xl p-4 md:p-6 lg:p-8 m-0">
     <div class="w-full">
       @if(count($files) >= 1)
       <div class="flex justify-between gap-2 mb-2">
-        <span class="text-sm text-gray-500">{{ count($files) }} total files selected.</span>
-        <span class="text-sm text-gray-500">{{ $this->formatBytes($this->getTotalUploadSize()) }} total upload size.</span>
+        <span class="text-xs text-gray-500 font-bold uppercase">{{ count($files) }} files selected</span>
+        <span class="text-xs text-gray-500 font-bold uppercase">{{ $this->formatBytes($this->getTotalUploadSize()) }} upload size</span>
       </div>
       @endif
       <div class="overflow-x-auto md:overflow-visible">
-        <table class="border-collapse table-fixed w-full text-sm shadow-md">
+        <table class="border-collapse table-auto w-full text-sm shadow-md">
           <thead class="bg-[#E6E6E6]">
             <tr>
               <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-[20px]">Id</th>
-              <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-[200px]">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Name</th>
               <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Type</th>
               <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Size</th>
               <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Status</th>
@@ -26,11 +26,11 @@
             @foreach($files as $index => $file)
             <tr>
               <td class="px-6 py-2">{{ $index+1 }}</td>
-              <td class="px-6 py-2 w-[200px]">{!! \Illuminate\Support\Str::limit($file->getClientOriginalName(), 40, '...') !!}</td>
+              <td class="px-6 py-2">{!! \Illuminate\Support\Str::limit($file->getClientOriginalName(), 40, '...') !!}</td>
               <td class="px-6 py-2">{{ $file->getMimeType() }}</td>
               <td class="px-6 py-2">{{$this->formatBytes($file->getSize())}}</td>
               <td class="px-6 py-2 hidden lg:table-cell">Pending</td>
-              <td class="px-6 py-2 hidden lg:table-cell">0%</td>
+              <td class="px-6 py-2 hidden lg:table-cell">100%</td>
               <td class="px-6 py-2 whitespace-nowrap flex items-center justify-center">
                 <button type="button" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="clearFile({{$index}})">Remove</button>
               </td>

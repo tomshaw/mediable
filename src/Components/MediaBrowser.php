@@ -3,25 +3,30 @@
 namespace TomShaw\Mediable\Components;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithFileUploads, WithPagination};
-use TomShaw\Mediable\Concerns\ModalState;
+use TomShaw\Mediable\Concerns\{ModalAlert, ModalState};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
+use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\{ServerLimits, WithEvents, WithFileSize, WithMimeTypes};
+use TomShaw\Mediable\Traits\{ServerLimits, WithFileSize, WithMimeTypes};
 
 class MediaBrowser extends Component
 {
     use ServerLimits;
-    use WithEvents;
     use WithFileSize;
     use WithFileUploads;
     use WithMimeTypes;
     use WithPagination;
 
     public ModalState $state;
+
+    public ModalAlert $alert;
+
+    public $uniqueId;
 
     public string $theme = 'tailwind';
 
@@ -44,6 +49,8 @@ class MediaBrowser extends Component
     public ?string $description = '';
 
     public ?string $fileUrl = '';
+
+    public ?string $fileDir = '';
 
     public ?string $fileType = '';
 
@@ -103,7 +110,11 @@ class MediaBrowser extends Component
 
     public function mount(?string $theme = null)
     {
+        $this->uniqueId = uniqid();
+
         $this->state = new ModalState();
+
+        $this->alert = new ModalAlert();
 
         $this->theme = $theme ?? config('mediable.theme');
 
@@ -159,6 +170,11 @@ class MediaBrowser extends Component
     #[On('media.alert')]
     public function alert($event): void
     {
+        $this->alert = new ModalAlert(
+            show: true,
+            type: $event['type'],
+            message: $event['message']
+        );
     }
 
     public function enableThumbMode(): self
@@ -206,6 +222,14 @@ class MediaBrowser extends Component
     {
         Eloquent::create($this->files);
 
+        $message = count($this->files) ? 'Created attachment(s) successfully!' : 'Created attachment successfully!';
+
+        $this->alert = new ModalAlert(
+            show: true,
+            type: 'success',
+            message: $message
+        );
+
         $this->fill([
             'files' => [],
             'orderBy' => 'id',
@@ -219,7 +243,11 @@ class MediaBrowser extends Component
     {
         Eloquent::update($this->modelId, $this->title, $this->caption, $this->description);
 
-        $this->dispatchAlert('success', 'Item successfully updated!');
+        $this->alert = new ModalAlert(
+            show: true,
+            type: 'success',
+            message: 'Updated attachment successfully!'
+        );
     }
 
     public function deleteAttachment(int $id): void
@@ -234,7 +262,11 @@ class MediaBrowser extends Component
             'description' => '',
         ]);
 
-        $this->dispatchAlert('success', 'Item successfully deleted!');
+        $this->alert = new ModalAlert(
+            show: true,
+            type: 'success',
+            message: 'Deleted attachment successfully!'
+        );
     }
 
     public function toggleAttachment(int $id): void
@@ -264,10 +296,13 @@ class MediaBrowser extends Component
         $this->description = $item['description'];
         $this->fileUrl = $item['file_url'];
         $this->fileType = $item['file_type'];
+        $this->fileDir = $item['file_dir'];
 
         if (! $this->showSidebar) {
             $this->toggleSidebar();
         }
+
+        $this->alert = new ModalAlert();
     }
 
     public function setActiveAttachment(Attachment $item): void
@@ -284,12 +319,15 @@ class MediaBrowser extends Component
         $this->description = $item['description'];
         $this->fileUrl = $item['file_url'];
         $this->fileType = $item['file_type'];
+        $this->fileDir = $item['file_dir'];
 
         if ($this->showSidebar) {
             $this->toggleSidebar();
         }
 
         $this->enablePreviewMode();
+
+        $this->alert = new ModalAlert();
     }
 
     public function clearSelected(): void
@@ -306,6 +344,16 @@ class MediaBrowser extends Component
         foreach ($this->selected as $item) {
             Eloquent::delete($item['id']);
         }
+
+        $count = count($this->selected);
+
+        $message = $count ? "Deleted $count attachment(s) successfully!" : 'Deleted attachment successfully!';
+
+        $this->alert = new ModalAlert(
+            show: true,
+            type: 'success',
+            message: $message
+        );
 
         $this->fill([
             'selected' => [],
@@ -350,6 +398,11 @@ class MediaBrowser extends Component
         $this->fullScreen = ! $this->fullScreen;
     }
 
+    public function closeAlert(): void
+    {
+        $this->alert = new ModalAlert();
+    }
+
     public function updatedFiles(): void
     {
         $this->validate(config('mediable.validation'));
@@ -381,14 +434,16 @@ class MediaBrowser extends Component
         }, 0);
     }
 
-    /**
-     * Called when the pagination property is about to be updated.
-     */
-    public function updatingPage(): void
+    public function resetAudioElement()
     {
         if ($this->audioElementId) {
             $this->audioElementId = null;
         }
+    }
+
+    public function updatingPage(): void
+    {
+        $this->resetAudioElement();
     }
 
     public function updatedImageWidth($value)
@@ -396,9 +451,30 @@ class MediaBrowser extends Component
         $this->imageWidth = $value;
     }
 
+    public function flipImage()
+    {
+        $filename = Storage::path($this->fileDir);
+
+        $image = GraphicDraw::create($filename);
+
+        //GraphicDraw::flip($image, IMG_FLIP_HORIZONTAL);
+        GraphicDraw::flip($image, IMG_FLIP_VERTICAL);
+
+        GraphicDraw::save($filename, $image);
+
+        $this->alert = new ModalAlert(
+            show: true,
+            type: 'success',
+            message: 'Updated attachment successfully!'
+        );
+
+        $this->uniqueId = uniqid();
+    }
+
     private function renderView(LengthAwarePaginator $paginator)
     {
         return view('mediable::'.$this->theme.'.media-browser', [
+            'uniqueId' => $this->uniqueId,
             'data' => $paginator,
         ]);
     }

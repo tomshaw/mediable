@@ -11,8 +11,9 @@
                 </div>
 
                 <div class="bg-white h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
-                    <div class="flex flex-col w-full">
+                    <div class="relative flex flex-col w-full">
                         @include("mediable::tailwind.includes.toolbar")
+                        @include("mediable::tailwind.includes.alert")
                         <div class="relative p-0 m-0 h-full w-full">
                             <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $thumbMode])>
                                 @include("mediable::tailwind.includes.attachments")
@@ -54,7 +55,6 @@
         state: @entangle('state').live,
 
         init() {
-            Livewire.on('mediable.alert', event => this.alert(event));
             Livewire.on('mediable.insert', event => this.insert(event?.selected));
             Livewire.on('audio.start', event => this.audioStart(event?.id));
             Livewire.on('audio.pause', event => this.audioPause(event?.id));
@@ -119,10 +119,6 @@
                     Mediable.insertAtCursor(el, insert.join(' '));
                 }
             }
-        },
-
-        alert(event) {
-            console.log('alert.event', event);
         }
     }))
 </script>

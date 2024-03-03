@@ -20,7 +20,7 @@
         @elseif ($this->mimeTypeVideo($item->file_type))
         <video src="{{ asset($item->file_url) }}" class="attachment__item" alt="{{ $item->file_original_name }}" controls></video>
         @elseif ($this->mimeTypeAudio($item->file_type))
-        <div class="relative object-contain overflow-hidden">
+        <div class="relative overflow-hidden">
 
           <audio class="hidden" id="audioPlayer{{ $item->id }}">
             <source src="{{ asset($item->file_url) }}" type="{{ $item->file_type }}">

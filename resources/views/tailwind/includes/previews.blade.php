@@ -1,7 +1,7 @@
 <div @class(["flex items-center justify-center p-4 md:p-6 lg:p-8 m-0", $this->mimeTypeImage($this->fileType) ? 'h-auto' : 'h-full'])>
   @if ($this->mimeTypeImage($this->fileType))
   <div class="flex items-center justify-center" style="width: {{ $imageWidth }}%;">
-    <img src="{{ asset($this->fileUrl) }}" class="object-contain shadow">
+    <img src="{{ asset($this->fileUrl) }}?id={{ $uniqueId }}" class="object-contain shadow">
   </div>
   @elseif ($this->mimeTypeVideo($this->fileType))
   <div class="flex items-center justify-center h-full w-full">

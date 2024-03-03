@@ -63,8 +63,11 @@
 
   @if($previewMode)
   <div class="flex items-center justify-start gap-2">
+
+    <button type="button" wire:click="flipImage" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Flip Image</button>
+
     @if ($this->mimeTypeImage($this->fileType))
-    <div>
+    <div class="mt-1.5">
       <input type="range" min="1" max="100" value="{{ $this->imageWidth }}" wire:model.live="imageWidth">
     </div>
     @endif
