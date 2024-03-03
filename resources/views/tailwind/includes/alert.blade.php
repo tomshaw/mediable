@@ -16,6 +16,26 @@
 <script>
   Alpine.data('initModalAlert', () => ({
     alert: @entangle('alert').live,
+    timer: null,
+    startTimer() {
+      if (this.alert.show) {
+        this.timer = setTimeout(() => {
+          this.alert.show = false;
+        }, 5000); // Hide the alert after 5 seconds
+      }
+    },
+    clearTimer() {
+      clearTimeout(this.timer);
+    },
+    init() {
+      this.$watch('alert.show', value => {
+        if (value) {
+          this.startTimer();
+        } else {
+          this.clearTimer();
+        }
+      });
+    },
   }))
 </script>
 @endscript
