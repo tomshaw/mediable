@@ -462,12 +462,6 @@ class MediaBrowser extends Component
 
         GraphicDraw::save($filename, $image);
 
-        $this->alert = new ModalAlert(
-            show: true,
-            type: 'success',
-            message: 'Updated attachment successfully!'
-        );
-
         $this->uniqueId = uniqid();
     }
 
