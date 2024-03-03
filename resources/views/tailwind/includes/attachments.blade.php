@@ -16,7 +16,7 @@
         </div>
 
         @if ($this->mimeTypeImage($item->file_type))
-        <img src="{{ asset($item->file_url) }}" class="attachment__item object-contain shadow border border-black" alt="{{ $item->file_original_name }}">
+        <img src="{{ asset($item->file_url) }}?id={{ $uniqueId }}" class="attachment__item object-contain shadow border border-black" alt="{{ $item->file_original_name }}">
         @elseif ($this->mimeTypeVideo($item->file_type))
         <video src="{{ asset($item->file_url) }}" class="attachment__item" alt="{{ $item->file_original_name }}" controls></video>
         @elseif ($this->mimeTypeAudio($item->file_type))
