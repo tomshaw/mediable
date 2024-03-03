@@ -9,7 +9,7 @@
       <li class="cursor-pointer shadow-md shadow-emerald-900" wire:click="setActiveAttachment({{$item}})">
         <div class="border border-black w-10 h-10 overflow-hidden">
           @if ($this->mimeTypeImage($item['file_type']))
-          <img src="{{ $item['file_url'] }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
+          <img src="{{ $item['file_url'] }}?id={{ $uniqueId }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
           @elseif ($this->mimeTypeVideo($item['file_type']))
           <img src="{{ asset("vendor/mediable/images/video.png") }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
           @elseif ($this->mimeTypeAudio($item['file_type']))
