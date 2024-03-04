@@ -5,7 +5,7 @@ namespace TomShaw\Mediable\Components;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithFileUploads, WithPagination};
-use TomShaw\Mediable\Concerns\{ModalAlert, ModalState};
+use TomShaw\Mediable\Concerns\{ModalAlert, ModalState, ModelState};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
@@ -26,6 +26,8 @@ class MediaBrowser extends Component
 
     public ModalAlert $alert;
 
+    public ModelState $model;
+
     public $uniqueId;
 
     public string $theme = 'tailwind';
@@ -39,20 +41,6 @@ class MediaBrowser extends Component
     public array $uniqueMimeTypes = [];
 
     public string $selectedMimeType = '';
-
-    public ?int $modelId = null;
-
-    public string $title = '';
-
-    public ?string $caption = '';
-
-    public ?string $description = '';
-
-    public ?string $fileUrl = '';
-
-    public ?string $fileDir = '';
-
-    public ?string $fileType = '';
 
     public string $searchTerm = '';
 
@@ -121,6 +109,8 @@ class MediaBrowser extends Component
         $this->state = new ModalState();
 
         $this->alert = new ModalAlert();
+
+        $this->model = new ModelState();
 
         $this->theme = $theme ?? config('mediable.theme');
 
@@ -258,7 +248,7 @@ class MediaBrowser extends Component
 
     public function updateAttachment(): void
     {
-        Eloquent::update($this->modelId, $this->title, $this->caption, $this->description);
+        Eloquent::update($this->model->id, $this->model->title, $this->model->caption, $this->model->description);
 
         $this->alert = new ModalAlert(
             show: true,
@@ -271,13 +261,9 @@ class MediaBrowser extends Component
     {
         Eloquent::delete($id);
 
-        $this->fill([
-            'selected' => [],
-            'modelId' => null,
-            'title' => '',
-            'caption' => '',
-            'description' => '',
-        ]);
+        $this->selected = [];
+
+        $this->model = new ModelState();
 
         $this->alert = new ModalAlert(
             show: true,
@@ -307,7 +293,7 @@ class MediaBrowser extends Component
             array_push($this->selected, $item);
         }
 
-        $this->fillAttachment($item);
+        $this->model = ModelState::fromAttachment($item);
 
         if (! $this->showSidebar) {
             $this->toggleSidebar();
@@ -324,7 +310,7 @@ class MediaBrowser extends Component
             return;
         }
 
-        $this->fillAttachment($item);
+        $this->model = ModelState::fromAttachment($item);
 
         if ($this->showSidebar) {
             $this->toggleSidebar();
@@ -469,7 +455,7 @@ class MediaBrowser extends Component
             return;
         }
 
-        $source = $this->fileDir;
+        $source = $this->model->fileDir;
 
         $destination = Eloquent::randomizeName($source);
 
@@ -477,24 +463,11 @@ class MediaBrowser extends Component
 
         $item = Eloquent::saveCopiedImageToDatabase($destination);
 
-        $this->fillAttachment($item);
+        $this->model = ModelState::fromAttachment($item);
 
         $this->selected = [];
 
         $this->resetPage();
-    }
-
-    public function fillAttachment(Attachment $item): void
-    {
-        $this->fill([
-            'modelId' => $item['id'],
-            'title' => $item['title'],
-            'caption' => $item['caption'],
-            'description' => $item['description'],
-            'fileUrl' => $item['file_url'],
-            'fileType' => $item['file_type'],
-            'fileDir' => $item['file_dir'],
-        ]);
     }
 
     public function generateUniqueId()

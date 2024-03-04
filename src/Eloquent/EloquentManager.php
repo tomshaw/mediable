@@ -137,13 +137,13 @@ class EloquentManager
         return $path;
     }
 
-    public function update(int $id, string $title, string $caption, string $description): void
+    public function update(int $id, ?string $title = '', ?string $caption = '', ?string $description = ''): void
     {
         try {
             Attachment::where('id', $id)->update([
-                'title' => $title,
-                'caption' => $caption,
-                'description' => $description,
+                'title' => $title ?? '',
+                'caption' => $caption ?? '',
+                'description' => $description ?? '',
             ]);
         } catch (Exception $e) {
             throw new MediaBrowserException($e->getMessage());

@@ -128,7 +128,7 @@
  
     </div>
 
-    @elseif ($this->mimeTypeImage($this->fileType))
+    @elseif ($this->mimeTypeImage($this->model->fileType))
     <button type="button" wire:click.live="enableEditorMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Editor Mode</button>
     @endif
 
@@ -138,10 +138,6 @@
 
   </div>
   <div class="flex flex-row items-center justify-end gap-4">
-
-
-
-
     <button type="button" wire:click="enableThumbMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Close</button>
   </div>
   @endif
