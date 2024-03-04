@@ -187,6 +187,7 @@ class MediaBrowser extends Component
             'thumbMode' => true,
             'previewMode' => false,
             'uploadMode' => false,
+            'destructive' => false,
         ]);
 
         return $this;
@@ -199,6 +200,7 @@ class MediaBrowser extends Component
             'previewMode' => true,
             'uploadMode' => false,
             'imageWidth' => 100,
+
         ]);
 
         return $this;
@@ -471,13 +473,18 @@ class MediaBrowser extends Component
 
         $item = Eloquent::saveCopiedImageToDatabase($destination);
 
-        $this->modelId = $item['id'];
-        $this->title = $item['title'];
-        $this->caption = $item['caption'];
-        $this->description = $item['description'];
-        $this->fileUrl = $item['file_url'];
-        $this->fileType = $item['file_type'];
-        $this->fileDir = $item['file_dir'];
+        $this->fill([
+            'modelId' => $item['id'],
+            'title' => $item['title'],
+            'caption' => $item['caption'],
+            'description' => $item['description'],
+            'fileUrl' => $item['file_url'],
+            'fileType' => $item['file_type'],
+            'fileDir' => $item['file_dir'],
+            'selected' => [],
+        ]);
+
+        $this->resetPage();
     }
 
     public function generateUniqueId()

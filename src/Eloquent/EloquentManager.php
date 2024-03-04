@@ -216,7 +216,7 @@ class EloquentManager
     {
         $extension = pathinfo($source, PATHINFO_EXTENSION);
 
-        $destinationFilename = Str::random(32).'-copy.'.$extension;
+        $destinationFilename = Str::random(24).'-copy.'.$extension;
 
         $directory = pathinfo($source, PATHINFO_DIRNAME);
 
