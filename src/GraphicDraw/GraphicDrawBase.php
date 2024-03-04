@@ -12,9 +12,29 @@ class GraphicDrawBase
         IMG_FLIP_BOTH => 'Both',
     ];
 
+    public $filterModes = [
+        IMG_FILTER_NEGATE => 'Negate',
+        IMG_FILTER_GRAYSCALE => 'Grayscale',
+        IMG_FILTER_BRIGHTNESS => 'Brightness',
+        IMG_FILTER_CONTRAST => 'Contrast',
+        IMG_FILTER_COLORIZE => 'Colorize',
+        IMG_FILTER_EDGEDETECT => 'Edge Detect',
+        IMG_FILTER_EMBOSS => 'Emboss',
+        IMG_FILTER_GAUSSIAN_BLUR => 'Gaussian Blur',
+        IMG_FILTER_SELECTIVE_BLUR => 'Selective Blur',
+        IMG_FILTER_MEAN_REMOVAL => 'Mean Removal',
+        IMG_FILTER_SMOOTH => 'Smooth',
+        IMG_FILTER_PIXELATE => 'Pixelate',
+    ];
+
     public function getFlipModes()
     {
         return $this->flipModes;
+    }
+
+    public function getFilterModes()
+    {
+        return $this->filterModes;
     }
 
     public function create(string $filename): GdImage|false

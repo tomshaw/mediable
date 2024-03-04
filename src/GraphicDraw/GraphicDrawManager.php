@@ -16,4 +16,17 @@ class GraphicDrawManager extends GraphicDrawBase
 
         return $this->save($filename, $image);
     }
+
+    public function filterAndSave(string $filename, int $filter, array $args = []): bool
+    {
+        $image = $this->create($filename);
+
+        if ($image === false) {
+            return false;
+        }
+
+        $this->filter($image, $filter, $args);
+
+        return $this->save($filename, $image);
+    }
 }
