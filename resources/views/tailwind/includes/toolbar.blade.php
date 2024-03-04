@@ -138,7 +138,7 @@
   </div>
   <div class="flex flex-row items-center justify-end gap-4">
 
-    @if ($this->mimeTypeImage($this->fileType))
+    @if ($this->mimeTypeImage($this->fileType) && !$destructive)
     <div class="flex flex-row flex-wrap items-center space-x-4">
       <div class="mt-1.5">
         <input type="range" min="1" max="100" value="{{ $this->imageWidth }}" wire:model.live="imageWidth">
