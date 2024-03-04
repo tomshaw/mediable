@@ -76,6 +76,8 @@ class MediaBrowser extends Component
 
     public bool $uploadMode = false;
 
+    public bool $editorMode = false;
+
     public bool $showPagination = true;
 
     public bool $showPerPage = true;
@@ -106,9 +108,11 @@ class MediaBrowser extends Component
 
     public ?int $memoryLimit = null;
 
-    public int $imageWidth = 100;
+    public int $imageHeight = 0;
 
-    public bool $destructive = false;
+    public int $imageWidth = 0;
+
+    public int $imageType = 0;
 
     public function mount(?string $theme = null)
     {
@@ -187,7 +191,7 @@ class MediaBrowser extends Component
             'thumbMode' => true,
             'previewMode' => false,
             'uploadMode' => false,
-            'destructive' => false,
+            'editorMode' => false,
         ]);
 
         return $this;
@@ -199,8 +203,6 @@ class MediaBrowser extends Component
             'thumbMode' => false,
             'previewMode' => true,
             'uploadMode' => false,
-            'imageWidth' => 100,
-
         ]);
 
         return $this;
@@ -213,6 +215,15 @@ class MediaBrowser extends Component
             'previewMode' => false,
             'uploadMode' => true,
         ]);
+
+        return $this;
+    }
+
+    public function enableEditorMode(): self
+    {
+        $this->editorMode = true;
+
+        $this->prepareImageForEditor();
 
         return $this;
     }
@@ -296,13 +307,7 @@ class MediaBrowser extends Component
             array_push($this->selected, $item);
         }
 
-        $this->modelId = $item['id'];
-        $this->title = $item['title'];
-        $this->caption = $item['caption'];
-        $this->description = $item['description'];
-        $this->fileUrl = $item['file_url'];
-        $this->fileType = $item['file_type'];
-        $this->fileDir = $item['file_dir'];
+        $this->fillAttachment($item);
 
         if (! $this->showSidebar) {
             $this->toggleSidebar();
@@ -319,16 +324,22 @@ class MediaBrowser extends Component
             return;
         }
 
-        $this->modelId = $item['id'];
-        $this->title = $item['title'];
-        $this->caption = $item['caption'];
-        $this->description = $item['description'];
-        $this->fileUrl = $item['file_url'];
-        $this->fileType = $item['file_type'];
-        $this->fileDir = $item['file_dir'];
+        $this->fillAttachment($item);
 
         if ($this->showSidebar) {
             $this->toggleSidebar();
+        }
+
+        if ($this->mimeTypeImage($item['file_dir'])) {
+            $size = $this->getImageSize(Eloquent::getFilePath($item['file_dir']));
+
+            if (count($size)) {
+                $this->fill([
+                    'imageWidth' => $size[0],
+                    'imageHeight' => $size[1],
+                    'imageType' => $size[2],
+                ]);
+            }
         }
 
         $this->enablePreviewMode();
@@ -452,16 +463,9 @@ class MediaBrowser extends Component
         $this->resetAudioElement();
     }
 
-    public function updatedImageWidth($value)
+    public function prepareImageForEditor(): void
     {
-        $this->imageWidth = $value;
-    }
-
-    public function toggleDestructive(): void
-    {
-        $this->destructive = ! $this->destructive;
-
-        if (! $this->destructive) {
+        if (! $this->editorMode) {
             return;
         }
 
@@ -473,6 +477,15 @@ class MediaBrowser extends Component
 
         $item = Eloquent::saveCopiedImageToDatabase($destination);
 
+        $this->fillAttachment($item);
+
+        $this->selected = [];
+
+        $this->resetPage();
+    }
+
+    public function fillAttachment(Attachment $item): void
+    {
         $this->fill([
             'modelId' => $item['id'],
             'title' => $item['title'],
@@ -481,10 +494,7 @@ class MediaBrowser extends Component
             'fileUrl' => $item['file_url'],
             'fileType' => $item['file_type'],
             'fileDir' => $item['file_dir'],
-            'selected' => [],
         ]);
-
-        $this->resetPage();
     }
 
     public function generateUniqueId()

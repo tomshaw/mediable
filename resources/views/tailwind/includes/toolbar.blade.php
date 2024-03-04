@@ -64,7 +64,7 @@
   @if($previewMode)
   <div class="flex items-center justify-start gap-2">
 
-    @if($destructive)
+    @if($editorMode)
 
     <select class="control-select" wire:model="flipMode" wire:change="flipImage">
       <option value="">Flip Modes</option>
@@ -125,10 +125,11 @@
       @endif
 
       <button class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="filterImage">Go</button>
+ 
     </div>
 
-    @else
-      <button type="button" wire:click.live="toggleDestructive" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Destructive Mode</button>
+    @elseif ($this->mimeTypeImage($this->fileType))
+    <button type="button" wire:click.live="enableEditorMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Editor Mode</button>
     @endif
 
     <div wire:loading class="hidden">
@@ -138,13 +139,8 @@
   </div>
   <div class="flex flex-row items-center justify-end gap-4">
 
-    @if ($this->mimeTypeImage($this->fileType) && !$destructive)
-    <div class="flex flex-row flex-wrap items-center space-x-4">
-      <div class="mt-1.5">
-        <input type="range" min="1" max="100" value="{{ $this->imageWidth }}" wire:model.live="imageWidth">
-      </div>
-    </div>
-    @endif
+
+
 
     <button type="button" wire:click="enableThumbMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Close</button>
   </div>

@@ -35,6 +35,21 @@ trait WithGraphicDraw
         return GraphicDraw::getFilterModes();
     }
 
+    public function getImageSize(string $filename, array $image_info = []): array|false
+    {
+        return GraphicDraw::getimagesize($filename, $image_info);
+    }
+
+    public function getImageMimeType(int $imageType): ?string
+    {
+        return GraphicDraw::getImageMimeType($imageType);
+    }
+
+    public function getImageExtension(int $imageType): ?string
+    {
+        return GraphicDraw::getImageExtension($imageType);
+    }
+
     public function flipImage()
     {
         if (! $this->flipMode) {

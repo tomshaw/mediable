@@ -121,9 +121,19 @@ class GraphicDrawBase
         return imagedestroy($image);
     }
 
-    public function getimagesize(string $filename, &$image_info): array|false
+    public function getimagesize(string $filename, array $image_info = []): array|false
     {
         return getimagesize($filename, $image_info);
+    }
+
+    public function getImageMimeType(int $imageType): ?string
+    {
+        return image_type_to_mime_type($imageType);
+    }
+
+    public function getImageExtension(int $imageType): ?string
+    {
+        return image_type_to_extension($imageType);
     }
 
     public function scale(GdImage $image, int $new_width, int $new_height = -1, int $mode = IMG_BILINEAR_FIXED): GdImage|false
