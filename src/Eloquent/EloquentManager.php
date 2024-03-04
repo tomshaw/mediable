@@ -2,11 +2,14 @@
 
 namespace TomShaw\Mediable\Eloquent;
 
+use Exception;
 use GdImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
 
@@ -28,14 +31,11 @@ class EloquentManager
 
     public function create(array $files): void
     {
-        $disk = config('mediable.disk');
-        $disks = config('filesystems.disks');
+        $diskConfig = $this->getAndValidateDisk(config('mediable.disk'));
 
-        if (! array_key_exists($disk, $disks)) {
-            throw new MediaBrowserException('Storage disk not found.');
-        }
+        $disk = $diskConfig['disk'];
 
-        $driver = $disks[$disk];
+        $driver = $diskConfig['driver'];
 
         foreach ($files as $file) {
             if (is_null($file)) {
@@ -48,7 +48,7 @@ class EloquentManager
 
             try {
                 Attachment::create($create);
-            } catch (MediaBrowserException $e) {
+            } catch (Exception $e) {
                 throw new MediaBrowserException($e->getMessage());
             }
 
@@ -56,7 +56,7 @@ class EloquentManager
 
                 try {
                     $image = imagecreatefromstring(file_get_contents($file->getRealPath()));
-                } catch (MediaBrowserException $e) {
+                } catch (Exception $e) {
                     continue;
                 }
 
@@ -64,7 +64,7 @@ class EloquentManager
 
                     try {
                         $path = $this->createImageResource($image, $store, $disk, 'image/webp', config('mediable.webp_quality'));
-                    } catch (MediaBrowserException $e) {
+                    } catch (Exception $e) {
                         continue;
                     }
 
@@ -145,7 +145,7 @@ class EloquentManager
                 'caption' => $caption,
                 'description' => $description,
             ]);
-        } catch (MediaBrowserException $e) {
+        } catch (Exception $e) {
             throw new MediaBrowserException($e->getMessage());
         }
     }
@@ -154,9 +154,75 @@ class EloquentManager
     {
         try {
             Attachment::find($id)->delete();
-        } catch (MediaBrowserException $e) {
+        } catch (Exception $e) {
             throw new MediaBrowserException($e->getMessage());
         }
+    }
+
+    public function copyFromTo(string $source, string $destination): void
+    {
+        if (! Storage::exists($source)) {
+            throw new MediaBrowserException('Source file not found.');
+        }
+
+        if (Storage::exists($destination)) {
+            throw new MediaBrowserException('Destingation file already exists.');
+        }
+
+        try {
+            Storage::copy($source, $destination);
+        } catch (Exception $e) {
+            throw new MediaBrowserException($e->getMessage());
+        }
+    }
+
+    public function saveCopiedImageToDatabase(string $destination): Attachment
+    {
+        $diskConfig = $this->getAndValidateDisk(config('mediable.disk'));
+
+        $driver = $diskConfig['driver'];
+
+        $filePath = Storage::path($destination);
+
+        try {
+            $file = new File($filePath);
+        } catch (Exception $e) {
+            throw new MediaBrowserException($e->getMessage());
+        }
+
+        $create = [
+            'file_name' => $file->getFilename(),
+            'file_original_name' => $file->getFilename(),
+            'file_type' => $file->getMimeType(),
+            'file_size' => $file->getSize(),
+            'file_dir' => $destination,
+            'file_url' => $driver['url'].'/'.basename($destination),
+            'title' => pathinfo($file->getFilename(), PATHINFO_FILENAME),
+        ];
+
+        try {
+            return Attachment::create($create);
+        } catch (Exception $e) {
+            throw new MediaBrowserException($e->getMessage());
+        }
+    }
+
+    public function getFilePath(string $filename): string
+    {
+        return Storage::path($filename);
+    }
+
+    public function randomizeName(string $source): string
+    {
+        $extension = pathinfo($source, PATHINFO_EXTENSION);
+
+        $destinationFilename = Str::random(32).'-copy.'.$extension;
+
+        $directory = pathinfo($source, PATHINFO_DIRNAME);
+
+        $destination = $directory.DIRECTORY_SEPARATOR.$destinationFilename;
+
+        return $destination;
     }
 
     public function search(string $searchTerm, array $searchColumns): void
@@ -181,5 +247,16 @@ class EloquentManager
     public function paginate(int $perPage): LengthAwarePaginator
     {
         return $this->query->paginate($perPage);
+    }
+
+    public function getAndValidateDisk(string $disk): array
+    {
+        $disks = config('filesystems.disks');
+
+        if (! array_key_exists($disk, $disks)) {
+            throw new MediaBrowserException('Storage disk not found.');
+        }
+
+        return ['disk' => $disk, 'driver' => $disks[$disk]];
     }
 }

@@ -32,6 +32,16 @@
         color: #fff;
     }
 
+    .bg-pattern {
+        background-color: #f3f4f6;
+        background-image: linear-gradient(45deg, #cccccc 25%, transparent 25%),
+            linear-gradient(-45deg, #cccccc 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #cccccc 75%),
+            linear-gradient(-45deg, transparent 75%, #cccccc 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+
     .attachment .attachment__item {
         animation: fadeIn 200ms forwards;
         animation-delay: 600ms;

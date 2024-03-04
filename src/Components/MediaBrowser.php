@@ -108,6 +108,8 @@ class MediaBrowser extends Component
 
     public int $imageWidth = 100;
 
+    public bool $destructive = false;
+
     public function mount(?string $theme = null)
     {
         $this->generateUniqueId();
@@ -451,6 +453,31 @@ class MediaBrowser extends Component
     public function updatedImageWidth($value)
     {
         $this->imageWidth = $value;
+    }
+
+    public function toggleDestructive(): void
+    {
+        $this->destructive = ! $this->destructive;
+
+        if (! $this->destructive) {
+            return;
+        }
+
+        $source = $this->fileDir;
+
+        $destination = Eloquent::randomizeName($source);
+
+        Eloquent::copyFromTo($source, $destination);
+
+        $item = Eloquent::saveCopiedImageToDatabase($destination);
+
+        $this->modelId = $item['id'];
+        $this->title = $item['title'];
+        $this->caption = $item['caption'];
+        $this->description = $item['description'];
+        $this->fileUrl = $item['file_url'];
+        $this->fileType = $item['file_type'];
+        $this->fileDir = $item['file_dir'];
     }
 
     public function generateUniqueId()

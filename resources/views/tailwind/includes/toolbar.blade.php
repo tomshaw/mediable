@@ -64,6 +64,8 @@
   @if($previewMode)
   <div class="flex items-center justify-start gap-2">
 
+    @if($destructive)
+
     <select class="control-select" wire:model="flipMode" wire:change="flipImage">
       <option value="">Flip Modes</option>
       @foreach($this->getFlipModes() as $key => $value)
@@ -124,6 +126,10 @@
 
       <button class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="filterImage">Go</button>
     </div>
+
+    @else
+      <button type="button" wire:click.live="toggleDestructive" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Destructive Mode</button>
+    @endif
 
     <div wire:loading class="hidden">
       <div class="border-gray-300 h-6 w-6 animate-spin rounded-full border-2 border-t-blue-600"></div>
