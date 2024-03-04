@@ -6,19 +6,25 @@ use GdImage;
 
 class GraphicDrawBase
 {
-    public function check(): bool
+    public $flipModes = [
+        IMG_FLIP_HORIZONTAL => 'Horizontal',
+        IMG_FLIP_VERTICAL => 'Vertical',
+        IMG_FLIP_BOTH => 'Both',
+    ];
+
+    public function getFlipModes()
     {
-        return extension_loaded('gd');
+        return $this->flipModes;
     }
 
     public function create(string $filename): GdImage|false
     {
         return match (strtolower(pathinfo($filename, PATHINFO_EXTENSION))) {
-            'jpeg', 'jpg' => $this->createImageFromJpeg($filename),
-            'png' => $this->createImageFromPng($filename),
-            'gif' => $this->createImageFromGif($filename),
-            'webp' => $this->createImageFromWebp($filename),
-            'avif' => $this->createImageFromAvif($filename),
+            'jpeg', 'jpg' => $this->imagecreatefromjpeg($filename),
+            'png' => $this->imagecreatefrompng($filename),
+            'gif' => $this->imagecreatefromgif($filename),
+            'webp' => $this->imagecreatefromwebp($filename),
+            'avif' => $this->imagecreatefromavif($filename),
             default => false,
         };
     }
@@ -35,32 +41,32 @@ class GraphicDrawBase
         };
     }
 
-    public function createImageFromString(string $data): GdImage|false
+    public function imagecreatefromstring(string $data): GdImage|false
     {
         return imagecreatefromstring($data);
     }
 
-    public function createImageFromJpeg(string $filename): GdImage|false
+    public function imagecreatefromjpeg(string $filename): GdImage|false
     {
         return imagecreatefromjpeg($filename);
     }
 
-    public function createImageFromPng(string $filename): GdImage|false
+    public function imagecreatefrompng(string $filename): GdImage|false
     {
         return imagecreatefrompng($filename);
     }
 
-    public function createImageFromGif(string $filename): GdImage|false
+    public function imagecreatefromgif(string $filename): GdImage|false
     {
         return imagecreatefromgif($filename);
     }
 
-    public function createImageFromWebp(string $filename): GdImage|false
+    public function imagecreatefromwebp(string $filename): GdImage|false
     {
         return imagecreatefromwebp($filename);
     }
 
-    public function createImageFromAvif(string $filename): GdImage|false
+    public function imagecreatefromavif(string $filename): GdImage|false
     {
         return imagecreatefromavif($filename);
     }

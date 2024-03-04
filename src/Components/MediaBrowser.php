@@ -3,22 +3,22 @@
 namespace TomShaw\Mediable\Components;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithFileUploads, WithPagination};
 use TomShaw\Mediable\Concerns\{ModalAlert, ModalState};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
-use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\{ServerLimits, WithFileSize, WithMimeTypes};
+use TomShaw\Mediable\Traits\{ServerLimits, WithExtension, WithFileSize, WithGraphicDraw, WithMimeTypes};
 
 class MediaBrowser extends Component
 {
     use ServerLimits;
+    use WithExtension;
     use WithFileSize;
     use WithFileUploads;
+    use WithGraphicDraw;
     use WithMimeTypes;
     use WithPagination;
 
@@ -110,7 +110,7 @@ class MediaBrowser extends Component
 
     public function mount(?string $theme = null)
     {
-        $this->uniqueId = uniqid();
+        $this->generateUniqueId();
 
         $this->state = new ModalState();
 
@@ -125,6 +125,8 @@ class MediaBrowser extends Component
         $this->memoryLimit = $this->getMemoryLimit();
 
         $this->resetModal();
+
+        $this->hasExtension('gd');
     }
 
     public function boot()
@@ -451,17 +453,8 @@ class MediaBrowser extends Component
         $this->imageWidth = $value;
     }
 
-    public function flipImage()
+    public function generateUniqueId()
     {
-        $filename = Storage::path($this->fileDir);
-
-        $image = GraphicDraw::create($filename);
-
-        //GraphicDraw::flip($image, IMG_FLIP_HORIZONTAL);
-        GraphicDraw::flip($image, IMG_FLIP_VERTICAL);
-
-        GraphicDraw::save($filename, $image);
-
         $this->uniqueId = uniqid();
     }
 

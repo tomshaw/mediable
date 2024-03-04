@@ -64,13 +64,18 @@
   @if($previewMode)
   <div class="flex items-center justify-start gap-2">
 
-    <button type="button" wire:click="flipImage" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Flip Image</button>
+    <select class="control-select" wire:model="flipMode" wire:change="flipImage">
+      @foreach($this->getFlipModes() as $key => $value)
+      <option value="{{ $key }}">{{ $value }}</option>
+      @endforeach
+    </select>
 
     @if ($this->mimeTypeImage($this->fileType))
     <div class="mt-1.5">
       <input type="range" min="1" max="100" value="{{ $this->imageWidth }}" wire:model.live="imageWidth">
     </div>
     @endif
+    
     <div wire:loading class="hidden">
       <div class="border-gray-300 h-6 w-6 animate-spin rounded-full border-2 border-t-blue-600"></div>
     </div>

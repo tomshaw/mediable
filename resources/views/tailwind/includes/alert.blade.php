@@ -21,7 +21,7 @@
       if (this.alert.show) {
         this.timer = setTimeout(() => {
           this.alert.show = false;
-        }, 5000); // Hide the alert after 5 seconds
+        }, 5000);
       }
     },
     clearTimer() {
