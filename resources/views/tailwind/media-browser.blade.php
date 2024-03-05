@@ -24,20 +24,17 @@
                             <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $uploadMode])>
                                 @include("mediable::tailwind.includes.uploads")
                             </div>
+                            <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $formMode])>
+                                @include("mediable::tailwind.includes.form")
+                            </div>
                         </div>
-                        @if(!$this->uploadMode && !$this->previewMode)
+                        @if(!$this->uploadMode && !$this->formMode && !$this->previewMode)
                         @include("mediable::tailwind.includes.pager")
                         @endif
                     </div>
-
-                    @if(!$this->uploadMode && $this->showSidebar)
-                    <div class="hidden relative lg:flex bg-gray-200 border-l border-gray-300 w-[267px] min-w-[267px] max-w-[267px]">
-                        @include("mediable::tailwind.includes.sidebar")
-                    </div>
-                    @endif
                 </div>
 
-                @if(!$this->uploadMode && count($this->selected))
+                @if(!$this->uploadMode && !$this->formMode && count($this->selected))
                 <div class="bg-gray-100 h-[60px] max-h-[60px] min-h-[60px] w-full">
                     @include("mediable::tailwind.includes.footer")
                 </div>

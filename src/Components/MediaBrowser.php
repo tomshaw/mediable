@@ -66,6 +66,8 @@ class MediaBrowser extends Component
 
     public bool $editorMode = false;
 
+    public bool $formMode = false;
+
     public bool $showPagination = true;
 
     public bool $showPerPage = true;
@@ -82,7 +84,7 @@ class MediaBrowser extends Component
 
     public array $columnWidths = [100, 50, 33.3, 25, 20, 16.66, 14.28, 12.5, 11.11, 10, 9.09, 8.33];
 
-    public int $defaultColumnWidth = 5;
+    public int $defaultColumnWidth = 4;
 
     public ?int $audioElementId = null;
 
@@ -182,6 +184,7 @@ class MediaBrowser extends Component
             'previewMode' => false,
             'uploadMode' => false,
             'editorMode' => false,
+            'formMode' => false,
         ]);
 
         return $this;
@@ -193,6 +196,8 @@ class MediaBrowser extends Component
             'thumbMode' => false,
             'previewMode' => true,
             'uploadMode' => false,
+            'editorMode' => false,
+            'formMode' => false,
         ]);
 
         return $this;
@@ -204,6 +209,8 @@ class MediaBrowser extends Component
             'thumbMode' => false,
             'previewMode' => false,
             'uploadMode' => true,
+            'editorMode' => false,
+            'formMode' => false,
         ]);
 
         return $this;
@@ -211,9 +218,28 @@ class MediaBrowser extends Component
 
     public function enableEditorMode(): self
     {
-        $this->editorMode = true;
+        $this->fill([
+            'thumbMode' => false,
+            'previewMode' => false,
+            'uploadMode' => false,
+            'editorMode' => true,
+            'formMode' => false,
+        ]);
 
         $this->prepareImageForEditor();
+
+        return $this;
+    }
+
+    public function enableFormMode(): self
+    {
+        $this->fill([
+            'thumbMode' => false,
+            'previewMode' => false,
+            'uploadMode' => false,
+            'editorMode' => false,
+            'formMode' => true,
+        ]);
 
         return $this;
     }
@@ -261,7 +287,7 @@ class MediaBrowser extends Component
     {
         Eloquent::delete($id);
 
-        $this->selected = [];
+        $this->clearSelected();
 
         $this->model = new ModelState();
 
@@ -336,10 +362,6 @@ class MediaBrowser extends Component
     public function clearSelected(): void
     {
         $this->selected = [];
-
-        if ($this->previewMode) {
-            $this->enableThumbMode();
-        }
     }
 
     public function deleteSelected(): void
@@ -350,7 +372,7 @@ class MediaBrowser extends Component
 
         $count = count($this->selected);
 
-        $message = $count ? "Deleted $count attachment(s) successfully!" : 'Deleted attachment successfully!';
+        $message = ($count > 1) ? "Deleted $count attachment(s) successfully!" : 'Deleted attachment successfully!';
 
         $this->alert = new ModalAlert(
             show: true,
@@ -358,13 +380,9 @@ class MediaBrowser extends Component
             message: $message
         );
 
-        $this->fill([
-            'selected' => [],
-            'modelId' => null,
-            'title' => '',
-            'caption' => '',
-            'description' => '',
-        ]);
+        $this->model = new ModelState();
+
+        $this->clearSelected();
     }
 
     public function resetModal(): void
@@ -430,6 +448,11 @@ class MediaBrowser extends Component
         $this->files = [];
     }
 
+    public function toggleOrderDir()
+    {
+        $this->orderDir = $this->orderDir === 'asc' ? 'desc' : 'asc';
+    }
+
     public function getTotalUploadSize()
     {
         return array_reduce($this->files, function ($carry, $file) {
@@ -459,13 +482,13 @@ class MediaBrowser extends Component
 
         $destination = Eloquent::randomizeName($source);
 
-        Eloquent::copyFromTo($source, $destination);
+        Eloquent::copyImageFromTo($source, $destination);
 
-        $item = Eloquent::saveCopiedImageToDatabase($destination);
+        $item = Eloquent::saveImageToDatabase($this->model, $destination);
 
         $this->model = ModelState::fromAttachment($item);
 
-        $this->selected = [];
+        $this->clearSelected();
 
         $this->resetPage();
     }

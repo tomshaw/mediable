@@ -1,5 +1,12 @@
 <div class="flex items-center justify-between bg-[#E6E6E6] p-0 m-0 px-4 w-full h-[50px] min-h-[50px] border-b border-[#ccc]">
 
+  @if($formMode)
+  <div class="flex items-center justify-start gap-2">
+    <button type="button" wire:click="enableThumbMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Close</button>
+  </div>
+  <div class="flex items-center justify-end gap-2"></div>
+  @endif
+
   @if($uploadMode)
   <div class="flex items-center justify-start gap-2">
     <button type="button" wire:click="enableThumbMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Close</button>
@@ -8,8 +15,8 @@
   <div class="flex items-center justify-end gap-2">
     <button type="button" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="clearFiles()">Reset</button>
     <button type="button" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="createAttachments()" wire:loading.attr="disabled">
-      <span wire:loading.remove wire:target="createAttachments">Add Attachments</span>
-      <span wire:loading wire:target="createAttachments">Processing...</span>
+      <span wire:loading.remove>Add Attachments</span>
+      <span wire:loading>Processing...</span>
     </button>
   </div>
   @endif
@@ -27,11 +34,7 @@
     @endif
 
     @if($showOrderDir)
-    <select class="control-select" wire:model.live="orderDir">
-      @foreach($orderDirValues as $key => $value)
-      <option value="{{$key}}"> @if($key == 'ASC') Ascending @else Descending @endif</option>
-      @endforeach
-    </select>
+    <button type="button" class="relative flex items-center justify-center w-[65px] min-w-[65px]  px-4 py-1.5 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="toggleOrderDir()">{{ strtoupper($orderDir) }}</button>
     @endif
 
     @if($showColumnWidth)
@@ -57,7 +60,10 @@
 
   </div>
   <div class="flex items-center justify-end gap-2">
-    <button type="button" wire:click="enableUploadMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">File Uploads</button>
+    @if (count($selected))
+    <button type="button" wire:click="enableFormMode()" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Edit</button>
+    @endif
+    <button type="button" wire:click="enableUploadMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Uploads</button>
   </div>
   @endif
 
@@ -125,7 +131,7 @@
       @endif
 
       <button class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="filterImage">Go</button>
- 
+
     </div>
 
     @elseif ($this->mimeTypeImage($this->model->fileType))

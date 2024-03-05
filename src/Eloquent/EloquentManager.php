@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
+use TomShaw\Mediable\Concerns\ModelState;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
 
@@ -159,14 +160,14 @@ class EloquentManager
         }
     }
 
-    public function copyFromTo(string $source, string $destination): void
+    public function copyImageFromTo(string $source, string $destination): void
     {
         if (! Storage::exists($source)) {
             throw new MediaBrowserException('Source file not found.');
         }
 
         if (Storage::exists($destination)) {
-            throw new MediaBrowserException('Destingation file already exists.');
+            throw new MediaBrowserException('Destination file already exists.');
         }
 
         try {
@@ -176,7 +177,7 @@ class EloquentManager
         }
     }
 
-    public function saveCopiedImageToDatabase(string $destination): Attachment
+    public function saveImageToDatabase(ModelState $model, string $destination): Attachment
     {
         $diskConfig = $this->getAndValidateDisk(config('mediable.disk'));
 
@@ -197,7 +198,9 @@ class EloquentManager
             'file_size' => $file->getSize(),
             'file_dir' => $destination,
             'file_url' => $driver['url'].'/'.basename($destination),
-            'title' => pathinfo($file->getFilename(), PATHINFO_FILENAME),
+            'title' => $model->title,
+            'caption' => $model->caption,
+            'description' => $model->description,
         ];
 
         try {
@@ -216,13 +219,11 @@ class EloquentManager
     {
         $extension = pathinfo($source, PATHINFO_EXTENSION);
 
-        $destinationFilename = Str::random(24).'-copy.'.$extension;
+        $destinationFilename = Str::random(12).'.'.$extension;
 
         $directory = pathinfo($source, PATHINFO_DIRNAME);
 
-        $destination = $directory.DIRECTORY_SEPARATOR.$destinationFilename;
-
-        return $destination;
+        return $directory.DIRECTORY_SEPARATOR.$destinationFilename;
     }
 
     public function search(string $searchTerm, array $searchColumns): void

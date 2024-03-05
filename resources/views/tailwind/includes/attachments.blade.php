@@ -3,8 +3,7 @@
 
     @if ($data->count())
     @foreach($data as $item)
-    <li @class(['attachment relative flex m-0 p-2 cursor-pointer list-none text-center select-none w-[20%]' , 'selected shadow-[inset_0_0_0_2px_#fff,_inset_0_0_0_7px_#00b5d2]'=> in_array($item->id, array_column($this->selected, 'id')), 'details' => $item->id == $this->model->id]) wire:click="toggleAttachment({{$item->id}})" style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
-
+    <li class="attachment relative flex bg-white m-0 p-1 cursor-pointer list-none text-center select-none" wire:click="toggleAttachment({{$item->id}})" style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
       <div class="relative bg-[#e5e7eb] cursor-pointer py-4 md:py-8 lg:py-12 xl:py-16 px-4 md:px-8 flex items-center justify-center min-w-full">
 
         <div class="hidden lg:block absolute top-0 right-0">
@@ -50,7 +49,7 @@
         @endif
 
         @if ($item->title)
-        <div class="hidden lg:block absolute inset-x-0 bottom-0 overflow-hidden max-h-full whitespace-nowrap text-left text-xs font-normal bg-[#444] px-1.5">
+        <div @class(['hidden lg:block absolute inset-x-0 bottom-0 overflow-hidden max-h-full whitespace-nowrap text-left text-xs font-normal px-1.5', in_array($item->id, array_column($this->selected, 'id')) ? 'bg-[#00b5d2]' : 'bg-[#444]'])>
           <div class="absolute inset-y-0 left-0 h-full w-0 bg-blue-500 z-0" id="audioProgress{{$item->id}}"></div>
           <span class="inline-block align-middle text-white text-xs font-light py-1 relative z-10">{!! $item->title !!}</span>
         </div>
