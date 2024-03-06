@@ -304,8 +304,6 @@ class MediaBrowser extends Component
 
         $this->model = ModelState::fromAttachment($item);
 
-        //dd($this->model);
-
         if (! $this->showSidebar) {
             $this->toggleSidebar();
         }
@@ -317,7 +315,10 @@ class MediaBrowser extends Component
                 $this->fill([
                     'imageWidth' => $width,
                     'imageHeight' => $height,
+                    'newWidth' => $width,
+                    'newHeight' => $height,
                     'imageType' => $type,
+                    'scaleMode' => '',
                 ]);
             }
         }
@@ -346,7 +347,10 @@ class MediaBrowser extends Component
                 $this->fill([
                     'imageWidth' => $size[0],
                     'imageHeight' => $size[1],
+                    'newWidth' => $size[0],
+                    'newHeight' => $size[1],
                     'imageType' => $size[2],
+                    'scaleMode' => '',
                 ]);
             }
         }

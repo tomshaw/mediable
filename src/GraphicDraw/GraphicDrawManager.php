@@ -29,4 +29,17 @@ class GraphicDrawManager extends GraphicDrawBase
 
         return $this->save($filename, $image);
     }
+
+    public function scaleAndSave(string $filename, int $new_width, int $new_height = -1, int $mode = IMG_BILINEAR_FIXED): bool
+    {
+        $image = $this->create($filename);
+
+        if ($image === false) {
+            return false;
+        }
+
+        $result = $this->scale($image, $new_width, $new_height, $mode);
+
+        return $this->save($filename, $result);
+    }
 }

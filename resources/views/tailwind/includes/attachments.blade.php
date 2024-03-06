@@ -12,6 +12,10 @@
         @endif
       </div>
 
+      <div class="hidden lg:block absolute top-0 right-0">
+        <span class="text-right text-xs font-normal text-[#777] bg-transparent py-1 px-2">{{$this->formatBytes($item->file_size)}} &dash; {{ strtoupper(collect(explode('/', $item->file_type))->last()) }}</span>
+      </div>
+
       @if ($this->mimeTypeImage($item->file_type))
       <img src="{{ asset($item->file_url) }}?id={{ $uniqueId }}" class="attachment__item object-contain shadow-md border border-black" alt="{{ $item->file_original_name }}">
       @elseif ($this->mimeTypeVideo($item->file_type))

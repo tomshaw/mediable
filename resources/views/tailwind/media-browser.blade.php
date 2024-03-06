@@ -80,7 +80,7 @@
                                 </div>
                             </div>
 
-                            @if(!$this->uploadMode && !$this->previewMode && !$this->editorMode)
+                            @if(!$this->uploadMode && !$this->editorMode)
                             <div class="flex items-center justify-center h-[50px] min-h-[50px] max-h-[50px]">
                                 <div class="flex items-center justify-between h-full w-full px-4">
                                     @if($showPagination && method_exists($data, 'links'))
@@ -108,10 +108,10 @@
 
                 </div>
 
-                @if(!$this->uploadMode && !$this->previewMode && !$this->editorMode)
+                @if(!$this->uploadMode && !$this->editorMode)
                 <div class="bg-[#e5e7eb] border-b border-gray-300 h-[100px] max-h-[100px] min-h-[100px] w-full overflow-hidden">
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto">
-                        @include("mediable::tailwind.includes.thumbs")
+                        @include("mediable::tailwind.includes.strip")
                     </div>
                 </div>
                 @endif

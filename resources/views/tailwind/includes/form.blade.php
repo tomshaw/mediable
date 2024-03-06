@@ -19,9 +19,19 @@
 
                 <div class="w-full mb-0">
                     <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Image Flip:</label>
-                    <select class="block text-gray-600 border border-gray-300 w-full py-1 px-2 appearance-none rounded-md text-xs font-medium leading-5" wire:model.live="flipMode">
+                    <select class="block text-gray-600 border border-gray-300 w-full py-1 px-2 appearance-none rounded-md text-xs font-medium leading-5" wire:model.live="flipMode" wire:change="flipImage">
                         <option value="">Flip Modes</option>
                         @foreach($this->getFlipModes() as $key => $value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="w-full mb-0">
+                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Image Scale:</label>
+                    <select class="block text-gray-600 border border-gray-300 w-full py-1 px-2 appearance-none rounded-md text-xs font-medium leading-5" wire:model.live="scaleMode" wire:change="scaleImage">
+                        <option value="">Scale Modes</option>
+                        @foreach($this->getScaleModes() as $key => $value)
                         <option value="{{ $key }}">{{ $value }}</option>
                         @endforeach
                     </select>
@@ -36,6 +46,17 @@
                         @endforeach
                     </select>
                 </div>
+
+                @if(in_array($scaleMode, array_keys($this->getScaleModes())))
+                <div class="w-full mb-0">
+                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Width:</label>
+                    <input type="number" class="control-input w-full" id="newWidth" wire:model.live="newWidth" wire:change="scaleImage">
+                </div>
+                <div class="w-full mb-0">
+                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Height:</label>
+                    <input type="number" class="control-input w-full" id="newHeight" wire:model.live="newHeight" wire:change="scaleImage">
+                </div>
+                @endif
 
                 @if($filterMode == IMG_FILTER_CONTRAST)
                 <div class="w-full mb-0">

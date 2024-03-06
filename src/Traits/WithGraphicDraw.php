@@ -25,6 +25,12 @@ trait WithGraphicDraw
 
     public $pixelateBlockSize = 1;
 
+    public $newWidth = 100;
+
+    public $newHeight = -1;
+
+    public $scaleMode = '';
+
     public function getFlipModes()
     {
         return GraphicDraw::getFlipModes();
@@ -33,6 +39,11 @@ trait WithGraphicDraw
     public function getFilterModes()
     {
         return GraphicDraw::getFilterModes();
+    }
+
+    public function getScaleModes()
+    {
+        return GraphicDraw::getScaleModes();
     }
 
     public function getImageSize(string $filename, array $image_info = []): array|false
@@ -57,6 +68,17 @@ trait WithGraphicDraw
         }
 
         GraphicDraw::flipAndSave(Storage::path($this->model->fileDir), $this->flipMode);
+
+        $this->generateUniqueId();
+    }
+
+    public function scaleImage()
+    {
+        if (! $this->scaleMode) {
+            return;
+        }
+
+        GraphicDraw::scaleAndSave(Storage::path($this->model->fileDir), $this->newWidth, $this->newHeight, $this->scaleMode);
 
         $this->generateUniqueId();
     }

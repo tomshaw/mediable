@@ -27,6 +27,12 @@ class GraphicDrawBase
         IMG_FILTER_PIXELATE => 'Pixelate',
     ];
 
+    public $scaleModes = [
+        IMG_NEAREST_NEIGHBOUR => 'Nearest Neighbour',
+        IMG_BILINEAR_FIXED => 'Bilinear Fixed',
+        IMG_BICUBIC => 'Bicubic',
+    ];
+
     public function getFlipModes()
     {
         return $this->flipModes;
@@ -35,6 +41,11 @@ class GraphicDrawBase
     public function getFilterModes()
     {
         return $this->filterModes;
+    }
+
+    public function getScaleModes()
+    {
+        return $this->scaleModes;
     }
 
     public function create(string $filename): GdImage|false
