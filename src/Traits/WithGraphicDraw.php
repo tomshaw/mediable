@@ -15,11 +15,11 @@ trait WithGraphicDraw
 
     public $brightness = 0;
 
-    public $colorizeRed = 0;
+    public $colorizeRed = -50;
 
-    public $colorizeGreen = 0;
+    public $colorizeGreen = -50;
 
-    public $colorizeBlue = 0;
+    public $colorizeBlue = 50;
 
     public $smoothLevel = 0;
 
