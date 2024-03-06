@@ -18,37 +18,37 @@
                 @endif
 
                 @if ($this->model->title)
-                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
                     {{ $this->model->title }}
                 </div>
                 @endif
 
                 @if ($this->model->fileName)
-                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
                     {{ $this->formatBytes($this->model->fileSize) }}
                 </div>
                 @endif
 
                 @if ($this->model->fileName)
-                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
                     {{ $this->model->fileType }}
                 </div>
                 @endif
 
                 @if ($this->model->fileName)
-                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
                     {{ $this->imageWidth }} x {{ $this->imageHeight }}
                 </div>
                 @endif
 
                 @if ($this->model->createdAt)
-                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
                     {{ $this->model->createdAt }}
                 </div>
                 @endif
 
                 @if ($this->model->updatedAt)
-                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
                     {{ $this->model->updatedAt }}
                 </div>
                 @endif

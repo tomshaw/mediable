@@ -4,12 +4,12 @@
   <li class="attachment relative flex bg-[#e5e7eb] m-0 p-0 cursor-pointer list-none text-center select-none border-r border-gray-300" wire:click="toggleAttachment({{$item->id}})" style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
     <div class="relative cursor-pointer py-4 md:py-8 lg:py-12 xl:py-16 px-4 md:px-8 flex items-center justify-center min-w-full">
 
-      <div class="hidden lg:block absolute top-0 right-0">
-        <span class="text-right text-xs font-normal text-[#777] bg-transparent py-1 px-2">{{$this->formatBytes($item->file_size)}} &dash; {{ strtoupper(collect(explode('/', $item->file_type))->last()) }}</span>
-      </div>
-
       <div class="hidden lg:block absolute top-[1px] left-0">
-        <span class="text-left text-xs font-normal text-[#777] bg-transparent py-1 px-2">{{$item->id}}</span>
+        @if(in_array($item->id, array_column($this->selected, 'id')))
+        <span class="text-left text-xs font-bold text-blue-500 bg-transparent py-1 px-2">[{{$item->id}}]</span>
+        @else
+        <span class="text-left text-xs font-bold text-gray-500 bg-transparent py-1 px-2">{{$item->id}}</span>
+        @endif
       </div>
 
       @if ($this->mimeTypeImage($item->file_type))
@@ -47,7 +47,7 @@
       @endif
 
       @if ($item->title)
-      <div @class(['hidden lg:block absolute inset-x-0 bottom-0 overflow-hidden max-h-full whitespace-nowrap text-left text-xs font-normal px-1.5', in_array($item->id, array_column($this->selected, 'id')) ? 'bg-[#00b5d2]' : 'bg-[#444]'])>
+      <div class="absolute inset-x-0 bottom-0 bg-[#444] overflow-hidden max-h-full whitespace-nowrap text-left text-xs font-normal px-1.5">
         <div class="absolute inset-y-0 left-0 h-full w-0 bg-blue-500 z-0" id="audioProgress{{$item->id}}"></div>
         <span class="inline-block align-middle text-white text-xs font-light py-1 relative z-10">{!! $item->title !!}</span>
       </div>

@@ -61,8 +61,8 @@
   </div>
   <div class="flex items-center justify-end gap-2">
     @if (count($selected))
-    <button type="button" wire:click="enableEditorMode()" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Editor Mode</button>
-    <button type="button" wire:click="enablePreviewMode()" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Preview Mode</button>
+    <button type="button" wire:click="enableEditorMode()" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Editor</button>
+    <button type="button" wire:click="enablePreviewMode()" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Preview</button>
     @endif
   </div>
   @endif
