@@ -9,46 +9,46 @@
 
     <div class="flex-grow border-b border-t border-[#ccc] h-full p-2">
         <div class="flex items-start justify-center p-0 m-0 w-full h-full overflow-hidden">
-            <div class="flex flex-col items-start justify-start gap-y-1.5 p-2">
+            <div class="flex flex-col items-start justify-start w-full gap-y-1.5 p-2">
 
                 @if ($this->mimeTypeImage($this->model->fileType))
                 <div class="mb-1">
-                    <img src="{{ $this->model->fileUrl }}?id={{ $uniqueId }}" class="max-w-60 object-cover" />
+                    <img src="{{ $this->model->fileUrl }}?id={{ $uniqueId }}" class="object-cover" />
                 </div>
                 @endif
 
                 @if ($this->model->title)
-                <div class="text-xs text-gray-500 w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
                     {{ $this->model->title }}
                 </div>
                 @endif
 
                 @if ($this->model->fileName)
-                <div class="text-xs text-gray-500 w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
                     {{ $this->formatBytes($this->model->fileSize) }}
                 </div>
                 @endif
 
                 @if ($this->model->fileName)
-                <div class="text-xs text-gray-500 w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
                     {{ $this->model->fileType }}
                 </div>
                 @endif
 
                 @if ($this->model->fileName)
-                <div class="text-xs text-gray-500 w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
                     {{ $this->imageWidth }} x {{ $this->imageHeight }}
                 </div>
                 @endif
 
                 @if ($this->model->createdAt)
-                <div class="text-xs text-gray-500 w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
                     {{ $this->model->createdAt }}
                 </div>
                 @endif
 
                 @if ($this->model->updatedAt)
-                <div class="text-xs text-gray-500 w-full py-1 px-2 bg-slate-300">
+                <div class="text-xs text-gray-500 overflow-hidden w-full py-1 px-2 bg-slate-300">
                     {{ $this->model->updatedAt }}
                 </div>
                 @endif

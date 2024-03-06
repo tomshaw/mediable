@@ -80,7 +80,7 @@
                                 </div>
                             </div>
 
-                            @if(!$this->uploadMode && !$this->previewMode)
+                            @if(!$this->uploadMode && !$this->previewMode && !$this->editorMode)
                             <div class="flex items-center justify-center h-[50px] min-h-[50px] max-h-[50px]">
                                 <div class="flex items-center justify-between h-full w-full px-4">
                                     @if($showPagination && method_exists($data, 'links'))

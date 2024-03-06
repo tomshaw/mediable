@@ -19,7 +19,6 @@
         </div>
     </div>
     <div class="w-2/12 bg-[#e5e7eb] p-7">
-
         <form wire:submit="updateAttachment" role="form">
             <div class="p-0 m-0">
                 <div class="mb-2">
@@ -51,6 +50,5 @@
                 </button>
             </div>
         </form>
-
     </div>
 </div>
