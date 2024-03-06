@@ -195,7 +195,7 @@ class MediaBrowser extends Component
             'thumbMode' => false,
             'previewMode' => true,
             'uploadMode' => false,
-            'editorMode' => false
+            'editorMode' => false,
         ]);
 
         return $this;
@@ -207,7 +207,7 @@ class MediaBrowser extends Component
             'thumbMode' => false,
             'previewMode' => false,
             'uploadMode' => false,
-            'editorMode' => true
+            'editorMode' => true,
         ]);
 
         $this->prepareImageForEditor();
@@ -221,7 +221,7 @@ class MediaBrowser extends Component
             'thumbMode' => false,
             'previewMode' => false,
             'uploadMode' => true,
-            'editorMode' => false
+            'editorMode' => false,
         ]);
 
         return $this;
@@ -311,7 +311,7 @@ class MediaBrowser extends Component
         }
 
         if ($this->mimeTypeImage($item['file_type'])) {
-            list($width, $height, $type) = $this->getImageSize(Eloquent::getFilePath($item['file_dir']));
+            [$width, $height, $type] = $this->getImageSize(Eloquent::getFilePath($item['file_dir']));
 
             if ($type) {
                 $this->fill([

@@ -75,7 +75,71 @@
   @endif
 
   @if($editorMode)
-  <div class="flex items-center justify-start gap-2"></div>
+  <div class="flex items-center justify-start gap-2">
+
+    <select class="control-select" wire:model="flipMode" wire:change="flipImage">
+      <option value="">Flip Modes</option>
+      @foreach($this->getFlipModes() as $key => $value)
+      <option value="{{ $key }}">{{ $value }}</option>
+      @endforeach
+    </select>
+
+    <select class="control-select" wire:model="filterMode" wire:change="filterImage">
+      <option value="">Filter Modes</option>
+      @foreach($this->getFilterModes() as $key => $value)
+      <option value="{{ $key }}">{{ $value }}</option>
+      @endforeach
+    </select>
+
+    <div class="flex flex-row flex-wrap items-center space-x-4">
+      @if($filterMode == IMG_FILTER_CONTRAST)
+      <label class="text-sm text-gray-500 flex items-center space-x-2 whitespace-nowrap">
+        <span>Contrast:</span>
+        <input type="number" class="control-input" wire:model="contrast" min="-100" max="100" step="1" />
+      </label>
+      @endif
+
+      @if($filterMode == IMG_FILTER_BRIGHTNESS)
+      <label class="text-sm text-gray-500 flex items-center space-x-2 whitespace-nowrap">
+        <span>Brightness:</span>
+        <input type="number" class="control-input" wire:model="brightness" min="-255" max="255" step="1" />
+      </label>
+      @endif
+
+      @if($filterMode == IMG_FILTER_COLORIZE)
+      <label class="text-sm text-gray-500 flex items-center space-x-2 whitespace-nowrap">
+        <span>Red:</span>
+        <input type="number" class="control-input" wire:model="colorizeRed" min="-255" max="255" step="1" />
+      </label>
+      <label class="text-sm text-gray-500 flex items-center space-x-2 whitespace-nowrap">
+        <span>Green:</span>
+        <input type="number" class="control-input" wire:model="colorizeGreen" min="-255" max="255" step="1" />
+      </label>
+      <label class="text-sm text-gray-500 flex items-center space-x-2 whitespace-nowrap">
+        <span>Blue:</span>
+        <input type="number" class="control-input" wire:model="colorizeBlue" min="-255" max="255" step="1" />
+      </label>
+      @endif
+
+      @if($filterMode == IMG_FILTER_SMOOTH)
+      <label class="text-sm text-gray-500 flex items-center space-x-2 whitespace-nowrap">
+        <span>Smooth Level:</span>
+        <input type="number" class="control-input" wire:model="smoothLevel" min="-10" max="10" step="1" />
+      </label>
+      @endif
+
+      @if($filterMode == IMG_FILTER_PIXELATE)
+      <label class="text-sm text-gray-500 flex items-center space-x-2 whitespace-nowrap">
+        <span>Pixelate Block Size:</span>
+        <input type="number" class="control-input" wire:model="pixelateBlockSize" min="1" step="1" />
+      </label>
+      @endif
+
+      <button class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="filterImage">Go</button>
+
+    </div>
+
+  </div>
   <div class="flex flex-row items-center justify-end gap-4">
     <button type="button" wire:click="enableThumbMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Close</button>
   </div>
