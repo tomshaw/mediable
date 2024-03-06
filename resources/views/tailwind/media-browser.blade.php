@@ -86,8 +86,7 @@
                                     @if($showPagination && method_exists($data, 'links'))
                                     {!! $data->links("mediable::tailwind.includes.pagination") !!}
                                     @endif
-
-                                    @if($showPerPage)
+                                    @if($showPerPage && method_exists($data, 'links') && $data->hasPages())
                                     <select class="control-select" wire:model.live="perPage">
                                         @foreach($perPageValues as $value)
                                         <option value="{{$value}}"> @if($value == 0) All @else {{ $value }} @endif</option>
