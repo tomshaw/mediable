@@ -6,7 +6,7 @@
 
       <div class="hidden lg:block absolute top-[1px] left-0">
         @if(in_array($item->id, array_column($this->selected, 'id')))
-        <span class="text-left text-xs font-bold text-blue-500 bg-transparent py-1 px-2">[{{$item->id}}]</span>
+        <span class="text-left text-xs font-bold text-blue-500 bg-transparent py-1 px-2">({{$item->id}})</span>
         @else
         <span class="text-left text-xs font-bold text-gray-500 bg-transparent py-1 px-2">{{$item->id}}</span>
         @endif
