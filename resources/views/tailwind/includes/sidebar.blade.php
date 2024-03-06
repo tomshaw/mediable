@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  <div class="flex-grow border-b border-t border-[#ccc] h-full p-6">
+  <div class="flex-grow border-b border-t border-[#ccc] h-full py-6 px-4">
     <form wire:submit.prevent="updateAttachment" role="form">
       <div class="p-0 m-0">
         <div class="mb-2">

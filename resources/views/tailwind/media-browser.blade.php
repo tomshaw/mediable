@@ -44,7 +44,7 @@
                             @if(!$this->editorMode)
                             @include("mediable::tailwind.includes.meta")
                             @elseif($this->editorMode)
-                            @include("mediable::tailwind.includes.meta")
+                            @include("mediable::tailwind.includes.form")
                             @endif
                         </div>
                     </div>
