@@ -184,7 +184,6 @@ class MediaBrowser extends Component
             'previewMode' => false,
             'uploadMode' => false,
             'editorMode' => false,
-            'formMode' => false,
         ]);
 
         return $this;
@@ -196,21 +195,7 @@ class MediaBrowser extends Component
             'thumbMode' => false,
             'previewMode' => true,
             'uploadMode' => false,
-            'editorMode' => false,
-            'formMode' => false,
-        ]);
-
-        return $this;
-    }
-
-    public function enableUploadMode(): self
-    {
-        $this->fill([
-            'thumbMode' => false,
-            'previewMode' => false,
-            'uploadMode' => true,
-            'editorMode' => false,
-            'formMode' => false,
+            'editorMode' => false
         ]);
 
         return $this;
@@ -222,8 +207,7 @@ class MediaBrowser extends Component
             'thumbMode' => false,
             'previewMode' => false,
             'uploadMode' => false,
-            'editorMode' => true,
-            'formMode' => false,
+            'editorMode' => true
         ]);
 
         $this->prepareImageForEditor();
@@ -231,14 +215,13 @@ class MediaBrowser extends Component
         return $this;
     }
 
-    public function enableFormMode(): self
+    public function enableUploadMode(): self
     {
         $this->fill([
             'thumbMode' => false,
             'previewMode' => false,
-            'uploadMode' => false,
-            'editorMode' => false,
-            'formMode' => true,
+            'uploadMode' => true,
+            'editorMode' => false
         ]);
 
         return $this;
@@ -321,8 +304,22 @@ class MediaBrowser extends Component
 
         $this->model = ModelState::fromAttachment($item);
 
+        //dd($this->model);
+
         if (! $this->showSidebar) {
             $this->toggleSidebar();
+        }
+
+        if ($this->mimeTypeImage($item['file_type'])) {
+            list($width, $height, $type) = $this->getImageSize(Eloquent::getFilePath($item['file_dir']));
+
+            if ($type) {
+                $this->fill([
+                    'imageWidth' => $width,
+                    'imageHeight' => $height,
+                    'imageType' => $type,
+                ]);
+            }
         }
 
         $this->alert = new ModalAlert();
@@ -342,7 +339,7 @@ class MediaBrowser extends Component
             $this->toggleSidebar();
         }
 
-        if ($this->mimeTypeImage($item['file_dir'])) {
+        if ($this->mimeTypeImage($item['file_type'])) {
             $size = $this->getImageSize(Eloquent::getFilePath($item['file_dir']));
 
             if (count($size)) {

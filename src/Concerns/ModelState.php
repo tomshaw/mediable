@@ -20,8 +20,8 @@ final class ModelState implements Wireable
         public ?string $description = '',
         public ?int $sortorder = 0,
         public ?string $styles = '',
-        public ?string $created_at = null,
-        public ?string $updated_at = null
+        public ?string $createdAt = null,
+        public ?string $updatedAt = null
     ) {
     }
 
@@ -40,8 +40,8 @@ final class ModelState implements Wireable
             description: $attachment->description,
             sortorder: $attachment->sortorder,
             styles: $attachment->styles,
-            created_at: $attachment->created_at,
-            updated_at: $attachment->updated_at,
+            createdAt: $attachment->created_at,
+            updatedAt: $attachment->updated_at,
         );
     }
 
@@ -60,8 +60,8 @@ final class ModelState implements Wireable
             'description' => $this->description,
             'sortorder' => $this->sortorder,
             'styles' => $this->styles,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'createdAt' => $this->createdAt,
+            'updatedAt' => $this->updatedAt,
         ];
     }
 
@@ -80,8 +80,8 @@ final class ModelState implements Wireable
             description: $value['description'],
             sortorder: $value['sortorder'],
             styles: $value['styles'],
-            created_at: $value['created_at'],
-            updated_at: $value['updated_at'],
+            createdAt: $value['createdAt'],
+            updatedAt: $value['updatedAt'],
         );
     }
 }
