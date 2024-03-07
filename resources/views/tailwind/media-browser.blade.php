@@ -135,7 +135,7 @@
 
         init() {
             Livewire.on('mediable.insert', event => this.insert(event?.selected));
-            Livewire.on('mediable.scrollto', event => this.scrollTo(event?.id));
+            Livewire.on('mediable.scroll', event => this.scrollTo(event?.id));
             Livewire.on('audio.start', event => this.audioStart(event?.id));
             Livewire.on('audio.pause', event => this.audioPause(event?.id));
         },
@@ -144,7 +144,9 @@
             const item = document.getElementById('list-item-' + id);
 
             if (item) {
-                item.scrollIntoView({behavior: 'smooth'});
+                item.scrollIntoView({
+                    behavior: 'smooth'
+                });
             }
         },
 

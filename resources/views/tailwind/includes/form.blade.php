@@ -74,16 +74,8 @@
 
                 @if($filterMode == IMG_FILTER_COLORIZE)
                 <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Red:</label>
-                    <input type="number" class="control-input w-full" wire:model.live="colorizeRed" min="-255" max="255" step="1" />
-                </div>
-                <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Green:</label>
-                    <input type="number" class="control-input w-full" wire:model.live="colorizeGreen" min="-255" max="255" step="1" />
-                </div>
-                <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Blue:</label>
-                    <input type="number" class="control-input w-full" wire:model.live="colorizeBlue" min="-255" max="255" step="1" />
+                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Colorize Color:</label>
+                    <input type="color" class="control-input w-full" wire:model.live="colorize" />
                 </div>
                 @endif
 

@@ -308,22 +308,9 @@ class MediaBrowser extends Component
             $this->toggleSidebar();
         }
 
-        if ($this->mimeTypeImage($item['file_type'])) {
-            [$width, $height, $type] = $this->getImageSize(Eloquent::getFilePath($item['file_dir']));
+        $this->applyImageInfo($item);
 
-            if ($type) {
-                $this->fill([
-                    'imageWidth' => $width,
-                    'imageHeight' => $height,
-                    'newWidth' => $width,
-                    'newHeight' => $height,
-                    'imageType' => $type,
-                    'scaleMode' => '',
-                ]);
-            }
-        }
-
-        $this->dispatch('mediable.scrollto', id: $this->model->id);
+        $this->dispatch('mediable.scroll', id: $this->model->id);
 
         $this->alert = new ModalAlert();
     }
@@ -342,20 +329,7 @@ class MediaBrowser extends Component
             $this->toggleSidebar();
         }
 
-        if ($this->mimeTypeImage($item['file_type'])) {
-            $size = $this->getImageSize(Eloquent::getFilePath($item['file_dir']));
-
-            if (count($size)) {
-                $this->fill([
-                    'imageWidth' => $size[0],
-                    'imageHeight' => $size[1],
-                    'newWidth' => $size[0],
-                    'newHeight' => $size[1],
-                    'imageType' => $size[2],
-                    'scaleMode' => '',
-                ]);
-            }
-        }
+        $this->applyImageInfo($item);
 
         $this->enablePreviewMode();
 
@@ -473,6 +447,24 @@ class MediaBrowser extends Component
     public function updatingPage(): void
     {
         $this->resetAudioElement();
+    }
+
+    public function applyImageInfo($item): void
+    {
+        if ($this->mimeTypeImage($item['file_type'])) {
+            [$width, $height, $type] = $this->getImageSize(Eloquent::getFilePath($item['file_dir']));
+
+            if ($type) {
+                $this->fill([
+                    'imageWidth' => $width,
+                    'imageHeight' => $height,
+                    'newWidth' => $width,
+                    'newHeight' => $height,
+                    'imageType' => $type,
+                    'scaleMode' => '',
+                ]);
+            }
+        }
     }
 
     public function prepareImageForEditor(): void

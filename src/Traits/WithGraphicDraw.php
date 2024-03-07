@@ -15,6 +15,8 @@ trait WithGraphicDraw
 
     public $brightness = 0;
 
+    public $colorize;
+
     public $colorizeRed = -50;
 
     public $colorizeGreen = -50;
@@ -89,6 +91,8 @@ trait WithGraphicDraw
             return;
         }
 
+        $this->normalizeColors();
+
         $args = [];
         if ($this->filterMode == IMG_FILTER_CONTRAST) {
             $args[] = $this->contrast;
@@ -107,5 +111,14 @@ trait WithGraphicDraw
         GraphicDraw::filterAndSave(Storage::path($this->model->fileDir), $this->filterMode, $args);
 
         $this->generateUniqueId();
+    }
+
+    public function normalizeColors()
+    {
+        [$r, $g, $b] = sscanf($this->colorize, '#%02x%02x%02x');
+
+        $this->colorizeRed = $r - 255;
+        $this->colorizeGreen = $g - 255;
+        $this->colorizeBlue = $b - 255;
     }
 }
