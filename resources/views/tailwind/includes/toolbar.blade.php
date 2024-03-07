@@ -18,7 +18,7 @@
   @if($panel->isThumbMode())
   <div class="flex items-center justify-start gap-2">
 
-    @if($showOrderBy)
+    @if($show->isShowOrderBy())
     <select class="control-select" wire:model.live="orderBy">
       @foreach($orderColumns as $key => $value)
       <option value="{{$key}}">{{ $value }}</option>
@@ -26,7 +26,7 @@
     </select>
     @endif
 
-    @if($showOrderDir)
+    @if($show->isShowOrderDir())
     <button type="button" class="relative flex items-center justify-between w-[80px] min-w-[80px] max-w-[80px] px-3 py-1.5 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="toggleOrderDir()">
       @if(strtoupper($orderDir) == 'ASC')
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4">
@@ -41,7 +41,7 @@
     </button>
     @endif
 
-    @if($showColumnWidth)
+    @if($show->isShowColumnWidth())
     <select class="control-select" wire:model.live="defaultColumnWidth">
       @foreach(array_reverse($columnWidths, true) as $key => $value)
       <option value="{{$key}}">{{ $value }}</option>
@@ -49,7 +49,7 @@
     </select>
     @endif
 
-    @if($showUniqueMimeTypes && count($uniqueMimeTypes)>=1)
+    @if($show->isShowUniqueMimeTypes() && count($uniqueMimeTypes)>=1)
     <select class="control-select" wire:model.live="selectedMimeType">
       <option value="">Mime Types</option>
       @foreach($uniqueMimeTypes as $mimeType)
@@ -60,11 +60,17 @@
 
   </div>
   <div class="flex items-center justify-end gap-2">
-    @if (count($selected))
+    @if ($show->isShowEditor() && count($selected))
     <button type="button" wire:click="enableEditorMode()" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Editor</button>
+    @endif
+
+    @if ($show->isShowPreview() && count($selected))
     <button type="button" wire:click="enablePreviewMode()" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Preview</button>
     @endif
+
+    @if ($show->isShowUpload())
     <button type="button" wire:click="enableUploadMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Uploads</button>
+    @endif
   </div>
   @endif
 
@@ -76,7 +82,7 @@
     </div>
   </div>
   <div class="flex flex-row items-center justify-end gap-4">
-    @if (count($selected))
+    @if ($show->isShowEditor() && count($selected))
     <button type="button" wire:click="enableEditorMode()" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Editor</button>
     @endif
   </div>

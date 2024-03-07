@@ -15,11 +15,13 @@
                             </button>
                         </div>
 
+                        @if($show->isShowSearch())
                         <div class="flex items-center justify-center w-full">
                             <div class="md:w-72">
                                 <input type="text" class="control-input" wire:model.live="searchTerm" spellcheck="false" placeholder="Search">
                             </div>
                         </div>
+                        @endif
 
                         <div class="flex items-center justify-end">
                             <button class="focus:outline-none transform transition duration-500 hover:rotate-180" wire:click="closeModal()">
@@ -73,10 +75,10 @@
                             @if(!$panel->isUploadMode() && !$panel->isEditorMode())
                             <div class="flex items-center justify-center h-[50px] min-h-[50px] max-h-[50px]">
                                 <div class="flex items-center justify-between h-full w-full px-4">
-                                    @if($showPagination && method_exists($data, 'links'))
+                                    @if($show->isShowPagination() && method_exists($data, 'links'))
                                     {!! $data->links("mediable::tailwind.includes.pagination") !!}
                                     @endif
-                                    @if($showPerPage && method_exists($data, 'links') && $data->hasPages())
+                                    @if($show->isShowPerPage() && method_exists($data, 'links') && $data->hasPages())
                                     <select class="control-select" wire:model.live="perPage">
                                         @foreach($perPageValues as $value)
                                         <option value="{{$value}}"> @if($value == 0) All @else {{ $value }} @endif</option>
@@ -90,7 +92,7 @@
                         </div>
                     </div>
 
-                    @if(!$panel->isUploadMode())
+                    @if($show->isShowSidebar() && !$panel->isUploadMode())
                     <div class="relative hidden xl:block bg-[#e5e7eb] min-w-[260px] h-full overflow-y-auto border-l border-gray-300">
                         @include("mediable::tailwind.includes.sidebar")
                     </div>
@@ -98,7 +100,7 @@
 
                 </div>
 
-                @if(!$panel->isUploadMode() && !$panel->isEditorMode())
+                @if($show->isShowImageStrip() && !$panel->isUploadMode() && !$panel->isEditorMode())
                 <div class="bg-[#e5e7eb] border-b border-gray-300 h-[100px] max-h-[100px] min-h-[100px] w-full overflow-hidden">
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
                         @include("mediable::tailwind.includes.strip")

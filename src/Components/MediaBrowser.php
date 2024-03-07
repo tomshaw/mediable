@@ -5,7 +5,7 @@ namespace TomShaw\Mediable\Components;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithFileUploads, WithPagination};
-use TomShaw\Mediable\Concerns\{AlertState, ModalState, ModelState, PanelState};
+use TomShaw\Mediable\Concerns\{AlertState, ModalState, ModelState, PanelState, ShowState};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
@@ -29,6 +29,8 @@ class MediaBrowser extends Component
     public ModelState $model;
 
     public PanelState $panel;
+
+    public ShowState $show;
 
     public $uniqueId;
 
@@ -59,20 +61,6 @@ class MediaBrowser extends Component
     public string $orderDir = 'DESC';
 
     public array $orderDirValues = ['ASC' => 'Ascending', 'DESC' => 'Descending'];
-
-    public bool $showPagination = true;
-
-    public bool $showPerPage = true;
-
-    public bool $showOrderBy = true;
-
-    public bool $showOrderDir = true;
-
-    public bool $showColumnWidth = true;
-
-    public bool $showUniqueMimeTypes = true;
-
-    public bool $showSidebar = true;
 
     public array $columnWidths = [100, 50, 33.3, 25, 20, 16.66, 14.28, 12.5, 11.11, 10, 9.09, 8.33];
 
@@ -107,6 +95,8 @@ class MediaBrowser extends Component
         $this->model = new ModelState();
 
         $this->panel = new PanelState(thumbMode: true);
+
+        $this->show = new ShowState();
 
         $this->theme = $theme ?? config('mediable.theme');
 
@@ -203,7 +193,7 @@ class MediaBrowser extends Component
 
     public function toggleSidebar(): self
     {
-        $this->showSidebar = ! $this->showSidebar;
+        $this->show = new ShowState(showSidebar: ! $this->show->isShowSidebar());
 
         return $this;
     }
@@ -279,7 +269,7 @@ class MediaBrowser extends Component
 
         $this->model = ModelState::fromAttachment($item);
 
-        if (! $this->showSidebar) {
+        if (! $this->show->isShowSidebar()) {
             $this->toggleSidebar();
         }
 
@@ -300,7 +290,7 @@ class MediaBrowser extends Component
 
         $this->model = ModelState::fromAttachment($item);
 
-        if ($this->showSidebar) {
+        if ($this->show->isShowSidebar()) {
             $this->toggleSidebar();
         }
 
