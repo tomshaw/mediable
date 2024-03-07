@@ -5,7 +5,7 @@ namespace TomShaw\Mediable\Components;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithFileUploads, WithPagination};
-use TomShaw\Mediable\Concerns\{ModalAlert, ModalState, ModelState};
+use TomShaw\Mediable\Concerns\{AlertState, ModalState, ModelState, PanelState};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
@@ -22,11 +22,13 @@ class MediaBrowser extends Component
     use WithMimeTypes;
     use WithPagination;
 
+    public AlertState $alert;
+
     public ModalState $state;
 
-    public ModalAlert $alert;
-
     public ModelState $model;
+
+    public PanelState $panel;
 
     public $uniqueId;
 
@@ -50,23 +52,13 @@ class MediaBrowser extends Component
 
     public int $perPage = 25;
 
-    public array $perPageValues = [10, 25, 50, 100, 0];
+    public array $perPageValues = [10, 25, 50, 75, 100, 0];
 
     public string $orderBy = 'id';
 
     public string $orderDir = 'DESC';
 
     public array $orderDirValues = ['ASC' => 'Ascending', 'DESC' => 'Descending'];
-
-    public bool $thumbMode = true;
-
-    public bool $previewMode = false;
-
-    public bool $uploadMode = false;
-
-    public bool $editorMode = false;
-
-    public bool $formMode = false;
 
     public bool $showPagination = true;
 
@@ -110,9 +102,11 @@ class MediaBrowser extends Component
 
         $this->state = new ModalState();
 
-        $this->alert = new ModalAlert();
+        $this->alert = new AlertState();
 
         $this->model = new ModelState();
+
+        $this->panel = new PanelState(thumbMode: true);
 
         $this->theme = $theme ?? config('mediable.theme');
 
@@ -170,7 +164,7 @@ class MediaBrowser extends Component
     #[On('media.alert')]
     public function alert($event): void
     {
-        $this->alert = new ModalAlert(
+        $this->alert = new AlertState(
             show: true,
             type: $event['type'],
             message: $event['message']
@@ -179,36 +173,21 @@ class MediaBrowser extends Component
 
     public function enableThumbMode(): self
     {
-        $this->fill([
-            'thumbMode' => true,
-            'previewMode' => false,
-            'uploadMode' => false,
-            'editorMode' => false,
-        ]);
+        $this->panel = new PanelState(thumbMode: true);
 
         return $this;
     }
 
     public function enablePreviewMode(): self
     {
-        $this->fill([
-            'thumbMode' => false,
-            'previewMode' => true,
-            'uploadMode' => false,
-            'editorMode' => false,
-        ]);
+        $this->panel = new PanelState(previewMode: true);
 
         return $this;
     }
 
     public function enableEditorMode(): self
     {
-        $this->fill([
-            'thumbMode' => false,
-            'previewMode' => false,
-            'uploadMode' => false,
-            'editorMode' => true,
-        ]);
+        $this->panel = new PanelState(editorMode: true);
 
         $this->prepareImageForEditor();
 
@@ -217,12 +196,7 @@ class MediaBrowser extends Component
 
     public function enableUploadMode(): self
     {
-        $this->fill([
-            'thumbMode' => false,
-            'previewMode' => false,
-            'uploadMode' => true,
-            'editorMode' => false,
-        ]);
+        $this->panel = new PanelState(uploadMode: true);
 
         return $this;
     }
@@ -238,9 +212,10 @@ class MediaBrowser extends Component
     {
         Eloquent::create($this->files);
 
-        $message = count($this->files) ? 'Created attachment(s) successfully!' : 'Created attachment successfully!';
+        $count = count($this->files);
+        $message = (count($this->files) > 1) ? "Created $count attachment(s) successfully!" : 'Created attachment successfully!';
 
-        $this->alert = new ModalAlert(
+        $this->alert = new AlertState(
             show: true,
             type: 'success',
             message: $message
@@ -259,7 +234,7 @@ class MediaBrowser extends Component
     {
         Eloquent::update($this->model->id, $this->model->title, $this->model->caption, $this->model->description);
 
-        $this->alert = new ModalAlert(
+        $this->alert = new AlertState(
             show: true,
             type: 'success',
             message: 'Updated attachment successfully!'
@@ -274,7 +249,7 @@ class MediaBrowser extends Component
 
         $this->model = new ModelState();
 
-        $this->alert = new ModalAlert(
+        $this->alert = new AlertState(
             show: true,
             type: 'success',
             message: 'Deleted attachment successfully!'
@@ -312,7 +287,7 @@ class MediaBrowser extends Component
 
         $this->dispatch('mediable.scroll', id: $this->model->id);
 
-        $this->alert = new ModalAlert();
+        $this->alert = new AlertState();
     }
 
     public function setActiveAttachment(Attachment $item): void
@@ -333,7 +308,7 @@ class MediaBrowser extends Component
 
         $this->enablePreviewMode();
 
-        $this->alert = new ModalAlert();
+        $this->alert = new AlertState();
     }
 
     public function clearSelected(): void
@@ -351,7 +326,7 @@ class MediaBrowser extends Component
 
         $message = ($count > 1) ? "Deleted $count attachment(s) successfully!" : 'Deleted attachment successfully!';
 
-        $this->alert = new ModalAlert(
+        $this->alert = new AlertState(
             show: true,
             type: 'success',
             message: $message
@@ -398,7 +373,7 @@ class MediaBrowser extends Component
 
     public function closeAlert(): void
     {
-        $this->alert = new ModalAlert();
+        $this->alert = new AlertState();
     }
 
     public function updatedFiles(): void
@@ -469,7 +444,7 @@ class MediaBrowser extends Component
 
     public function prepareImageForEditor(): void
     {
-        if (! $this->editorMode) {
+        if (! $this->panel->IsEditorMode()) {
             return;
         }
 

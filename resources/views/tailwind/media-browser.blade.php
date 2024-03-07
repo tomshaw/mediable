@@ -30,20 +30,14 @@
                     </div>
                 </div>
 
-                @if(!$this->previewMode && !$this->editorMode)
-                <div class="bg-[#e6e6e6] border-t border-gray-300 h-[50px] max-h-[50px] min-h-[50px] w-full">
-                    @include("mediable::tailwind.includes.topbar")
-                </div>
-                @endif
-
                 <div class="bg-black h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
 
-                    @if(!$this->uploadMode)
+                    @if(!$panel->isUploadMode())
                     <div class="hidden xl:block bg-[#e5e7eb] min-w-[260px] max-w-[260px] h-full border-r border-gray-300">
                         <div class="relative flex items-center justify-center h-full overflow-hidden">
-                            @if(!$this->editorMode)
+                            @if(!$panel->isEditorMode())
                             @include("mediable::tailwind.includes.meta")
-                            @elseif($this->editorMode)
+                            @elseif($panel->isEditorMode())
                             @include("mediable::tailwind.includes.form")
                             @endif
                         </div>
@@ -53,34 +47,30 @@
                     <div class="bg-gray-200 w-full h-full overflow-y-auto">
                         <div class="flex flex-col h-full">
 
-                            @if(!$this->uploadMode)
                             <div class="flex items-center justify-center h-[50px] min-h-[50px] max-h-[50px]">
                                 @include("mediable::tailwind.includes.toolbar")
                             </div>
-                            @endif
 
                             <div class="flex items-center justify-center flex-grow overflow-auto border-t border-b border-gray-300">
                                 <div class="w-full h-full overflow-y-auto">
-
                                     <div class="relative p-0 m-0 h-full w-full">
-                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $thumbMode])>
+                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isThumbMode()])>
                                             @include("mediable::tailwind.includes.attachments")
                                         </div>
-                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $previewMode])>
+                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isPreviewMode()])>
                                             @include("mediable::tailwind.includes.previews")
                                         </div>
-                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $editorMode])>
+                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isEditorMode()])>
                                             @include("mediable::tailwind.includes.editor")
                                         </div>
-                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $uploadMode])>
+                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isUploadMode()])>
                                             @include("mediable::tailwind.includes.uploads")
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
-                            @if(!$this->uploadMode && !$this->editorMode)
+                            @if(!$panel->isUploadMode() && !$panel->isEditorMode())
                             <div class="flex items-center justify-center h-[50px] min-h-[50px] max-h-[50px]">
                                 <div class="flex items-center justify-between h-full w-full px-4">
                                     @if($showPagination && method_exists($data, 'links'))
@@ -100,7 +90,7 @@
                         </div>
                     </div>
 
-                    @if(!$this->uploadMode)
+                    @if(!$panel->isUploadMode())
                     <div class="relative hidden xl:block bg-[#e5e7eb] min-w-[260px] h-full overflow-y-auto border-l border-gray-300">
                         @include("mediable::tailwind.includes.sidebar")
                     </div>
@@ -108,7 +98,7 @@
 
                 </div>
 
-                @if(!$this->uploadMode && !$this->editorMode)
+                @if(!$panel->isUploadMode() && !$panel->isEditorMode())
                 <div class="bg-[#e5e7eb] border-b border-gray-300 h-[100px] max-h-[100px] min-h-[100px] w-full overflow-hidden">
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
                         @include("mediable::tailwind.includes.strip")
@@ -116,8 +106,8 @@
                 </div>
                 @endif
 
-                @if(!$this->uploadMode && !$this->previewMode && !$this->editorMode && count($this->selected))
-                <div class="bg-gray-100 h-[60px] max-h-[60px] min-h-[60px] w-full">
+                @if(!$panel->isUploadMode() && !$panel->isEditorMode() && count($this->selected))
+                <div class="bg-[#e6e6e6] h-[60px] max-h-[60px] min-h-[60px] w-full">
                     @include("mediable::tailwind.includes.footer")
                 </div>
                 @endif

@@ -104,4 +104,11 @@ trait WithMimeTypes
     {
         return in_array($mimeType, $this->strategies['archive']);
     }
+
+    public function formatMimeType(string $mimeType): string
+    {
+        $parts = explode('/', $mimeType);
+
+        return strtoupper(end($parts));
+    }
 }

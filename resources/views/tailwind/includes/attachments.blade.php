@@ -13,7 +13,11 @@
       </div>
 
       <div class="hidden lg:block absolute top-0 right-0">
-        <span class="text-right text-xs font-normal text-[#777] bg-transparent py-1 px-2">{{$this->formatBytes($item->file_size)}} &dash; {{ strtoupper(collect(explode('/', $item->file_type))->last()) }}</span>
+        @if(in_array($item->id, array_column($this->selected, 'id')))
+        <span class="text-right text-xs font-bold text-blue-500 bg-transparent py-1 px-2">{{$this->formatBytes($item->file_size)}} &dash; {{ strtoupper(collect(explode('/', $item->file_type))->last()) }}</span>
+        @else
+        <span class="text-right text-xs font-bold text-gray-500 bg-transparent py-1 px-2">{{$this->formatBytes($item->file_size)}} &dash; {{ strtoupper(collect(explode('/', $item->file_type))->last()) }}</span>
+        @endif
       </div>
 
       @if ($this->mimeTypeImage($item->file_type))

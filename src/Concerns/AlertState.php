@@ -4,7 +4,7 @@ namespace TomShaw\Mediable\Concerns;
 
 use Livewire\Wireable;
 
-final class ModalAlert implements Wireable
+final class AlertState implements Wireable
 {
     public function __construct(
         public bool $show = false,

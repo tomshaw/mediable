@@ -12,14 +12,14 @@
             <div class="flex flex-col items-start justify-start w-full gap-y-1.5 p-2">
 
                 @if ($this->mimeTypeImage($this->model->fileType))
-                <div class="mb-1">
+                <figure class="mb-0">
                     <img src="{{ $this->model->fileUrl }}?id={{ $uniqueId }}" class="object-cover" />
-                </div>
+                </figure>
                 @endif
 
                 <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Image Flip:</label>
-                    <select class="block text-gray-600 border border-gray-300 w-full py-1 px-2 appearance-none rounded-md text-xs font-medium leading-5" wire:model.live="flipMode" wire:change="flipImage">
+                    <label for="flipMode" class="inline-block text-gray-500 mb-1 text-xs font-normal">Image Flip:</label>
+                    <select id="flipMode" class="block text-gray-600 border border-gray-300 w-full py-1 px-2 appearance-none rounded-md text-xs font-medium leading-5" wire:model.live="flipMode" wire:change="flipImage">
                         <option value="">Flip Modes</option>
                         @foreach($this->getFlipModes() as $key => $value)
                         <option value="{{ $key }}">{{ $value }}</option>
@@ -28,8 +28,8 @@
                 </div>
 
                 <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Image Scale:</label>
-                    <select class="block text-gray-600 border border-gray-300 w-full py-1 px-2 appearance-none rounded-md text-xs font-medium leading-5" wire:model.live="scaleMode" wire:change="scaleImage">
+                    <label for="scaleMode" class="inline-block text-gray-500 mb-1 text-xs font-normal">Image Scale:</label>
+                    <select id="scaleMode" class="block text-gray-600 border border-gray-300 w-full py-1 px-2 appearance-none rounded-md text-xs font-medium leading-5" wire:model.live="scaleMode" wire:change="scaleImage">
                         <option value="">Scale Modes</option>
                         @foreach($this->getScaleModes() as $key => $value)
                         <option value="{{ $key }}">{{ $value }}</option>
@@ -38,8 +38,8 @@
                 </div>
 
                 <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Image Filters:</label>
-                    <select class="block text-gray-600 border border-gray-300 w-full py-1 px-2 appearance-none rounded-md text-xs font-medium leading-5" wire:model.live="filterMode">
+                    <label for="filterMode" class="inline-block text-gray-500 mb-1 text-xs font-normal">Image Filters:</label>
+                    <select id="filterMode" class="block text-gray-600 border border-gray-300 w-full py-1 px-2 appearance-none rounded-md text-xs font-medium leading-5" wire:model.live="filterMode">
                         <option value="">Filter Modes</option>
                         @foreach($this->getFilterModes() as $key => $value)
                         <option value="{{ $key }}">{{ $value }}</option>
@@ -49,47 +49,47 @@
 
                 @if(in_array($scaleMode, array_keys($this->getScaleModes())))
                 <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Width:</label>
+                    <label for="newWidth" class="inline-block text-gray-500 mb-1 text-xs font-normal">Width:</label>
                     <input type="number" class="control-input w-full" id="newWidth" wire:model.live="newWidth" wire:change="scaleImage">
                 </div>
                 <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Height:</label>
+                    <label for="newHeight" class="inline-block text-gray-500 mb-1 text-xs font-normal">Height:</label>
                     <input type="number" class="control-input w-full" id="newHeight" wire:model.live="newHeight" wire:change="scaleImage">
                 </div>
                 @endif
 
                 @if($filterMode == IMG_FILTER_CONTRAST)
                 <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Contrast:</label>
-                    <input type="number" class="control-input w-full" wire:model.live="contrast" min="-100" max="100" step="1" />
+                    <label for="contrast" class="inline-block text-gray-500 mb-1 text-xs font-normal">Contrast:</label>
+                    <input type="number" class="control-input w-full" id="contrast" wire:model.live="contrast" min="-100" max="100" step="1" />
                 </div>
                 @endif
 
                 @if($filterMode == IMG_FILTER_BRIGHTNESS)
                 <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Brightness:</label>
-                    <input type="number" class="control-input w-full" wire:model.live="brightness" min="-255" max="255" step="1" />
+                    <label for="brightness" class="inline-block text-gray-500 mb-1 text-xs font-normal">Brightness:</label>
+                    <input type="number" class="control-input w-full" id="brightness" wire:model.live="brightness" min="-255" max="255" step="1" />
                 </div>
                 @endif
 
                 @if($filterMode == IMG_FILTER_COLORIZE)
                 <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Colorize Color:</label>
-                    <input type="color" class="control-input w-full" wire:model.live="colorize" />
+                    <label for="colorize" class="inline-block text-gray-500 mb-1 text-xs font-normal">Colorize Color:</label>
+                    <input type="color" class="control-input w-full" id="colorize" wire:model.live="colorize" />
                 </div>
                 @endif
 
                 @if($filterMode == IMG_FILTER_SMOOTH)
                 <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Smooth Level:</label>
-                    <input type="number" class="control-input w-full" wire:model.live="smoothLevel" min="-10" max="10" step="1" />
+                    <label for="smoothLevel" class="inline-block text-gray-500 mb-1 text-xs font-normal">Smooth Level:</label>
+                    <input type="number" class="control-input w-full" id="smoothLevel" wire:model.live="smoothLevel" min="-10" max="10" step="1" />
                 </div>
                 @endif
 
                 @if($filterMode == IMG_FILTER_PIXELATE)
                 <div class="w-full mb-0">
-                    <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Pixelate Block Size:</label>
-                    <input type="number" class="control-input w-full" wire:model.live="pixelateBlockSize" min="1" step="1" />
+                    <label for="pixelateBlockSize" class="inline-block text-gray-500 mb-1 text-xs font-normal">Pixelate Block Size:</label>
+                    <input type="number" class="control-input w-full" id="pixelateBlockSize" wire:model.live="pixelateBlockSize" min="1" step="1" />
                 </div>
                 @endif
 

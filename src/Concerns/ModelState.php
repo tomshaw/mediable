@@ -2,6 +2,7 @@
 
 namespace TomShaw\Mediable\Concerns;
 
+use Carbon\Carbon;
 use Livewire\Wireable;
 use TomShaw\Mediable\Models\Attachment;
 
@@ -83,5 +84,10 @@ final class ModelState implements Wireable
             createdAt: $value['createdAt'],
             updatedAt: $value['updatedAt'],
         );
+    }
+
+    public function formatDateTime(string $value): string
+    {
+        return Carbon::parse($value)->format('F j, Y, g:i a');
     }
 }

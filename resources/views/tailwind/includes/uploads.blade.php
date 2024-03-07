@@ -58,7 +58,6 @@
       <input type="file" id="fileInput" wire:model="files" multiple>
     </div>
   </form>
-
   @endif
 
 </div>
@@ -103,15 +102,10 @@
     transferFiles(files) {
       this.error = null;
 
-      // Check total upload size.
       this.maxUploadSizeCheck(files);
-
-      // Check individual upload file size.
       this.maxUploadFileSizeCheck(files);
 
       if (this.error) {
-        console.warn('error', this.error);
-
         this.$wire.dispatch('mediable.alert', {
           type: 'error',
           message: this.error,
@@ -124,8 +118,6 @@
           this.progress = 0;
         },
         (error) => {
-          console.warn('uploadMultipleError', error);
-
           this.error = error;
           this.progress = 0;
 

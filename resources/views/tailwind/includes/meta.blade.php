@@ -12,14 +12,15 @@
             <div class="flex flex-col items-start justify-start w-full gap-y-1.5 p-2">
 
                 @if ($this->mimeTypeImage($this->model->fileType))
-                <div class="mb-1">
+                <figure class="mb-0">
                     <img src="{{ $this->model->fileUrl }}?id={{ $uniqueId }}" class="object-cover" />
-                </div>
+                    <figcaption class="text-xs text-white overflow-hidden w-full mt-2 py-1 px-2 bg-[#444]">{{$this->model->title}}</figcaption>
+                </figure>
                 @endif
 
-                @if ($this->model->title)
+                @if ($this->model->fileOriginalName)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
-                    {{ $this->model->title }}
+                    {{ $this->model->fileOriginalName }}
                 </div>
                 @endif
 
@@ -31,25 +32,25 @@
 
                 @if ($this->model->fileName)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
-                    {{ $this->model->fileType }}
+                    {{ $this->formatMimeType($this->model->fileType) }}
                 </div>
                 @endif
 
                 @if ($this->model->fileName)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
-                    {{ $this->imageWidth }} x {{ $this->imageHeight }}
+                    {{ $this->imageWidth }}&times;{{ $this->imageHeight }}
                 </div>
                 @endif
 
                 @if ($this->model->createdAt)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
-                    {{ $this->model->createdAt }}
+                    {{ $this->model->formatDateTime($this->model->createdAt) }}
                 </div>
                 @endif
 
                 @if ($this->model->updatedAt)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
-                    {{ $this->model->updatedAt }}
+                    {{ $this->model->formatDateTime($this->model->updatedAt) }}
                 </div>
                 @endif
 
