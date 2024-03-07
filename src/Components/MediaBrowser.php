@@ -323,6 +323,8 @@ class MediaBrowser extends Component
             }
         }
 
+        $this->dispatch('mediable.scrollto', id: $this->model->id);
+
         $this->alert = new ModalAlert();
     }
 

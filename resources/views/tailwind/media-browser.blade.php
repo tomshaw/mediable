@@ -66,7 +66,7 @@
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $thumbMode])>
                                             @include("mediable::tailwind.includes.attachments")
                                         </div>
-                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $previewMode])>
+                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $previewMode])>
                                             @include("mediable::tailwind.includes.previews")
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $editorMode])>
@@ -110,7 +110,7 @@
 
                 @if(!$this->uploadMode && !$this->editorMode)
                 <div class="bg-[#e5e7eb] border-b border-gray-300 h-[100px] max-h-[100px] min-h-[100px] w-full overflow-hidden">
-                    <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto">
+                    <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
                         @include("mediable::tailwind.includes.strip")
                     </div>
                 </div>
@@ -135,8 +135,17 @@
 
         init() {
             Livewire.on('mediable.insert', event => this.insert(event?.selected));
+            Livewire.on('mediable.scrollto', event => this.scrollTo(event?.id));
             Livewire.on('audio.start', event => this.audioStart(event?.id));
             Livewire.on('audio.pause', event => this.audioPause(event?.id));
+        },
+
+        scrollTo(id) {
+            const item = document.getElementById('list-item-' + id);
+
+            if (item) {
+                item.scrollIntoView({behavior: 'smooth'});
+            }
         },
 
         audioStart(id) {

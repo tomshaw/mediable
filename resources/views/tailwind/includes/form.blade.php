@@ -102,7 +102,10 @@
                 @endif
 
                 <div class="w-full mt-2">
-                    <button class="relative flex items-center justify-center w-full px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="filterImage">Apply filter</button>
+                    <button type="submit" wire:loading.attr="disabled" class="relative flex items-center justify-center w-full px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="filterImage">
+                        <span wire:loading.remove>Apply filter</span>
+                        <span wire:loading>Processing...</span>
+                    </button>
                 </div>
             </div>
         </div>

@@ -5,6 +5,58 @@
         box-shadow: none !important;
     }
 
+    .mediable .scrollY {
+        scrollbar-width: thin;
+        /* For Firefox */
+        scrollbar-color: rgba(155, 155, 155, 0.7) transparent;
+        /* For Firefox */
+        overflow-y: auto;
+        /* Enable vertical scrolling */
+    }
+
+    .mediable .scrollY::-webkit-scrollbar {
+        width: 7px;
+        /* For Chrome, Safari, and Opera */
+    }
+
+    .mediable .scrollY::-webkit-scrollbar-track {
+        background: transparent;
+        /* For Chrome, Safari, and Opera */
+    }
+
+    .mediable .scrollY::-webkit-scrollbar-thumb {
+        background-color: rgba(155, 155, 155, 0.7);
+        /* For Chrome, Safari, and Opera */
+        border-radius: 20px;
+        border: transparent;
+    }
+
+    .mediable .scrollX {
+        scrollbar-width: thin;
+        /* For Firefox */
+        scrollbar-color: rgba(155, 155, 155, 0.7) transparent;
+        /* For Firefox */
+        overflow-x: auto;
+        /* Enable horizontal scrolling */
+    }
+
+    .mediable .scrollX::-webkit-scrollbar {
+        height: 5px;
+        /* For Chrome, Safari, and Opera */
+    }
+
+    .mediable .scrollX::-webkit-scrollbar-track {
+        background: transparent;
+        /* For Chrome, Safari, and Opera */
+    }
+
+    .mediable .scrollX::-webkit-scrollbar-thumb {
+        background-color: rgba(155, 155, 155, 0.7);
+        /* For Chrome, Safari, and Opera */
+        border-radius: 20px;
+        border: transparent;
+    }
+
     .mediable .control-input {
         display: block;
         color: #696969;
