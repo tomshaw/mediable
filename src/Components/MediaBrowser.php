@@ -316,6 +316,12 @@ class MediaBrowser extends Component
         $this->selected = [];
     }
 
+    public function confirmDelete()
+    {
+        $this->dispatch('mediable.confirm', type: 'delete.selected', message: 'Are you sure you want to delete selected attachments?');
+    }
+
+    #[On('delete.selected')]
     public function deleteSelected(): void
     {
         foreach ($this->selected as $item) {

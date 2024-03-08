@@ -129,8 +129,15 @@
         init() {
             Livewire.on('mediable.insert', event => this.insert(event?.selected));
             Livewire.on('mediable.scroll', event => this.scrollTo(event?.id));
+            Livewire.on('mediable.confirm', event => this.confirm(event));
             Livewire.on('audio.start', event => this.audioStart(event?.id));
             Livewire.on('audio.pause', event => this.audioPause(event?.id));
+        },
+
+        confirm(event) {
+            if (window.confirm(event.message)) {
+                this.$dispatch(event.type);
+            }
         },
 
         scrollTo(id) {
