@@ -175,14 +175,20 @@ class EloquentManager
     public function garbage(): void
     {
         try {
-            Attachment::where('hidden', '=', true)->delete();
+            $attachments = Attachment::where('hidden', true)->get();
+
+            foreach ($attachments as $attachment) {
+                $fileDir = $attachment->file_dir;
+
+                if (Storage::exists($fileDir)) {
+                    Storage::delete($fileDir);
+                }
+
+                $attachment->delete();
+            }
         } catch (Exception $e) {
             throw new MediaBrowserException($e->getMessage());
         }
-
-        // if (Storage::exists($source)) {
-        //
-        // }
     }
 
     public function copyImageFromTo(string $source, string $destination): string
