@@ -505,6 +505,8 @@ class MediaBrowser extends Component
         $this->refId = null;
 
         $this->enableThumbMode();
+
+        $this->resetPage();
     }
 
     public function undoEditorChanges()
