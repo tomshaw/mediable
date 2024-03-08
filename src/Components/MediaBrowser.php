@@ -321,10 +321,6 @@ class MediaBrowser extends Component
 
         $this->attachment = AttachmentState::fromAttachment($item);
 
-        if ($this->show->isShowSidebar()) {
-            $this->toggleSidebar();
-        }
-
         $this->applyImageInfo($item);
 
         $this->enablePreviewMode();
