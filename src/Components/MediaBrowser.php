@@ -5,7 +5,7 @@ namespace TomShaw\Mediable\Components;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithFileUploads, WithPagination};
-use TomShaw\Mediable\Concerns\{AlertState, ModalState, ModelState, PanelState, ShowState};
+use TomShaw\Mediable\Concerns\{AlertState, AttachmentState, FileState, ModalState, PanelState, ShowState};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
@@ -24,13 +24,15 @@ class MediaBrowser extends Component
 
     public AlertState $alert;
 
-    public ModalState $state;
+    public ModalState $modal;
 
-    public ModelState $model;
+    public AttachmentState $attachment;
 
     public PanelState $panel;
 
     public ShowState $show;
+
+    public FileState $file;
 
     public $uniqueId;
 
@@ -88,15 +90,17 @@ class MediaBrowser extends Component
     {
         $this->generateUniqueId();
 
-        $this->state = new ModalState();
+        $this->modal = new ModalState();
 
         $this->alert = new AlertState();
 
-        $this->model = new ModelState();
+        $this->attachment = new AttachmentState();
 
         $this->panel = new PanelState(thumbMode: true);
 
         $this->show = new ShowState();
+
+        $this->file = new FileState();
 
         $this->theme = $theme ?? config('mediable.theme');
 
@@ -128,7 +132,7 @@ class MediaBrowser extends Component
     #[On('mediable.open')]
     public function open(?string $id = null): void
     {
-        $this->state = new ModalState(true, $id ?? '');
+        $this->modal = new ModalState(true, $id ?? '');
     }
 
     #[On('mediable.close')]
@@ -222,7 +226,7 @@ class MediaBrowser extends Component
 
     public function updateAttachment(): void
     {
-        Eloquent::update($this->model->id, $this->model->title, $this->model->caption, $this->model->description);
+        Eloquent::update($this->attachment->id, $this->attachment->title, $this->attachment->caption, $this->attachment->description);
 
         $this->alert = new AlertState(
             show: true,
@@ -237,7 +241,7 @@ class MediaBrowser extends Component
 
         $this->clearSelected();
 
-        $this->model = new ModelState();
+        $this->attachment = new AttachmentState();
 
         $this->alert = new AlertState(
             show: true,
@@ -267,7 +271,7 @@ class MediaBrowser extends Component
             array_push($this->selected, $item);
         }
 
-        $this->model = ModelState::fromAttachment($item);
+        $this->attachment = AttachmentState::fromAttachment($item);
 
         if (! $this->show->isShowSidebar()) {
             $this->toggleSidebar();
@@ -275,7 +279,7 @@ class MediaBrowser extends Component
 
         $this->applyImageInfo($item);
 
-        $this->dispatch('mediable.scroll', id: $this->model->id);
+        $this->dispatch('mediable.scroll', id: $this->attachment->id);
 
         $this->alert = new AlertState();
     }
@@ -288,7 +292,7 @@ class MediaBrowser extends Component
             return;
         }
 
-        $this->model = ModelState::fromAttachment($item);
+        $this->attachment = AttachmentState::fromAttachment($item);
 
         if ($this->show->isShowSidebar()) {
             $this->toggleSidebar();
@@ -322,7 +326,7 @@ class MediaBrowser extends Component
             message: $message
         );
 
-        $this->model = new ModelState();
+        $this->attachment = new AttachmentState();
 
         $this->clearSelected();
     }
@@ -337,7 +341,7 @@ class MediaBrowser extends Component
 
     public function insertMedia(): void
     {
-        if ($this->state->hasElementId()) {
+        if ($this->modal->hasElementId()) {
             $this->dispatch(BrowserEvents::INSERT->value, selected: $this->selected);
         } else {
             $this->dispatch(BrowserEvents::DEFAULT->value, $this->selected);
@@ -348,7 +352,7 @@ class MediaBrowser extends Component
 
     public function closeModal(): void
     {
-        $this->state = new ModalState(
+        $this->modal = new ModalState(
             show: false,
             elementId: ''
         );
@@ -438,15 +442,17 @@ class MediaBrowser extends Component
             return;
         }
 
-        $source = $this->model->fileDir;
+        $source = $this->attachment->getFileDir();
 
         $destination = Eloquent::randomizeName($source);
 
         Eloquent::copyImageFromTo($source, $destination);
 
-        $item = Eloquent::saveImageToDatabase($this->model, $destination);
+        $item = Eloquent::saveImageToDatabase($this->attachment, $destination);
 
-        $this->model = ModelState::fromAttachment($item);
+        $this->attachment = AttachmentState::fromAttachment($item);
+
+        $this->file = new FileState($item['file_type'], $item['file_dir'], $item['file_url']);
 
         $this->clearSelected();
 

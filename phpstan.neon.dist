@@ -9,4 +9,4 @@ parameters:
         - src
 
     excludePaths:
-        - src/Concerns/ModelState.php
+        - src/Concerns/AttachmentState.php

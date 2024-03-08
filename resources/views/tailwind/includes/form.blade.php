@@ -11,9 +11,9 @@
         <div class="flex items-start justify-center p-0 m-0 w-full h-full overflow-hidden">
             <div class="flex flex-col items-start justify-start w-full gap-y-1.5 p-2">
 
-                @if ($this->mimeTypeImage($this->model->fileType))
+                @if ($this->mimeTypeImage($this->attachment->file_type))
                 <figure class="mb-0">
-                    <img src="{{ $this->model->fileUrl }}?id={{ $uniqueId }}" class="object-cover" />
+                    <img src="{{ $this->attachment->file_url }}?id={{ $uniqueId }}" class="object-cover" />
                 </figure>
                 @endif
 

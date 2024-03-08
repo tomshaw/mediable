@@ -55,7 +55,7 @@ it('has the correct view', function () {
 
 // Test that the component has the correct initial properties
 it('has the correct initial properties', function () {
-    $state = $this->component->get('state');
+    $state = $this->component->get('modal');
     expect($state->show)->toBe(false);
     expect($state->elementId)->toBe('');
 });

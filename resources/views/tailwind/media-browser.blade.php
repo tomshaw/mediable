@@ -123,7 +123,7 @@
 <script>
     Alpine.data('initMediableBrowser', () => ({
 
-        state: @entangle('state').live,
+        state: @entangle('modal').live,
 
         init() {
             Livewire.on('mediable.insert', event => this.insert(event?.selected));

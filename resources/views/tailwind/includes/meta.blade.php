@@ -11,46 +11,46 @@
         <div class="flex items-start justify-center p-0 m-0 w-full h-full overflow-hidden">
             <div class="flex flex-col items-start justify-start w-full gap-y-1.5 p-2">
 
-                @if ($this->mimeTypeImage($this->model->fileType))
+                @if ($this->mimeTypeImage($this->attachment->file_type))
                 <figure class="mb-0">
-                    <img src="{{ $this->model->fileUrl }}?id={{ $uniqueId }}" class="object-cover" />
-                    <figcaption class="text-xs text-white overflow-hidden w-full mt-2 py-1 px-2 bg-[#444]">{{$this->model->title}}</figcaption>
+                    <img src="{{ $this->attachment->file_url }}?id={{ $uniqueId }}" class="object-cover" />
+                    <figcaption class="text-xs text-white overflow-hidden w-full mt-2 py-1 px-2 bg-[#444]">{{$this->attachment->title}}</figcaption>
                 </figure>
                 @endif
 
-                @if ($this->model->fileOriginalName)
+                @if ($this->attachment->file_original_name)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
-                    {{ $this->model->fileOriginalName }}
+                    {{ $this->attachment->file_original_name }}
                 </div>
                 @endif
 
-                @if ($this->model->fileName)
+                @if ($this->attachment->file_size)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
-                    {{ $this->formatBytes($this->model->fileSize) }}
+                    {{ $this->formatBytes($this->attachment->file_size) }}
                 </div>
                 @endif
 
-                @if ($this->model->fileName)
+                @if ($this->attachment->file_type)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
-                    {{ $this->formatMimeType($this->model->fileType) }}
+                    {{ $this->formatMimeType($this->attachment->file_type) }}
                 </div>
                 @endif
 
-                @if ($this->model->fileName)
+                @if ($this->imageWidth && $this->imageHeight)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
                     {{ $this->imageWidth }}&times;{{ $this->imageHeight }}
                 </div>
                 @endif
 
-                @if ($this->model->createdAt)
+                @if ($this->attachment->created_at)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
-                    {{ $this->model->formatDateTime($this->model->createdAt) }}
+                    {{ $this->attachment->getCreatedAt() }}
                 </div>
                 @endif
 
-                @if ($this->model->updatedAt)
+                @if ($this->attachment->updated_at)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
-                    {{ $this->model->formatDateTime($this->model->updatedAt) }}
+                    {{ $this->attachment->getUpdatedAt() }}
                 </div>
                 @endif
 

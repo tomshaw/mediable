@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
-use TomShaw\Mediable\Concerns\ModelState;
+use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
 
@@ -177,7 +177,7 @@ class EloquentManager
         }
     }
 
-    public function saveImageToDatabase(ModelState $model, string $destination): Attachment
+    public function saveImageToDatabase(AttachmentState $attachment, string $destination): Attachment
     {
         $diskConfig = $this->getAndValidateDisk(config('mediable.disk'));
 
@@ -198,9 +198,9 @@ class EloquentManager
             'file_size' => $file->getSize(),
             'file_dir' => $destination,
             'file_url' => $driver['url'].'/'.basename($destination),
-            'title' => $model->title,
-            'caption' => $model->caption,
-            'description' => $model->description,
+            'title' => $attachment->title,
+            'caption' => $attachment->caption,
+            'description' => $attachment->description,
         ];
 
         try {

@@ -69,7 +69,7 @@ trait WithGraphicDraw
             return;
         }
 
-        GraphicDraw::flipAndSave(Storage::path($this->model->fileDir), $this->flipMode);
+        GraphicDraw::flipAndSave(Storage::path($this->attachment->file_dir), $this->flipMode);
 
         $this->generateUniqueId();
     }
@@ -80,7 +80,7 @@ trait WithGraphicDraw
             return;
         }
 
-        GraphicDraw::scaleAndSave(Storage::path($this->model->fileDir), $this->newWidth, $this->newHeight, $this->scaleMode);
+        GraphicDraw::scaleAndSave(Storage::path($this->attachment->file_dir), $this->newWidth, $this->newHeight, $this->scaleMode);
 
         $this->generateUniqueId();
     }
@@ -108,7 +108,7 @@ trait WithGraphicDraw
             $args[] = $this->pixelateBlockSize;
         }
 
-        GraphicDraw::filterAndSave(Storage::path($this->model->fileDir), $this->filterMode, $args);
+        GraphicDraw::filterAndSave(Storage::path($this->attachment->file_dir), $this->filterMode, $args);
 
         $this->generateUniqueId();
     }

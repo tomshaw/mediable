@@ -12,23 +12,23 @@
       <div class="p-0 m-0">
         <div class="mb-2">
           <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Title</label>
-          <input type="text" class="control-input" wire:model="model.title" spellcheck="false">
+          <input type="text" class="control-input" wire:model="attachment.title" spellcheck="false">
         </div>
         <div class="mb-2">
           <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Caption</label>
-          <input type="text" class="control-input" wire:model="model.caption" spellcheck="false">
+          <input type="text" class="control-input" wire:model="attachment.caption" spellcheck="false">
         </div>
         <div class="mb-2">
           <label class="inline-block text-gray-500 mb-1 text-xs font-bold tracking-wide">Order</label>
-          <input type="text" class="control-input" wire:model="model.sortorder" spellcheck="false">
+          <input type="text" class="control-input" wire:model="attachment.sortorder" spellcheck="false">
         </div>
         <div class="mb-2">
           <label class="inline-block text-gray-500 mb-1 text-xs font-bold tracking-wide">Styles</label>
-          <input type="text" class="control-input" wire:model="model.styles" spellcheck="false">
+          <input type="text" class="control-input" wire:model="attachment.styles" spellcheck="false">
         </div>
         <div class="mb-2">
           <label class="inline-block text-gray-500 mb-1 text-xs font-normal">Description</label>
-          <textarea class="control-input focus:ring-0" wire:model="model.description" rows="4" spellcheck="false"></textarea>
+          <textarea class="control-input focus:ring-0" wire:model="attachment.description" rows="4" spellcheck="false"></textarea>
         </div>
       </div>
       <div class="flex flex-col items-start justify-start flex-nowrap gap-y-2 p-0 m-0">
