@@ -304,6 +304,10 @@ class MediaBrowser extends Component
             $this->toggleSidebar();
         }
 
+        if ($this->panel->isPreviewMode()) {
+            $this->enableThumbMode();
+        }
+
         $this->applyImageInfo($item);
 
         $this->dispatch('mediable.scroll', id: $this->attachment->id);
