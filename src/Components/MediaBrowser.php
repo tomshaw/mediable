@@ -257,7 +257,7 @@ class MediaBrowser extends Component
             $this->alert = new AlertState(
                 show: true,
                 type: 'success',
-                message: 'Updated attachment successfully!'
+                message: 'Attachment updated successfully!'
             );
         }
     }
@@ -273,7 +273,7 @@ class MediaBrowser extends Component
         $this->alert = new AlertState(
             show: true,
             type: 'success',
-            message: 'Deleted attachment successfully!'
+            message: 'Attachment deleted successfully!'
         );
     }
 
