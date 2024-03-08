@@ -311,6 +311,27 @@ class MediaBrowser extends Component
         $this->alert = new AlertState();
     }
 
+    public function setActiveAttachment(Attachment $item): void
+    {
+        $found = in_array($item['id'], array_column($this->selected, 'id'));
+
+        if (! $found) {
+            return;
+        }
+
+        $this->attachment = AttachmentState::fromAttachment($item);
+
+        if ($this->show->isShowSidebar()) {
+            $this->toggleSidebar();
+        }
+
+        $this->applyImageInfo($item);
+
+        $this->enablePreviewMode();
+
+        $this->alert = new AlertState();
+    }
+
     public function clearSelected(): void
     {
         $this->selected = [];
