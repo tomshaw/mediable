@@ -33,6 +33,10 @@ trait WithGraphicDraw
 
     public $scaleMode = '';
 
+    public $editHistory = [];
+
+    public ?int $refId = null;
+
     public function getFlipModes()
     {
         return GraphicDraw::getFlipModes();
@@ -72,6 +76,8 @@ trait WithGraphicDraw
         GraphicDraw::flipAndSave(Storage::path($this->attachment->file_dir), $this->flipMode);
 
         $this->generateUniqueId();
+
+        $this->editHistory[] = $this->attachment->id;
     }
 
     public function scaleImage()
@@ -83,6 +89,8 @@ trait WithGraphicDraw
         GraphicDraw::scaleAndSave(Storage::path($this->attachment->file_dir), $this->newWidth, $this->newHeight, $this->scaleMode);
 
         $this->generateUniqueId();
+
+        $this->editHistory[] = $this->attachment->id;
     }
 
     public function filterImage()
@@ -111,6 +119,8 @@ trait WithGraphicDraw
         GraphicDraw::filterAndSave(Storage::path($this->attachment->file_dir), $this->filterMode, $args);
 
         $this->generateUniqueId();
+
+        $this->editHistory[] = $this->attachment->id;
     }
 
     public function normalizeColors()

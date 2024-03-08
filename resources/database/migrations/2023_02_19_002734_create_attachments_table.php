@@ -22,8 +22,9 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('caption')->nullable();
             $table->text('description')->nullable();
-            $table->integer('sortorder')->default('0')->nullable();
+            $table->integer('sort_order')->default('0')->nullable();
             $table->string('styles')->nullable();
+            $table->boolean('hidden')->default(false);
             $table->timestamps();
         });
     }

@@ -21,12 +21,17 @@ class EloquentManager
     ) {
     }
 
+    public function load(int $id)
+    {
+        return Attachment::find($id);
+    }
+
     public function query(string $orderBy, string $orderDir, ?string $mimeType = null): void
     {
         if ($mimeType) {
-            $this->query = Attachment::where('file_type', '=', $mimeType)->orderBy($orderBy, $orderDir);
+            $this->query = Attachment::where('hidden', '=', false)->where('file_type', '=', $mimeType)->orderBy($orderBy, $orderDir);
         } else {
-            $this->query = Attachment::orderBy($orderBy, $orderDir);
+            $this->query = Attachment::where('hidden', '=', false)->orderBy($orderBy, $orderDir);
         }
     }
 
@@ -138,13 +143,20 @@ class EloquentManager
         return $path;
     }
 
-    public function update(int $id, ?string $title = '', ?string $caption = '', ?string $description = ''): void
+    public function update(int $id, array $data = []): void
+    {
+        try {
+            Attachment::where('id', $id)->update($data);
+        } catch (Exception $e) {
+            throw new MediaBrowserException($e->getMessage());
+        }
+    }
+
+    public function enable(int $id): void
     {
         try {
             Attachment::where('id', $id)->update([
-                'title' => $title ?? '',
-                'caption' => $caption ?? '',
-                'description' => $description ?? '',
+                'hidden' => false,
             ]);
         } catch (Exception $e) {
             throw new MediaBrowserException($e->getMessage());
@@ -160,7 +172,20 @@ class EloquentManager
         }
     }
 
-    public function copyImageFromTo(string $source, string $destination): void
+    public function garbage(): void
+    {
+        try {
+            Attachment::where('hidden', '=', true)->delete();
+        } catch (Exception $e) {
+            throw new MediaBrowserException($e->getMessage());
+        }
+
+        // if (Storage::exists($source)) {
+        //
+        // }
+    }
+
+    public function copyImageFromTo(string $source, string $destination): string
     {
         if (! Storage::exists($source)) {
             throw new MediaBrowserException('Source file not found.');
@@ -175,6 +200,8 @@ class EloquentManager
         } catch (Exception $e) {
             throw new MediaBrowserException($e->getMessage());
         }
+
+        return $destination;
     }
 
     public function saveImageToDatabase(AttachmentState $attachment, string $destination): Attachment
@@ -183,13 +210,9 @@ class EloquentManager
 
         $driver = $diskConfig['driver'];
 
-        $filePath = Storage::path($destination);
+        $filepath = Storage::path($destination);
 
-        try {
-            $file = new File($filePath);
-        } catch (Exception $e) {
-            throw new MediaBrowserException($e->getMessage());
-        }
+        $file = $this->fileObject($filepath);
 
         $create = [
             'file_name' => $file->getFilename(),
@@ -201,6 +224,7 @@ class EloquentManager
             'title' => $attachment->title,
             'caption' => $attachment->caption,
             'description' => $attachment->description,
+            'hidden' => true,
         ];
 
         try {
@@ -213,6 +237,17 @@ class EloquentManager
     public function getFilePath(string $filename): string
     {
         return Storage::path($filename);
+    }
+
+    public function fileObject(string $path, bool $checkPath = true): File
+    {
+        try {
+            $file = new File($path, $checkPath);
+        } catch (Exception $e) {
+            throw new MediaBrowserException($e->getMessage());
+        }
+
+        return $file;
     }
 
     public function randomizeName(string $source): string

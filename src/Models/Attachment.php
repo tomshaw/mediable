@@ -21,5 +21,6 @@ class Attachment extends Model
         'description',
         'sortorder',
         'styles',
+        'hidden',
     ];
 }

@@ -49,8 +49,9 @@
                     <div class="bg-gray-200 w-full h-full overflow-y-auto">
                         <div class="flex flex-col h-full">
 
-                            <div class="flex items-center justify-center h-[50px] min-h-[50px] max-h-[50px]">
+                            <div class="relative flex items-center justify-center h-[50px] min-h-[50px] max-h-[50px]">
                                 @include("mediable::tailwind.includes.toolbar")
+                                @include("mediable::tailwind.includes.alert")
                             </div>
 
                             <div class="flex items-center justify-center flex-grow overflow-auto border-t border-b border-gray-300">

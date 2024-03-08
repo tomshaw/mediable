@@ -20,7 +20,7 @@ beforeEach(function () {
         'title' => 'temp_file_name.jpg',
         'caption' => 'temp_file_name.jpg',
         'description' => 'temp_file_name.jpg',
-        'sortorder' => 1,
+        'sort_order' => 1,
         'styles' => 'temp_file_name.jpg',
     ]);
 

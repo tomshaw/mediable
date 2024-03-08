@@ -3,7 +3,7 @@
     'bg-yellow-200': alert.type === 'warning',
     'bg-green-200': alert.type === 'success',
     'bg-blue-200': alert.type === 'info',
-    'absolute flex items-center justify-between p-0 m-0 px-4 w-full h-[50px] min-h-[50px] border-b border-[#ccc] will-change-transform': true
+    'absolute flex items-center justify-between p-0 m-0 px-4 w-full h-[50px] min-h-[50px] will-change-transform': true
 }" x-data="initModalAlert()" x-show="alert.show" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90">
   <div class="flex items-center justify-start gap-2">
     <span class="text-sm text-gray-700">{{$alert->message}}</span>

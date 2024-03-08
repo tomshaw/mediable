@@ -19,8 +19,9 @@ final class AttachmentState implements Wireable
         public ?string $title = '',
         public ?string $caption = '',
         public ?string $description = '',
-        public ?int $sortorder = 0,
+        public ?int $sort_order = 0,
         public ?string $styles = '',
+        public ?bool $hidden = false,
         public ?string $created_at = null,
         public ?string $updated_at = null
     ) {
@@ -39,8 +40,9 @@ final class AttachmentState implements Wireable
             title: $attachment->title,
             caption: $attachment->caption,
             description: $attachment->description,
-            sortorder: $attachment->sortorder,
+            sort_order: $attachment->sort_order,
             styles: $attachment->styles,
+            hidden: $attachment->hidden,
             created_at: $attachment->created_at,
             updated_at: $attachment->updated_at,
         );
@@ -59,8 +61,9 @@ final class AttachmentState implements Wireable
             'title' => $this->title,
             'caption' => $this->caption,
             'description' => $this->description,
-            'sortorder' => $this->sortorder,
+            'sort_order' => $this->sort_order,
             'styles' => $this->styles,
+            'hidden' => $this->hidden,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
@@ -79,8 +82,9 @@ final class AttachmentState implements Wireable
             title: $value['title'],
             caption: $value['caption'],
             description: $value['description'],
-            sortorder: $value['sortorder'],
+            sort_order: $value['sort_order'],
             styles: $value['styles'],
+            hidden: $value['hidden'],
             created_at: $value['created_at'],
             updated_at: $value['updated_at'],
         );
@@ -138,7 +142,7 @@ final class AttachmentState implements Wireable
 
     public function getSortOrder(): int
     {
-        return $this->sortorder;
+        return $this->sort_order;
     }
 
     public function getStyles(): string

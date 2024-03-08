@@ -3,9 +3,10 @@
 namespace TomShaw\Mediable\Components;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Validator;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithFileUploads, WithPagination};
-use TomShaw\Mediable\Concerns\{AlertState, AttachmentState, FileState, ModalState, PanelState, ShowState};
+use TomShaw\Mediable\Concerns\{AlertState, AttachmentState, ModalState, PanelState, ShowState};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
@@ -32,8 +33,6 @@ class MediaBrowser extends Component
 
     public ShowState $show;
 
-    public FileState $file;
-
     public $uniqueId;
 
     public string $theme = 'tailwind';
@@ -52,7 +51,7 @@ class MediaBrowser extends Component
 
     public array $searchColumns = ['title', 'caption', 'description', 'file_original_name'];
 
-    public array $orderColumns = ['id' => 'ID', 'file_name' => 'Name', 'file_type' => 'Type', 'file_size' => 'Size', 'file_dir' => 'Directory', 'file_url' => 'URL', 'title' => 'Title', 'caption' => 'Caption', 'description' => 'Description', 'created_at' => 'Created At', 'updated_at' => 'Updated At'];
+    public array $orderColumns = ['id' => 'ID', 'file_name' => 'Name', 'file_type' => 'Type', 'file_size' => 'Size', 'file_dir' => 'Directory', 'file_url' => 'URL', 'title' => 'Title', 'caption' => 'Caption', 'description' => 'Description', 'sort_order' => 'Sort Order', 'created_at' => 'Created At', 'updated_at' => 'Updated At'];
 
     public int $perPage = 25;
 
@@ -100,8 +99,6 @@ class MediaBrowser extends Component
 
         $this->show = new ShowState();
 
-        $this->file = new FileState();
-
         $this->theme = $theme ?? config('mediable.theme');
 
         $this->maxUploadSize = $this->getMaxUploadSize();
@@ -113,6 +110,8 @@ class MediaBrowser extends Component
         $this->resetModal();
 
         $this->hasExtension('gd');
+
+        Eloquent::garbage();
     }
 
     public function boot()
@@ -183,7 +182,7 @@ class MediaBrowser extends Component
     {
         $this->panel = new PanelState(editorMode: true);
 
-        $this->prepareImageForEditor();
+        $this->prepareImageEditor();
 
         return $this;
     }
@@ -226,13 +225,41 @@ class MediaBrowser extends Component
 
     public function updateAttachment(): void
     {
-        Eloquent::update($this->attachment->id, $this->attachment->title, $this->attachment->caption, $this->attachment->description);
+        $data = [
+            'title' => $this->attachment->title,
+            'caption' => $this->attachment->caption,
+            'description' => $this->attachment->description,
+            'sort_order' => $this->attachment->sort_order,
+            'styles' => $this->attachment->styles,
+        ];
 
-        $this->alert = new AlertState(
-            show: true,
-            type: 'success',
-            message: 'Updated attachment successfully!'
-        );
+        $rules = [
+            'title' => 'required|string|max:255',
+            'caption' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'sort_order' => 'required|integer',
+            'styles' => 'nullable|string|max:500',
+        ];
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            $this->alert = new AlertState(
+                show: true,
+                type: 'error',
+                message: $validator->errors()->first()
+            );
+        } else {
+            $validated = $validator->validated();
+
+            Eloquent::update($this->attachment->id, $validated);
+
+            $this->alert = new AlertState(
+                show: true,
+                type: 'success',
+                message: 'Updated attachment successfully!'
+            );
+        }
     }
 
     public function deleteAttachment(int $id): void
@@ -280,27 +307,6 @@ class MediaBrowser extends Component
         $this->applyImageInfo($item);
 
         $this->dispatch('mediable.scroll', id: $this->attachment->id);
-
-        $this->alert = new AlertState();
-    }
-
-    public function setActiveAttachment(Attachment $item): void
-    {
-        $found = in_array($item['id'], array_column($this->selected, 'id'));
-
-        if (! $found) {
-            return;
-        }
-
-        $this->attachment = AttachmentState::fromAttachment($item);
-
-        if ($this->show->isShowSidebar()) {
-            $this->toggleSidebar();
-        }
-
-        $this->applyImageInfo($item);
-
-        $this->enablePreviewMode();
 
         $this->alert = new AlertState();
     }
@@ -436,27 +442,97 @@ class MediaBrowser extends Component
         }
     }
 
-    public function prepareImageForEditor(): void
+    public function prepareImageEditor(): void
     {
         if (! $this->panel->IsEditorMode()) {
             return;
         }
 
+        $this->refId = $this->attachment->getId();
+
         $source = $this->attachment->getFileDir();
 
         $destination = Eloquent::randomizeName($source);
 
-        Eloquent::copyImageFromTo($source, $destination);
+        $destination = Eloquent::copyImageFromTo($source, $destination);
 
         $item = Eloquent::saveImageToDatabase($this->attachment, $destination);
 
         $this->attachment = AttachmentState::fromAttachment($item);
 
-        $this->file = new FileState($item['file_type'], $item['file_dir'], $item['file_url']);
+        $this->clearSelected();
+
+        $this->resetPage();
+
+        $this->editHistory = [];
+    }
+
+    public function saveEditorChanges()
+    {
+        Eloquent::enable($this->attachment->id);
+
+        $this->fillEditorProperties();
+
+        $this->editHistory = [];
+
+        $this->refId = null;
+
+        $this->enableThumbMode();
+    }
+
+    public function undoEditorChanges()
+    {
+        $this->fillEditorProperties();
+
+        $row = Eloquent::load($this->refId);
+
+        $this->refId = $row->id;
+
+        $source = $row->file_dir;
+
+        $destination = Eloquent::randomizeName($source);
+
+        $destination = Eloquent::copyImageFromTo($source, $destination);
+
+        $item = Eloquent::saveImageToDatabase($this->attachment, $destination);
+
+        $this->attachment = AttachmentState::fromAttachment($item);
 
         $this->clearSelected();
 
         $this->resetPage();
+
+        $this->editHistory = [];
+    }
+
+    public function closeImageEditor()
+    {
+        $this->fillEditorProperties();
+
+        $this->editHistory = [];
+
+        $this->refId = null;
+
+        $this->enableThumbMode();
+    }
+
+    public function fillEditorProperties()
+    {
+        $this->fill([
+            'flipMode' => '',
+            'filterMode' => '',
+            'contrast' => 0,
+            'brightness' => 0,
+            'colorize' => null,
+            'colorizeRed' => -50,
+            'colorizeGreen' => -50,
+            'colorizeBlue' => 50,
+            'smoothLevel' => 0,
+            'pixelateBlockSize' => 1,
+            'newWidth' => 100,
+            'newHeight' => -1,
+            'scaleMode' => '',
+        ]);
     }
 
     public function generateUniqueId()
