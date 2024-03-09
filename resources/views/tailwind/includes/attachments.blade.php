@@ -1,7 +1,7 @@
 @if ($data->count())
 <ul class="flex flex-wrap -mx-1 p-0 pl-1 w-full">
   @foreach($data as $item)
-  <li class="attachment relative flex bg-[#e5e7eb] m-0 p-0 cursor-pointer list-none text-center select-none border-r border-gray-300" id="list-item-{{$item->id}}" wire:click="toggleAttachment({{$item->id}})" style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
+  <li class="attachment relative flex bg-[#e5e7eb] m-0 p-0 cursor-pointer list-none text-center select-none border-r border-gray-300" id="attachment-id-{{$item->id}}" wire:click="toggleAttachment({{$item->id}})" style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
     <div class="relative cursor-pointer py-4 md:py-8 lg:py-12 xl:py-16 px-4 md:px-8 flex items-center justify-center min-w-full">
 
       <div class="hidden lg:block absolute top-[1px] left-0">

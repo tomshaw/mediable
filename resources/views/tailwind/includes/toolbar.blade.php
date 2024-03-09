@@ -18,6 +18,10 @@
   @if($panel->isThumbMode())
   <div class="flex items-center justify-start gap-2">
 
+    <button type="button" wire:click="toggleMetaInfo">
+      <x-icons.expand :show="$show->isShowMetaInfo()" direction="left" />
+    </button>
+
     @if($show->isShowOrderBy() && $data->count())
     <select class="control-select" wire:model.live="orderBy">
       @foreach($orderColumns as $key => $value)
@@ -71,6 +75,10 @@
     @if ($show->isShowUpload())
     <button type="button" wire:click="enableUploadMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Uploads</button>
     @endif
+
+    <button type="button" wire:click="toggleSidebar">
+      <x-icons.expand :show="$show->isShowSidebar()" direction="right" />
+    </button>
   </div>
   @endif
 
@@ -82,6 +90,7 @@
     </div>
   </div>
   <div class="flex flex-row items-center justify-end gap-2">
+    <button type="button" wire:click="deleteAttachment({{$attachment->id}})" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Delete</button>
     @if ($show->isShowEditor() && count($selected))
     <button type="button" wire:click="enableEditorMode()" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Editor</button>
     @endif

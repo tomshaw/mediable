@@ -89,7 +89,7 @@ class EloquentManager
 
                     try {
                         $path = $this->createImageResource($image, $store, $disk, 'image/avif', config('mediable.avif_quality'));
-                    } catch (MediaBrowserException $e) {
+                    } catch (Exception $e) {
                         continue;
                     }
 

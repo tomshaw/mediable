@@ -2,7 +2,7 @@
 <ul class="flex items-center justify-start gap-x-2">
     @foreach($data as $item)
     <li class="shadow-md cursor-pointer" wire:click="toggleAttachment({{$item->id}})">
-        <div @class(['border border-black w-14 h-14 overflow-hidden', in_array($item->id, array_column($this->selected, 'id')) ? 'border-black' : 'border-black'])>
+        <div @class(['border border-black w-16 h-16 overflow-hidden', in_array($item->id, array_column($this->selected, 'id')) ? 'border-black' : 'border-black'])>
             @if ($this->mimeTypeImage($item['file_type']))
             <img src="{{ $item['file_url'] }}?id={{ $uniqueId }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
             @elseif ($this->mimeTypeVideo($item['file_type']))

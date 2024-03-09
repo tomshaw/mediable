@@ -18,7 +18,8 @@ final class ShowState implements Wireable
         public bool $showUpload = true,
         public bool $showEditor = true,
         public bool $showPreview = true,
-        public bool $showImageStrip = true
+        public bool $showImageStrip = true,
+        public bool $showMetaInfo = true,
     ) {
     }
 
@@ -82,6 +83,11 @@ final class ShowState implements Wireable
         return $this->showImageStrip;
     }
 
+    public function isShowMetaInfo(): bool
+    {
+        return $this->showMetaInfo;
+    }
+
     public function toLivewire()
     {
         return [
@@ -97,6 +103,7 @@ final class ShowState implements Wireable
             'showEditor' => $this->showEditor,
             'showPreview' => $this->showPreview,
             'showImageStrip' => $this->showImageStrip,
+            'showMetaInfo' => $this->showMetaInfo,
         ];
     }
 
@@ -114,7 +121,8 @@ final class ShowState implements Wireable
             showUpload: $value['showUpload'],
             showEditor: $value['showEditor'],
             showPreview: $value['showPreview'],
-            showImageStrip: $value['showImageStrip']
+            showImageStrip: $value['showImageStrip'],
+            showMetaInfo: $value['showMetaInfo'],
         );
     }
 }

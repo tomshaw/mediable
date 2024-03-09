@@ -7,35 +7,35 @@ use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 
 trait WithGraphicDraw
 {
-    public $flipMode = '';
+    public ?int $flipMode = null;
 
-    public $filterMode = '';
+    public ?int $filterMode = null;
 
-    public $contrast = 0;
+    public int $contrast = 0;
 
-    public $brightness = 0;
+    public int $brightness = 0;
 
-    public $colorize;
+    public ?string $colorize = '';
 
-    public $colorizeRed = -50;
+    public int $colorizeRed = -50;
 
-    public $colorizeGreen = -50;
+    public int $colorizeGreen = -50;
 
-    public $colorizeBlue = 50;
+    public int $colorizeBlue = 50;
 
-    public $smoothLevel = 0;
+    public int $smoothLevel = 0;
 
-    public $pixelateBlockSize = 1;
+    public int $pixelateBlockSize = 1;
 
-    public $newWidth = 100;
+    public int $newWidth = 100;
 
-    public $newHeight = -1;
+    public int $newHeight = -1;
 
-    public $scaleMode = '';
+    public ?int $scaleMode = null;
 
-    public $editHistory = [];
+    public ?int $primaryId = null;
 
-    public ?int $refId = null;
+    public array $editHistory = [];
 
     public function getFlipModes()
     {
@@ -77,7 +77,7 @@ trait WithGraphicDraw
 
         $this->generateUniqueId();
 
-        $this->editHistory[] = $this->attachment->id;
+        $this->editHistory[] = $this->getDrawSettings();
     }
 
     public function scaleImage()
@@ -90,7 +90,7 @@ trait WithGraphicDraw
 
         $this->generateUniqueId();
 
-        $this->editHistory[] = $this->attachment->id;
+        $this->editHistory[] = $this->getDrawSettings();
     }
 
     public function filterImage()
@@ -120,7 +120,7 @@ trait WithGraphicDraw
 
         $this->generateUniqueId();
 
-        $this->editHistory[] = $this->attachment->id;
+        $this->editHistory[] = $this->getDrawSettings();
     }
 
     public function normalizeColors()
@@ -130,5 +130,25 @@ trait WithGraphicDraw
         $this->colorizeRed = $r - 255;
         $this->colorizeGreen = $g - 255;
         $this->colorizeBlue = $b - 255;
+    }
+
+    public function getDrawSettings(): array
+    {
+        return [
+            'flipMode' => $this->flipMode,
+            'filterMode' => $this->filterMode,
+            'contrast' => $this->contrast,
+            'brightness' => $this->brightness,
+            'colorize' => $this->colorize,
+            'colorizeRed' => $this->colorizeRed,
+            'colorizeGreen' => $this->colorizeGreen,
+            'colorizeBlue' => $this->colorizeBlue,
+            'smoothLevel' => $this->smoothLevel,
+            'pixelateBlockSize' => $this->pixelateBlockSize,
+            'newWidth' => $this->newWidth,
+            'newHeight' => $this->newHeight,
+            'scaleMode' => $this->scaleMode,
+            'primaryId' => $this->primaryId,
+        ];
     }
 }

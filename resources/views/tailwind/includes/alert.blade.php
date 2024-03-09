@@ -21,7 +21,7 @@
       if (this.alert.show) {
         this.timer = setTimeout(() => {
           this.alert.show = false;
-        }, 5000);
+        }, 3000);
       }
     },
     clearTimer() {

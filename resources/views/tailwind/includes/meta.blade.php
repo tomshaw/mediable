@@ -18,6 +18,22 @@
                 </figure>
                 @endif
 
+                @if ($this->mimeTypeVideo($this->attachment->file_type))
+                <figure class="mb-0">
+                    <video src="{{ asset($this->attachment->file_url) }}" controls></video>
+                    <figcaption class="text-xs text-white overflow-hidden w-full mt-2 py-1 px-2 bg-[#444]">{{$this->attachment->title}}</figcaption>
+                </figure>
+                @endif 
+
+                @if ($this->mimeTypeAudio($this->attachment->file_type))
+                <figure class="mb-0">
+                    <audio controls class="w-[227px] mb-2">
+                        <source src="{{ asset($this->attachment->file_url) }}" type="{{ $this->attachment->file_type }}">
+                    </audio>
+                    <figcaption class="text-xs text-white overflow-hidden w-full mt-2 py-1 px-2 bg-[#444]">{{$this->attachment->title}}</figcaption>
+                </figure>
+                @endif
+
                 @if ($this->attachment->file_original_name)
                 <div class="text-xs text-white overflow-hidden w-full py-1 px-2 bg-[#444]">
                     {{ $this->attachment->file_original_name }}

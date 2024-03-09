@@ -11,11 +11,12 @@ use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\{ServerLimits, WithExtension, WithFileSize, WithGraphicDraw, WithMimeTypes};
+use TomShaw\Mediable\Traits\{ServerLimits, WithCache, WithExtension, WithFileSize, WithGraphicDraw, WithMimeTypes};
 
 class MediaBrowser extends Component
 {
     use ServerLimits;
+    use WithCache;
     use WithExtension;
     use WithFileSize;
     use WithFileUploads;
@@ -112,6 +113,11 @@ class MediaBrowser extends Component
         $this->hasExtension('gd');
 
         Eloquent::garbage();
+
+        if ($this->hasStoreAttachmentId()) {
+            $id = $this->getStoreAttachmentId();
+            $this->toggleAttachment($id);
+        }
     }
 
     public function boot()
@@ -196,7 +202,14 @@ class MediaBrowser extends Component
 
     public function toggleSidebar(): self
     {
-        $this->show = new ShowState(showSidebar: ! $this->show->isShowSidebar());
+        $this->show = new ShowState(showSidebar: ! $this->show->isShowSidebar(), showMetaInfo: $this->show->isShowMetaInfo());
+
+        return $this;
+    }
+
+    public function toggleMetaInfo(): self
+    {
+        $this->show = new ShowState(showMetaInfo: ! $this->show->isShowMetaInfo(), showSidebar: $this->show->isShowSidebar());
 
         return $this;
     }
@@ -275,6 +288,8 @@ class MediaBrowser extends Component
             type: 'success',
             message: 'Attachment deleted successfully!'
         );
+
+        $this->enableThumbMode();
     }
 
     public function toggleAttachment(int $id): void
@@ -300,10 +315,6 @@ class MediaBrowser extends Component
 
         $this->attachment = AttachmentState::fromAttachment($item);
 
-        if (! $this->show->isShowSidebar()) {
-            $this->toggleSidebar();
-        }
-
         if ($this->panel->isPreviewMode()) {
             $this->enableThumbMode();
         }
@@ -313,6 +324,8 @@ class MediaBrowser extends Component
         $this->dispatch('mediable.scroll', id: $this->attachment->id);
 
         $this->alert = new AlertState();
+
+        $this->storeAttachmentId($this->attachment->id);
     }
 
     public function setActiveAttachment(Attachment $item): void
@@ -330,6 +343,8 @@ class MediaBrowser extends Component
         $this->enablePreviewMode();
 
         $this->alert = new AlertState();
+
+        $this->storeAttachmentId($this->attachment->id);
     }
 
     public function clearSelected(): void
@@ -463,7 +478,7 @@ class MediaBrowser extends Component
                     'newWidth' => $width,
                     'newHeight' => $height,
                     'imageType' => $type,
-                    'scaleMode' => '',
+                    'scaleMode' => null,
                 ]);
             }
         }
@@ -475,7 +490,7 @@ class MediaBrowser extends Component
             return;
         }
 
-        $this->refId = $this->attachment->getId();
+        $this->primaryId = $this->attachment->getId();
 
         $source = $this->attachment->getFileDir();
 
@@ -502,7 +517,7 @@ class MediaBrowser extends Component
 
         $this->editHistory = [];
 
-        $this->refId = null;
+        $this->primaryId = null;
 
         $this->enableThumbMode();
 
@@ -513,9 +528,9 @@ class MediaBrowser extends Component
     {
         $this->fillEditorProperties();
 
-        $row = Eloquent::load($this->refId);
+        $row = Eloquent::load($this->primaryId);
 
-        $this->refId = $row->id;
+        $this->primaryId = $row->id;
 
         $source = $row->file_dir;
 
@@ -540,7 +555,7 @@ class MediaBrowser extends Component
 
         $this->editHistory = [];
 
-        $this->refId = null;
+        $this->primaryId = null;
 
         $this->enableThumbMode();
     }
@@ -548,8 +563,8 @@ class MediaBrowser extends Component
     public function fillEditorProperties()
     {
         $this->fill([
-            'flipMode' => '',
-            'filterMode' => '',
+            'flipMode' => null,
+            'filterMode' => null,
             'contrast' => 0,
             'brightness' => 0,
             'colorize' => null,
@@ -560,7 +575,7 @@ class MediaBrowser extends Component
             'pixelateBlockSize' => 1,
             'newWidth' => 100,
             'newHeight' => -1,
-            'scaleMode' => '',
+            'scaleMode' => null,
         ]);
     }
 

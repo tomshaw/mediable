@@ -34,7 +34,7 @@
 
                 <div class="bg-black h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
 
-                    @if(!$panel->isUploadMode())
+                    @if($show->isShowMetaInfo() && !$panel->isUploadMode())
                     <div class="hidden xl:block bg-[#e5e7eb] min-w-[260px] max-w-[260px] h-full border-r border-gray-300">
                         <div class="relative flex items-center justify-center h-full overflow-hidden">
                             @if(!$panel->isEditorMode())
@@ -141,7 +141,7 @@
         },
 
         scrollTo(id) {
-            const item = document.getElementById('list-item-' + id);
+            const item = document.getElementById('attachment-id-' + id);
 
             if (item) {
                 item.scrollIntoView({
