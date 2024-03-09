@@ -55,7 +55,7 @@
 
     @if($show->isShowUniqueMimeTypes() && count($uniqueMimeTypes)>=1)
     <select class="control-select" wire:model.live="selectedMimeType">
-      <option value="">Mime Types</option>
+      <option value="">Mimes</option>
       @foreach($uniqueMimeTypes as $mimeType)
       <option value="{{$mimeType}}">{{ $mimeType }}</option>
       @endforeach

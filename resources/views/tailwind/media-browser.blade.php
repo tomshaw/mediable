@@ -102,7 +102,7 @@
                 </div>
 
                 @if($show->isShowImageStrip() && !$panel->isUploadMode() && !$panel->isEditorMode())
-                <div class="bg-[#e5e7eb] border-b border-gray-300 h-[100px] max-h-[100px] min-h-[100px] w-full overflow-hidden">
+                <div class="hidden 2xl:block bg-[#e5e7eb] border-b border-gray-300 h-[100px] max-h-[100px] min-h-[100px] w-full overflow-hidden">
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
                         @include("mediable::tailwind.includes.strip")
                     </div>
