@@ -297,7 +297,7 @@ class MediaBrowser extends Component
         $item = Attachment::find($id);
 
         if (! $item) {
-            throw new MediaBrowserException("No attachment found with id: $id");
+            return;
         }
 
         $found = in_array($item['id'], array_column($this->selected, 'id'));
