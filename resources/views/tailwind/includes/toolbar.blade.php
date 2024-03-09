@@ -18,7 +18,7 @@
   @if($panel->isThumbMode())
   <div class="flex items-center justify-start gap-2">
 
-    <button type="button" wire:click="toggleMetaInfo">
+    <button type="button" class="hidden xl:block" wire:click="toggleMetaInfo">
       <x-icons.expand :show="$show->isShowMetaInfo()" direction="left" />
     </button>
 
@@ -76,7 +76,7 @@
     <button type="button" wire:click="enableUploadMode" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Uploads</button>
     @endif
 
-    <button type="button" wire:click="toggleSidebar">
+    <button type="button" class="hidden xl:block" wire:click="toggleSidebar">
       <x-icons.expand :show="$show->isShowSidebar()" direction="right" />
     </button>
   </div>
