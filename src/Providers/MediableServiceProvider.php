@@ -87,6 +87,9 @@ class MediableServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../../resources/images' => public_path('vendor/mediable/images'),
             ], 'mediable.images');
+            $this->publishes([
+                __DIR__.'/../resources/fonts' => public_path('vendor/mediable/fonts'),
+            ], 'mediable.fonts');
         }
     }
 

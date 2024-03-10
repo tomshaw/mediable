@@ -19,7 +19,7 @@
 
                 @if($selectedForm == '')
                 @foreach($this->availableForms as $key => $value)
-                <button type="button" wire:click="setForm('{{$key}}')" class="text-xs text-white overflow-hidden w-full select-none mb-1.5 py-1 px-2 bg-[#444] hover:bg-[#555]">
+                <button type="button" wire:click="setForm('{{$key}}')" class="text-xs text-white appearance-none rounded-md overflow-hidden w-full select-none mb-1.5 py-1 px-2 bg-[#444] hover:bg-[#555]">
                     {{ $value }}
                 </button>
                 @endforeach
@@ -191,6 +191,48 @@
                     <button type="submit" wire:click="cropImage" wire:loading.attr="disabled" class="relative flex items-center justify-center w-full px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">
                         <span wire:loading.remove wire:target="cropImage">Apply</span>
                         <span wire:loading wire:target="cropImage">Processing...</span>
+                    </button>
+                    @if(count($editHistory))
+                    <button type="button" wire:click="undoEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Undo</button>
+                    <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
+                    @endif
+                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-rose-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Back</span>
+                    </button>
+                </div>
+                @endif
+
+                @if($selectedForm == 'image-text')
+                <div class="mb-1 w-full">
+                    <label for="imageText" class="inline-block text-gray-500 mb-1 text-xs font-normal">Text:</label>
+                    <input type="text" class="control-input w-full" id="imageText" wire:model="imageText">
+                </div>
+                <div class="mb-1 w-full">
+                    <label for="imageFont" class="inline-block text-gray-500 mb-1 text-xs font-normal">Font face:</label>
+                    <select id="imageFont" class="block text-gray-600 border border-gray-300 w-full py-1 px-2 appearance-none rounded-md text-xs font-medium leading-5" wire:model="imageFont">
+                        <option value="">Choose font:</option>
+                        @foreach($this->buildFontList() as $key => $value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-1 w-full">
+                    <label for="imageFontSize" class="inline-block text-gray-500 mb-1 text-xs font-normal">Font color:</label>
+                    <input type="text" class="control-input w-full" id="imageFontSize" wire:model="imageFontSize" />
+                </div>
+                <div class="mb-1 w-full">
+                    <label for="imageTextColor" class="inline-block text-gray-500 mb-1 text-xs font-normal">Font color:</label>
+                    <input type="color" class="control-input w-full" id="imageTextColor" wire:model="imageTextColor" />
+                </div>
+                <div class="mb-1 w-full">
+                    <label for="imageTextAngle" class="inline-block text-gray-500 mb-1 text-xs font-normal">Font angle:</label>
+                    <input type="range" class="control-input w-full" id="imageTextAngle" wire:model="imageTextAngle" min="0" max="360">
+                </div>
+                <div class="flex flex-col justify-start items-stretch w-full mt-2 gap-y-2">
+                    <button type="submit" wire:click="addText" wire:loading.attr="disabled" class="relative flex items-center justify-center w-full px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">
+                        <span wire:loading.remove wire:target="addText">Apply</span>
+                        <span wire:loading wire:target="addText">Processing...</span>
                     </button>
                     @if(count($editHistory))
                     <button type="button" wire:click="undoEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Undo</button>

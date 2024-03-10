@@ -47,6 +47,16 @@ trait WithGraphicDraw
 
     public int $cropHeight = 0;
 
+    public string $imageText = '';
+
+    public string $imageFont = '';
+
+    public float $imageFontSize = 14.0;
+
+    public string $imageTextColor = '#000000';
+
+    public int $imageTextAngle = 0;
+
     public ?int $primaryId = null;
 
     public array $editHistory = [];
@@ -59,6 +69,7 @@ trait WithGraphicDraw
         'image-filter' => 'Filter Image',
         'image-rotate' => 'Rotate Image',
         'image-crop' => 'Crop Image',
+        'image-text' => 'Add Text',
     ];
 
     public function setForm(string $key): void
@@ -207,6 +218,35 @@ trait WithGraphicDraw
         $this->editHistory[] = $this->getDrawSettings();
     }
 
+    public function addText()
+    {
+        if (! is_numeric($this->imageFontSize) || $this->imageFontSize <= 0) {
+            return;
+        }
+
+        if (! file_exists($this->imageFont) || ! is_readable($this->imageFont)) {
+            return;
+        }
+
+        if (! is_string($this->imageText) || trim($this->imageText) === '') {
+            return;
+        }
+
+        if (! is_numeric($this->imageTextAngle) || $this->imageTextAngle < 0 || $this->imageTextAngle > 360) {
+            return;
+        }
+
+        $color = $this->normalizeHexValue($this->imageTextColor);
+
+        $centered = $this->centerText();
+
+        GraphicDraw::textAndSave(Storage::path($this->attachment->file_dir), $this->imageFontSize, $this->imageTextAngle, $centered[0], $centered[1], $color, $this->imageFont, $this->imageText);
+
+        $this->generateUniqueId();
+
+        $this->editHistory[] = $this->getDrawSettings();
+    }
+
     public function normalizeColors()
     {
         [$r, $g, $b] = sscanf($this->colorize, '#%02x%02x%02x');
@@ -229,6 +269,21 @@ trait WithGraphicDraw
         return imagecolorallocate($image, $red, $green, $blue);
     }
 
+    public function centerText()
+    {
+        [$imageWidth, $imageHeight] = getimagesize(Storage::path($this->attachment->file_dir));
+
+        $bbox = imagettfbbox($this->imageFontSize, $this->imageTextAngle, $this->imageFont, $this->imageText);
+
+        $textWidth = $bbox[2] - $bbox[0];
+        $textHeight = $bbox[7] - $bbox[1];
+
+        $x = ($imageWidth / 2) - ($textWidth / 2);
+        $y = ($imageHeight / 2) - ($textHeight / 2);
+
+        return [$x, $y];
+    }
+
     public function getDrawSettings(): array
     {
         return [
@@ -245,6 +300,18 @@ trait WithGraphicDraw
             'scaleWidth' => $this->scaleWidth,
             'scaleHeight' => $this->scaleHeight,
             'scaleMode' => $this->scaleMode,
+            'rotateAngle' => $this->rotateAngle,
+            'rotateBgColor' => $this->rotateBgColor,
+            'rotateIgnoreTransparent' => $this->rotateIgnoreTransparent,
+            'cropX' => $this->cropX,
+            'cropY' => $this->cropY,
+            'cropWidth' => $this->cropWidth,
+            'cropHeight' => $this->cropHeight,
+            'imageText' => $this->imageText,
+            'imageFont' => $this->imageFont,
+            'imageFontSize' => $this->imageFontSize,
+            'imageTextColor' => $this->imageTextColor,
+            'imageTextAngle' => $this->imageTextAngle,
             'primaryId' => $this->primaryId,
         ];
     }

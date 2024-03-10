@@ -11,7 +11,7 @@ use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\{ServerLimits, WithCache, WithExtension, WithFileSize, WithGraphicDraw, WithMimeTypes};
+use TomShaw\Mediable\Traits\{ServerLimits, WithCache, WithExtension, WithFileSize, WithFonts, WithGraphicDraw, WithMimeTypes};
 
 class MediaBrowser extends Component
 {
@@ -20,6 +20,7 @@ class MediaBrowser extends Component
     use WithExtension;
     use WithFileSize;
     use WithFileUploads;
+    use WithFonts;
     use WithGraphicDraw;
     use WithMimeTypes;
     use WithPagination;

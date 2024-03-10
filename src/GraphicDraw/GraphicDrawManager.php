@@ -68,4 +68,17 @@ class GraphicDrawManager extends GraphicDrawBase
 
         return $this->save($filename, $result);
     }
+
+    public function textAndSave(string $filename, float $size, float $angle, int $x, int $y, int $color, string $fontfile, string $text): bool
+    {
+        $image = $this->create($filename);
+
+        if ($image === false) {
+            return false;
+        }
+
+        $this->text($image, $size, $angle, $x, $y, $color, $fontfile, $text);
+
+        return $this->save($filename, $image);
+    }
 }

@@ -187,7 +187,7 @@ class GraphicDrawBase
         return imagefilter($image, $filter, ...$args);
     }
 
-    public function text(GdImage $image, int $size, int $angle, int $x, int $y, int $color, string $fontfile, string $text): array|false
+    public function text(GdImage $image, float $size, float $angle, int $x, int $y, int $color, string $fontfile, string $text): array|false
     {
         return imagettftext($image, $size, $angle, $x, $y, $color, $fontfile, $text);
     }
