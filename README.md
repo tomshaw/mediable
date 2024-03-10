@@ -10,6 +10,12 @@ Mediable is a light weight easy to use Laravel Livewire Media Manager. Mediable 
 
 > For a complete demonstration see the [Mediable Demo](https://github.com/tomshaw/mediable-demo) repository.
 
+### Screenshots
+Here's an example of what this project looks like.
+
+#### Screenshot
+![Mediable](https://raw.github.com/tomshaw/mediable/master/docs/mediable.jpg)
+
 ## Installation
 
 You can install the package via composer:
@@ -165,3 +171,13 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 ## License
 
 The MIT License (MIT). See [License File](LICENSE) for more information.
+
+```
+
+                 _ _       _     _      
+  /\/\   ___  __| (_) __ _| |__ | | ___ 
+ /    \ / _ \/ _` | |/ _` | '_ \| |/ _ \
+/ /\/\ \  __/ (_| | | (_| | |_) | |  __/
+\/    \/\___|\__,_|_|\__,_|_.__/|_|\___|
+                                        
+```
