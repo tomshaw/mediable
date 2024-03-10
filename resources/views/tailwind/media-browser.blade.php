@@ -132,6 +132,8 @@
             Livewire.on('mediable.confirm', event => this.confirm(event));
             Livewire.on('audio.start', event => this.audioStart(event?.id));
             Livewire.on('audio.pause', event => this.audioPause(event?.id));
+            
+            this.initTextCopy();
         },
 
         confirm(event) {
@@ -209,6 +211,20 @@
                     Mediable.insertAtCursor(el, insert.join(' '));
                 }
             }
+        },
+
+        initTextCopy() {
+            document.querySelectorAll('[data-textcopy]').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    var text = this.innerText;
+                    var textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                });
+            });
         }
     }))
 </script>

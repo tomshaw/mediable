@@ -1,11 +1,13 @@
 <div class="flex items-center justify-between h-full py-0 px-4">
   <div class="flex items-center justify-start gap-2">
     @if (count($selected))
-    <button type="button" class="relative flex items-center justify-center px-3 py-1.5 bg-[#555] text-white rounded-md text-xs font-normal cursor-pointer transition-all duration-100 ease-in hover:text-white focus:outline-none" wire:click="confirmDelete" title="Delete selected">
-      [#]
+    <button wire:click="confirmDelete" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-[#555] py-1.5 px-3 text-xs font-normal text-white">
+      <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
+      <span class="relative">[#]</span>
     </button>
-    <button type="button" class="relative flex items-center justify-center px-3 py-1.5 bg-[#555] text-white rounded-md text-xs font-normal cursor-pointer transition-all duration-100 ease-in hover:text-white focus:outline-none" wire:click="clearSelected" title="Clear selected">
-      Clear Selected
+    <button wire:click="clearSelected" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-[#555] py-1.5 px-3 text-xs font-normal text-white">
+      <span class="absolute h-0 w-0 rounded-full bg-blue-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
+      <span class="relative">Clear Selected</span>
     </button>
     @endif
     <ul class="flex items-center justify-start ml-4 gap-x-2">
@@ -28,7 +30,10 @@
   </div>
   <div class="flex items-center justify-start gap-2">
     @if (count($selected))
-    <button type="button" class="relative flex items-center justify-center px-3 py-1.5 bg-[#555] text-white rounded-md text-xs font-normal cursor-pointer transition-all duration-100 ease-in hover:text-white focus:outline-none" wire:click="insertMedia()">Insert Attachments</button>
+    <button wire:click="insertMedia" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-[#555] py-1.5 px-3 text-xs font-normal text-white">
+      <span class="absolute h-0 w-0 rounded-full bg-blue-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
+      <span class="relative">Insert Selected</span>
+    </button>
     @endif
   </div>
 </div>

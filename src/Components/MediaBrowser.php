@@ -275,23 +275,6 @@ class MediaBrowser extends Component
         }
     }
 
-    public function deleteAttachment(int $id): void
-    {
-        Eloquent::delete($id);
-
-        $this->clearSelected();
-
-        $this->attachment = new AttachmentState();
-
-        $this->alert = new AlertState(
-            show: true,
-            type: 'success',
-            message: 'Attachment deleted successfully!'
-        );
-
-        $this->enableThumbMode();
-    }
-
     public function toggleAttachment(int $id): void
     {
         $item = Attachment::find($id);
@@ -351,6 +334,32 @@ class MediaBrowser extends Component
     public function confirmDelete()
     {
         $this->dispatch('mediable.confirm', type: 'delete.selected', message: 'Are you sure you want to delete selected attachments?');
+    }
+
+    public function deleteAttachment(int $id): void
+    {
+        Eloquent::delete($id);
+
+        $this->selected = array_filter($this->selected, function ($item) use ($id) {
+            return $item['id'] !== $id;
+        });
+
+        if (count($this->selected)) {
+            $end = end($this->selected);
+            if ($end->count()) {
+                $this->attachment = AttachmentState::fromAttachment($end);
+                $this->storeAttachmentId($this->attachment->id);
+            }
+        } else {
+            $this->deleteStoreAttachmentId();
+            $this->attachment = new AttachmentState();
+        }
+
+        $this->alert = new AlertState(
+            show: true,
+            type: 'success',
+            message: 'Attachment deleted successfully!'
+        );
     }
 
     #[On('delete.selected')]

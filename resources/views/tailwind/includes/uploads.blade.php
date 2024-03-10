@@ -32,7 +32,12 @@
               <td class="px-6 py-2 hidden lg:table-cell">Pending</td>
               <td class="px-6 py-2 hidden lg:table-cell">100%</td>
               <td class="px-6 py-2 whitespace-nowrap flex items-center justify-center">
-                <button type="button" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="clearFile({{$index}})">Remove</button>
+
+                <button wire:click="clearFile({{$index}})" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] py-1.5 px-4 text-xs font-normal text-white">
+                  <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
+                  <span class="relative">Remove</span>
+                </button>
+
               </td>
             </tr>
             @endforeach

@@ -33,7 +33,7 @@
       </div>
       <div class="flex flex-col items-start justify-start flex-nowrap gap-y-2 p-0 mt-3">
         <button type="reset" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
-          <span class="absolute h-0 w-0 rounded-full bg-[#777] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+          <span class="absolute h-0 w-0 rounded-full bg-rose-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
           <span class="relative">Reset</span>
         </button>
         <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50" wire:click="updateAttachment" wire:loading.attr="disabled">
