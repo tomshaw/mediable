@@ -480,9 +480,8 @@ class MediaBrowser extends Component
                 $this->fill([
                     'imageWidth' => $width,
                     'imageHeight' => $height,
-                    'newWidth' => $width,
-                    'newHeight' => $height,
-                    'imageType' => $type,
+                    'scaleWidth' => $width,
+                    'scaleHeight' => $height,
                     'scaleMode' => null,
                 ]);
             }
@@ -512,6 +511,8 @@ class MediaBrowser extends Component
         $this->resetPage();
 
         $this->editHistory = [];
+
+        $this->selectedForm = '';
     }
 
     public function saveEditorChanges()
@@ -578,8 +579,8 @@ class MediaBrowser extends Component
             'colorizeBlue' => 50,
             'smoothLevel' => 0,
             'pixelateBlockSize' => 1,
-            'newWidth' => 100,
-            'newHeight' => -1,
+            'scaleWidth' => 100,
+            'scaleHeight' => -1,
             'scaleMode' => null,
         ]);
     }

@@ -27,9 +27,9 @@ trait WithGraphicDraw
 
     public int $pixelateBlockSize = 1;
 
-    public int $newWidth = 100;
+    public int $scaleWidth = 0;
 
-    public int $newHeight = -1;
+    public int $scaleHeight = 0;
 
     public ?int $scaleMode = null;
 
@@ -37,17 +37,35 @@ trait WithGraphicDraw
 
     public array $editHistory = [];
 
-    public function getFlipModes()
+    public ?string $selectedForm = '';
+
+    public array $availableForms = [
+        'image-flip' => 'Flip Image',
+        'image-scale' => 'Scale Image',
+        'image-filter' => 'Filter Image',
+    ];
+
+    public function setForm(string $key): void
+    {
+        $this->selectedForm = $key;
+    }
+
+    public function resetForm(): void
+    {
+        $this->selectedForm = '';
+    }
+
+    public function getFlipModes(): array
     {
         return GraphicDraw::getFlipModes();
     }
 
-    public function getFilterModes()
+    public function getFilterModes(): array
     {
         return GraphicDraw::getFilterModes();
     }
 
-    public function getScaleModes()
+    public function getScaleModes(): array
     {
         return GraphicDraw::getScaleModes();
     }
@@ -65,6 +83,26 @@ trait WithGraphicDraw
     public function getImageExtension(int $imageType): ?string
     {
         return GraphicDraw::getImageExtension($imageType);
+    }
+
+    public function updatedScaleWidth()
+    {
+        $originalWidth = $this->scaleWidth;
+        $originalHeight = $this->scaleHeight;
+
+        $aspectRatio = $originalWidth / $originalHeight;
+
+        $this->scaleHeight = intval($this->scaleWidth / $aspectRatio);
+    }
+
+    public function updatedScaleHeight()
+    {
+        $originalWidth = $this->scaleWidth;
+        $originalHeight = $this->scaleHeight;
+
+        $aspectRatio = $originalWidth / $originalHeight;
+
+        $this->scaleWidth = intval($this->scaleHeight * $aspectRatio);
     }
 
     public function flipImage()
@@ -86,7 +124,7 @@ trait WithGraphicDraw
             return;
         }
 
-        GraphicDraw::scaleAndSave(Storage::path($this->attachment->file_dir), $this->newWidth, $this->newHeight, $this->scaleMode);
+        GraphicDraw::scaleAndSave(Storage::path($this->attachment->file_dir), $this->scaleWidth, $this->scaleHeight, $this->scaleMode);
 
         $this->generateUniqueId();
 
@@ -145,8 +183,8 @@ trait WithGraphicDraw
             'colorizeBlue' => $this->colorizeBlue,
             'smoothLevel' => $this->smoothLevel,
             'pixelateBlockSize' => $this->pixelateBlockSize,
-            'newWidth' => $this->newWidth,
-            'newHeight' => $this->newHeight,
+            'scaleWidth' => $this->scaleWidth,
+            'scaleHeight' => $this->scaleHeight,
             'scaleMode' => $this->scaleMode,
             'primaryId' => $this->primaryId,
         ];

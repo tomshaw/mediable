@@ -155,10 +155,6 @@
     </div>
   </div>
   <div class="flex flex-row items-center justify-end gap-2">
-    @if(count($editHistory))
-    <button type="button" wire:click="undoEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Undo</button>
-    <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
-    @endif
     <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-neutral-200" wire:click="toggleSidebar">
       <x-icons.arrow :show="$show->isShowSidebar()" direction="left" />
     </button>
