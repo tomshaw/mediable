@@ -72,6 +72,11 @@ class GraphicDrawBase
         };
     }
 
+    public function imagecreatefrompath(string $filename): GdImage|false
+    {
+        return $this->create($filename);
+    }
+
     public function imagecreatefromstring(string $data): GdImage|false
     {
         return imagecreatefromstring($data);
@@ -135,6 +140,16 @@ class GraphicDrawBase
     public function getimagesize(string $filename, array $image_info = []): array|false
     {
         return getimagesize($filename, $image_info);
+    }
+
+    public function imagesy(GdImage $image): int|false
+    {
+        return imagesy($image);
+    }
+
+    public function imagesx(GdImage $image): int|false
+    {
+        return imagesx($image);
     }
 
     public function getImageMimeType(int $imageType): ?string

@@ -42,4 +42,30 @@ class GraphicDrawManager extends GraphicDrawBase
 
         return $this->save($filename, $result);
     }
+
+    public function rotateAndSave(string $filename, float $angle, int $bgd_color, bool $ignore_transparent = false): bool
+    {
+        $image = $this->create($filename);
+
+        if ($image === false) {
+            return false;
+        }
+
+        $result = $this->rotate($image, $angle, $bgd_color, $ignore_transparent);
+
+        return $this->save($filename, $result);
+    }
+
+    public function cropAndSave(string $filename, array $rect): bool
+    {
+        $image = $this->create($filename);
+
+        if ($image === false) {
+            return false;
+        }
+
+        $result = $this->crop($image, $rect);
+
+        return $this->save($filename, $result);
+    }
 }

@@ -31,7 +31,21 @@ trait WithGraphicDraw
 
     public int $scaleHeight = 0;
 
-    public ?int $scaleMode = null;
+    public ?int $scaleMode = 4;
+
+    public int $rotateAngle = 0;
+
+    public string $rotateBgColor = '#000000';
+
+    public bool $rotateIgnoreTransparent = false;
+
+    public int $cropX = 0;
+
+    public int $cropY = 0;
+
+    public int $cropWidth = 0;
+
+    public int $cropHeight = 0;
 
     public ?int $primaryId = null;
 
@@ -43,6 +57,8 @@ trait WithGraphicDraw
         'image-flip' => 'Flip Image',
         'image-scale' => 'Scale Image',
         'image-filter' => 'Filter Image',
+        'image-rotate' => 'Rotate Image',
+        'image-crop' => 'Crop Image',
     ];
 
     public function setForm(string $key): void
@@ -87,8 +103,10 @@ trait WithGraphicDraw
 
     public function updatedScaleWidth()
     {
-        $originalWidth = $this->scaleWidth;
-        $originalHeight = $this->scaleHeight;
+        $image = GraphicDraw::imagecreatefrompath(Storage::path($this->attachment->file_dir));
+
+        $originalWidth = GraphicDraw::imagesx($image);
+        $originalHeight = GraphicDraw::imagesy($image);
 
         $aspectRatio = $originalWidth / $originalHeight;
 
@@ -97,8 +115,10 @@ trait WithGraphicDraw
 
     public function updatedScaleHeight()
     {
-        $originalWidth = $this->scaleWidth;
-        $originalHeight = $this->scaleHeight;
+        $image = GraphicDraw::imagecreatefrompath(Storage::path($this->attachment->file_dir));
+
+        $originalWidth = GraphicDraw::imagesx($image);
+        $originalHeight = GraphicDraw::imagesy($image);
 
         $aspectRatio = $originalWidth / $originalHeight;
 
@@ -161,6 +181,32 @@ trait WithGraphicDraw
         $this->editHistory[] = $this->getDrawSettings();
     }
 
+    public function rotateImage()
+    {
+        if (! $this->rotateAngle) {
+            return;
+        }
+
+        $backgroundColor = $this->normalizeHexValue($this->rotateBgColor);
+
+        GraphicDraw::rotateAndSave(Storage::path($this->attachment->file_dir), $this->rotateAngle, $backgroundColor, $this->rotateIgnoreTransparent);
+
+        $this->generateUniqueId();
+
+        $this->editHistory[] = $this->getDrawSettings();
+    }
+
+    public function cropImage()
+    {
+        $rect = ['x' => $this->cropX, 'y' => $this->cropY, 'width' => $this->cropWidth, 'height' => $this->cropHeight];
+
+        GraphicDraw::cropAndSave(Storage::path($this->attachment->file_dir), $rect);
+
+        $this->generateUniqueId();
+
+        $this->editHistory[] = $this->getDrawSettings();
+    }
+
     public function normalizeColors()
     {
         [$r, $g, $b] = sscanf($this->colorize, '#%02x%02x%02x');
@@ -168,6 +214,19 @@ trait WithGraphicDraw
         $this->colorizeRed = $r - 255;
         $this->colorizeGreen = $g - 255;
         $this->colorizeBlue = $b - 255;
+    }
+
+    public function normalizeHexValue(string $hexColor)
+    {
+        $hexColor = ltrim($hexColor, '#');
+
+        $red = hexdec(substr($hexColor, 0, 2));
+        $green = hexdec(substr($hexColor, 2, 2));
+        $blue = hexdec(substr($hexColor, 4, 2));
+
+        $image = imagecreatetruecolor(100, 100);
+
+        return imagecolorallocate($image, $red, $green, $blue);
     }
 
     public function getDrawSettings(): array
