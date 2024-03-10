@@ -32,10 +32,14 @@
         </div>
       </div>
       <div class="flex flex-col items-start justify-start flex-nowrap gap-y-2 p-0 mt-3">
-        <button type="reset" class="relative flex items-center justify-center w-full px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Reset</button>
-        <button type="submit" class="relative flex items-center justify-center w-full px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="createAttachments()" wire:loading.attr="disabled">
-          <span wire:loading.remove wire:target="updateAttachment">Submit</span>
-          <span wire:loading wire:target="updateAttachment">Saving...</span>
+        <button type="reset" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
+          <span class="absolute h-0 w-0 rounded-full bg-[#777] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+          <span class="relative">Reset</span>
+        </button>
+        <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50" wire:click="updateAttachment" wire:loading.attr="disabled">
+          <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+          <span class="relative" wire:loading.remove wire:target="updateAttachment">Submit</span>
+          <span class="relative" wire:loading wire:target="updateAttachment">Saving...</span>
         </button>
       </div>
     </form>

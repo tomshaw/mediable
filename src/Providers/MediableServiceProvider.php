@@ -66,14 +66,10 @@ class MediableServiceProvider extends ServiceProvider
         Blade::component('mediable::scripts', Scripts::class);
         Blade::component('mediable::styles', Styles::class);
 
-        Blade::component('icons::attachments', 'icons.attachments');
-        Blade::component('icons::tables', 'icons.tables');
-        Blade::component('icons::square', 'icons.square');
-        Blade::component('icons::plus', 'icons.plus');
-        Blade::component('icons::minus', 'icons.minus');
-        Blade::component('icons::logo', 'icons.logo');
+        Blade::component('icons::arrow', 'icons.arrow');
+        Blade::component('icons::close', 'icons.close');
         Blade::component('icons::exit', 'icons.exit');
-        Blade::component('icons::expand', 'icons.expand');
+        Blade::component('icons::logo', 'icons.logo');
     }
 
     /**
