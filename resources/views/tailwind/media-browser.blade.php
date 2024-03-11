@@ -134,16 +134,20 @@
 
         audioStart(id) {
             const audio = document.getElementById('audioPlayer' + id);
-            //const progressBar = document.getElementById('audioProgress' + id);
+            const progressBar = document.getElementById('audioProgress' + id);
 
             if (audio) {
                 audio.play();
 
                 audio.addEventListener('timeupdate', () => {
                     if (audio.duration) {
-                        const progress = (audio.currentTime / audio.duration) * 100;
+                        const progress = ((audio.currentTime / audio.duration) * 100).toFixed(2);
+                        const currentTime = audio.currentTime.toFixed(2);
+                        const duration = audio.duration.toFixed(2);
 
-                        //progressBar.style.width = progress + '%';
+                        if (progressBar) {
+                            progressBar.innerHTML = `${progress}%   ${currentTime} / ${duration}`;
+                        }
                     }
                 });
 

@@ -6,9 +6,9 @@
 
       <div class="hidden lg:block absolute top-[1px] left-0">
         @if(in_array($item->id, array_column($this->selected, 'id')))
-        <span class="text-left font-light text-red-500 bg-transparent py-1 px-2" style="font-size: 10px;">{{$item->id}}</span>
+        <span class="text-left text-xs font-light text-red-500 bg-transparent py-1 px-2">{{$item->id}}</span>
         @else
-        <span class="text-left font-light text-black bg-transparent py-1 px-2" style="font-size: 10px;">{{$item->id}}</span>
+        <span class="text-left text-xs font-light text-black bg-transparent py-1 px-2">{{$item->id}}</span>
         @endif
       </div>
 
@@ -28,7 +28,7 @@
       @elseif ($this->mimeTypeVideo($item->file_type))
       <video src="{{ asset($item->file_url) }}" class="attachment__item" alt="{{ $item->file_original_name }}" controls></video>
       @elseif ($this->mimeTypeAudio($item->file_type))
-      <div class="relative overflow-hidden">
+      <div class="flex items-center justify-center h-full w-full overflow-hidden">
 
         <audio class="hidden" id="audioPlayer{{ $item->id }}">
           <source src="{{ asset($item->file_url) }}" type="{{ $item->file_type }}">
@@ -45,6 +45,8 @@
           <span class="audio-animation inline-block bg-[#555] w-1/3 h-[30%]" style="animation-delay: -2.2s;"></span>
           <span class="audio-animation inline-block bg-[#555] w-1/3 h-[75%]" style="animation-delay: -3.7s"></span>
         </button>
+
+        <div class="absolute left-1 bottom-1 w-full overflow-hidden whitespace-nowrap text-left text-xs font-normal px-1.5" id="audioProgress{{$item->id}}"></div>
 
       </div>
       @else
