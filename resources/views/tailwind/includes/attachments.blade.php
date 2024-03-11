@@ -57,7 +57,7 @@
       @if ($item->title)
       <div class="absolute inset-x-0 bottom-0 bg-[#555] overflow-hidden max-h-full whitespace-nowrap text-left text-xs font-normal px-1.5">
         <div class="absolute inset-y-0 left-0 h-full w-0 bg-blue-500 z-0" id="audioProgress{{$item->id}}"></div>
-        <span class="inline-block align-middle text-white text-xs font-light py-1 relative z-10">{!! $item->title !!}</span>
+        <span class="inline-block align-middle text-white text-xs font-light py-1.5 relative z-10">{!! $item->title !!}</span>
       </div>
       @endif
 

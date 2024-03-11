@@ -19,7 +19,7 @@
 
                 @if($selectedForm == '')
                 @foreach($this->availableForms as $key => $value)
-                <button type="button" wire:click="setForm('{{$key}}')" class="text-xs text-white appearance-none rounded-md overflow-hidden w-full select-none mb-1.5 py-1 px-2 bg-[#444] hover:bg-[#555]">
+                <button type="button" wire:click="setForm('{{$key}}')" class="text-xs text-white appearance-none rounded-full overflow-hidden w-full select-none mb-1.5 py-1.5 px-2 bg-[#444] hover:bg-[#555]">
                     {{ $value }}
                 </button>
                 @endforeach
