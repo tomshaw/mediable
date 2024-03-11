@@ -80,11 +80,13 @@
                                     {!! $data->links("mediable::tailwind.includes.pagination") !!}
                                     @endif
                                     @if($show->isShowPerPage() && method_exists($data, 'links') && $data->hasPages())
-                                    <select class="control-select" wire:model.live="perPage">
-                                        @foreach($perPageValues as $value)
-                                        <option value="{{$value}}"> @if($value == 0) All @else {{ $value }} @endif</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="hidden xl:block">
+                                        <select class="control-select" wire:model.live="perPage">
+                                            @foreach($perPageValues as $value)
+                                            <option value="{{$value}}"> @if($value == 0) All @else {{ $value }} @endif</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     @endif
                                 </div>
                             </div>
@@ -132,7 +134,7 @@
             Livewire.on('mediable.confirm', event => this.confirm(event));
             Livewire.on('audio.start', event => this.audioStart(event?.id));
             Livewire.on('audio.pause', event => this.audioPause(event?.id));
-            
+
             this.initTextCopy();
         },
 
