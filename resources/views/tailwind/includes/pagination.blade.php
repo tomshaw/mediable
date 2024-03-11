@@ -100,7 +100,7 @@
       </div>
 
       <div>
-        <p class="text-sm text-gray-700 leading-5">
+        <p class="hidden xl:block text-sm text-gray-700 leading-5">
           <span>{!! __('Showing') !!}</span>
           <span class="font-medium">{{ $paginator->firstItem() }}</span>
           <span>{!! __('to') !!}</span>

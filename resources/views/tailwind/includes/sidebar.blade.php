@@ -1,6 +1,6 @@
 <div class="flex flex-col justify-between p-0 m-0 w-full h-full">
 
-  <div class="bg-gray-200 w-full h-[50px] min-h-[50px] max-h-[50px]">
+  <div class="bg-gray-200 h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
     <div class="flex items-center justify-between px-4 h-full w-full">
       <div></div>
       <div></div>
@@ -45,7 +45,7 @@
     </form>
   </div>
 
-  <div class="bg-gray-200 w-full h-[50px] min-h-[50px] max-h-[50px]">
+  <div class="bg-gray-200 h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
     <div class="flex items-center justify-start px-4 h-full w-full gap-x-2"></div>
   </div>
 </div>

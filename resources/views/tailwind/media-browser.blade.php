@@ -6,7 +6,7 @@
         <div class="flex h-full bg-white flex-grow overflow-hidden">
             <div class="relative flex flex-col justify-between w-full h-full overflow-hidden">
 
-                <div class="bg-gray-100 h-[70px] max-h-[70px] min-h-[70px] w-full">
+                <div class="bg-gray-100 h-12 min-h-12 max-h-12 xl:h-14 xl:min-h-14 xl:max-h-14 2xl:h-16 2xl:min-h-16 2xl:max-h-16 w-full">
                     <div class="flex items-center justify-between h-full px-8">
 
                         <div class="flex items-center justify-end">
@@ -32,10 +32,10 @@
                     </div>
                 </div>
 
-                <div class="bg-black h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
+                <div class="bg-gray-200 h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
 
                     @if($show->isShowMetaInfo() && !$panel->isUploadMode())
-                    <div class="hidden xl:block bg-[#e5e7eb] min-w-[260px] max-w-[260px] h-full border-r border-gray-300">
+                    <div class="relative bg-gray-200 border-r border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
                         <div class="relative flex items-center justify-center h-full overflow-hidden">
                             @if(!$panel->isEditorMode())
                             @include("mediable::tailwind.includes.meta")
@@ -49,7 +49,7 @@
                     <div class="bg-gray-200 w-full h-full overflow-y-auto">
                         <div class="flex flex-col h-full">
 
-                            <div class="relative flex items-center justify-center h-[50px] min-h-[50px] max-h-[50px]">
+                            <div class="relative flex items-center justify-center h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
                                 @include("mediable::tailwind.includes.toolbar")
                                 @include("mediable::tailwind.includes.alert")
                             </div>
@@ -57,7 +57,7 @@
                             <div class="flex items-center justify-center flex-grow overflow-auto border-t border-b border-gray-300">
                                 <div class="w-full h-full overflow-y-auto">
                                     <div class="relative p-0 m-0 h-full w-full">
-                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isThumbMode()])>
+                                        <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isThumbMode()])>
                                             @include("mediable::tailwind.includes.attachments")
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isPreviewMode()])>
@@ -74,7 +74,7 @@
                             </div>
 
                             @if(!$panel->isUploadMode() && !$panel->isEditorMode())
-                            <div class="flex items-center justify-center h-[50px] min-h-[50px] max-h-[50px]">
+                            <div class="relative flex items-center justify-center h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
                                 <div class="flex items-center justify-between h-full w-full px-4">
                                     @if($show->isShowPagination() && method_exists($data, 'links'))
                                     {!! $data->links("mediable::tailwind.includes.pagination") !!}
@@ -94,7 +94,7 @@
                     </div>
 
                     @if($show->isShowSidebar() && !$panel->isUploadMode())
-                    <div class="relative hidden xl:block bg-[#e5e7eb] min-w-[260px] h-full overflow-y-auto border-l border-gray-300">
+                    <div class="relative bg-gray-200 border-l border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
                         @include("mediable::tailwind.includes.sidebar")
                     </div>
                     @endif
