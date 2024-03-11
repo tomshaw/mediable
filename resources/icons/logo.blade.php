@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 415 80" stroke="currentColor" class="w-full h-full text-[#333] fill-current">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 415 80" fill="currentColor" stroke="currentColor" class="fill-current">
     <g>
         <path d="M58.1,71.9v-40L40.9,58h-0.3L23.5,32.1v39.7H10.3V10.6h14.5l16.1,25.9L57,10.6h14.5v61.3H58.1z" />
         <path d="M128.4,53.1H95.8c1.3,6,5.5,9.2,11.5,9.2c4.5,0,7.7-1.4,11.4-4.8l7.6,6.7c-4.4,5.4-10.7,8.8-19.2,8.8 C93,72.9,82.6,63,82.6,48.7v-0.2c0-13.4,9.5-24.4,23.2-24.4c15.7,0,22.8,12.2,22.8,25.5v0.2C128.6,51,128.5,51.8,128.4,53.1z M105.8,34.8c-5.5,0-9.1,3.9-10.2,10h20C114.9,38.8,111.4,34.8,105.8,34.8z" />

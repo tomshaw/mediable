@@ -7,29 +7,7 @@
             <div class="relative flex flex-col justify-between w-full h-full overflow-hidden">
 
                 <div class="bg-gray-100 h-12 min-h-12 max-h-12 xl:h-14 xl:min-h-14 xl:max-h-14 2xl:h-16 2xl:min-h-16 2xl:max-h-16 w-full">
-                    <div class="flex items-center justify-between h-full px-8">
-
-                        <div class="flex items-center justify-end">
-                            <button class="w-28 cursor-pointer" wire:click="expandModal()" role="button">
-                                <x-icons.logo />
-                            </button>
-                        </div>
-
-                        @if($show->isShowSearch())
-                        <div class="flex items-center justify-center w-full">
-                            <div class="md:w-72">
-                                <input type="text" class="control-input" wire:model.live="searchTerm" spellcheck="false" placeholder="Search">
-                            </div>
-                        </div>
-                        @endif
-
-                        <div class="flex items-center justify-end">
-                            <button class="focus:outline-none transform transition duration-500 hover:rotate-180" wire:click="closeModal()">
-                                <x-icons.exit />
-                            </button>
-                        </div>
-
-                    </div>
+                    @include("mediable::tailwind.includes.header")
                 </div>
 
                 <div class="bg-gray-200 h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">

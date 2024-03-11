@@ -2,7 +2,7 @@
 
   @if($panel->isUploadMode())
   <div class="flex items-center justify-start gap-2">
-    <button wire:click="enableThumbMode" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-neutral-200 transition active:scale-95">
+    <button wire:click="enableThumbMode" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-white transition active:scale-95">
       <x-icons.close />
     </button>
   </div>
@@ -24,7 +24,7 @@
   @if($panel->isThumbMode())
   <div class="flex items-center justify-start gap-2">
 
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-neutral-200" wire:click="toggleMetaInfo">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-white" wire:click="toggleMetaInfo">
       <x-icons.arrow :show="$show->isShowMetaInfo()" direction="right" />
     </button>
 
@@ -97,7 +97,7 @@
     </button>
     @endif
 
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-neutral-200" wire:click="toggleSidebar">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-white" wire:click="toggleSidebar">
       <x-icons.arrow :show="$show->isShowSidebar()" direction="left" />
     </button>
   </div>
@@ -106,11 +106,11 @@
   @if($panel->isPreviewMode())
   <div class="flex items-center justify-start gap-2">
 
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-neutral-200" wire:click="toggleMetaInfo">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-white" wire:click="toggleMetaInfo">
       <x-icons.arrow :show="$show->isShowMetaInfo()" direction="right" />
     </button>
 
-    <button wire:click="enableThumbMode" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-neutral-200 transition active:scale-95">
+    <button wire:click="enableThumbMode" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-white transition active:scale-95">
       <x-icons.close />
     </button>
 
@@ -134,7 +134,7 @@
     </button>
     @endif
 
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-neutral-200" wire:click="toggleSidebar">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-white" wire:click="toggleSidebar">
       <x-icons.arrow :show="$show->isShowSidebar()" direction="left" />
     </button>
   </div>
@@ -142,11 +142,11 @@
 
   @if($panel->isEditorMode())
   <div class="flex items-center justify-start gap-2">
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-neutral-200" wire:click="toggleMetaInfo">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-white" wire:click="toggleMetaInfo">
       <x-icons.arrow :show="$show->isShowMetaInfo()" direction="right" />
     </button>
 
-    <button wire:click="closeImageEditor" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-neutral-200 transition active:scale-95">
+    <button wire:click="closeImageEditor" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-white transition active:scale-95">
       <x-icons.close />
     </button>
 
@@ -155,7 +155,7 @@
     </div>
   </div>
   <div class="flex flex-row items-center justify-end gap-2">
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-neutral-200" wire:click="toggleSidebar">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-white" wire:click="toggleSidebar">
       <x-icons.arrow :show="$show->isShowSidebar()" direction="left" />
     </button>
   </div>
