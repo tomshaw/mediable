@@ -11,12 +11,13 @@ use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\{ServerLimits, WithCache, WithExtension, WithFileSize, WithFonts, WithGraphicDraw, WithMimeTypes};
+use TomShaw\Mediable\Traits\{ServerLimits, WithCache, WithColumnWidths, WithExtension, WithFileSize, WithFonts, WithGraphicDraw, WithMimeTypes};
 
 class MediaBrowser extends Component
 {
     use ServerLimits;
     use WithCache;
+    use WithColumnWidths;
     use WithExtension;
     use WithFileSize;
     use WithFileUploads;
@@ -64,10 +65,6 @@ class MediaBrowser extends Component
     public string $orderDir = 'DESC';
 
     public array $orderDirValues = ['ASC' => 'Ascending', 'DESC' => 'Descending'];
-
-    public array $columnWidths = [100, 50, 33.3, 25, 20, 16.66, 14.28, 12.5, 11.11, 10, 9.09, 8.33];
-
-    public int $defaultColumnWidth = 4;
 
     public ?int $audioElementId = null;
 
