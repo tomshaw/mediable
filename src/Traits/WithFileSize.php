@@ -4,8 +4,12 @@ namespace TomShaw\Mediable\Traits;
 
 trait WithFileSize
 {
-    public function formatBytes(int|float $bytes, int $precision = 2): string
+    public function formatBytes(int|float|null $bytes, int $precision = 2): string
     {
+        if ($bytes === null) {
+            return '0 B';
+        }
+        
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);

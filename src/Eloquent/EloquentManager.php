@@ -6,7 +6,7 @@ use Exception;
 use GdImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\{DB, Storage};
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
@@ -300,5 +300,17 @@ class EloquentManager
         }
 
         return ['disk' => $disk, 'driver' => $disks[$disk]];
+    }
+
+    public function getMimeTypeStats()
+    {
+        return Attachment::select('file_type', DB::raw('count(*) as total'), DB::raw('sum(file_size) as total_size'))
+            ->groupBy('file_type')
+            ->get();
+    }
+
+    public function getMimeTypeTotals()
+    {
+        return Attachment::select(DB::raw('count(*) as total'), DB::raw('sum(file_size) as total_size'))->first();
     }
 }

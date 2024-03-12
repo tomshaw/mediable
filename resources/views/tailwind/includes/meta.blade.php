@@ -52,7 +52,7 @@
                 </div>
                 @endif
 
-                @if ($this->imageWidth && $this->imageHeight)
+                @if ($this->attachment->file_size && $this->imageWidth && $this->imageHeight)
                 <div class="text-xs text-white overflow-hidden w-full py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>
                     {{ $this->imageWidth }}&times;{{ $this->imageHeight }}
                 </div>

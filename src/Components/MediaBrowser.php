@@ -11,7 +11,7 @@ use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Exceptions\MediaBrowserException;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\{ServerLimits, WithCache, WithColumnWidths, WithExtension, WithFileSize, WithFonts, WithGraphicDraw, WithMimeTypes};
+use TomShaw\Mediable\Traits\{ServerLimits, WithCache, WithColumnWidths, WithExtension, WithFileSize, WithFonts, WithGraphicDraw, WithMimeTypes, WithReporting};
 
 class MediaBrowser extends Component
 {
@@ -25,6 +25,7 @@ class MediaBrowser extends Component
     use WithGraphicDraw;
     use WithMimeTypes;
     use WithPagination;
+    use WithReporting;
 
     public AlertState $alert;
 
@@ -327,6 +328,12 @@ class MediaBrowser extends Component
     public function clearSelected(): void
     {
         $this->selected = [];
+
+        $this->attachment = new AttachmentState();
+
+        $this->resetPage();
+
+        $this->enableThumbMode();
     }
 
     public function confirmDelete()
