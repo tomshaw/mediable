@@ -11,10 +11,12 @@
         <div class="flex items-start justify-center p-0 m-0 w-full h-full">
             <div class="flex flex-col items-start justify-start w-full p-2 gap-y-1.5">
 
+                @if ($this->mimeTypeTotals->total)
                 <div class="flex items-center justify-between text-xs font-normal text-white bg-[#555] hover:bg-[#444] select-none overflow-hidden w-full py-1.5 px-2">
                     <span>FILES</span>
                     <span>{{ $this->mimeTypeTotals->total }} &ndash; {{ $this->formatBytes($this->mimeTypeTotals->total_size) }}</span>
                 </div>
+                @endif
 
                 @foreach($this->mimeTypeStats as $item)
                 <div class="flex items-center justify-between text-xs font-normal text-white bg-[#555] hover:bg-[#444] select-none overflow-hidden w-full py-1.5 px-2">
