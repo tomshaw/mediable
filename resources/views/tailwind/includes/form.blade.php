@@ -51,7 +51,7 @@
                     <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
                     @endif
                     <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
-                        <span class="absolute h-0 w-0 rounded-full bg-green-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
                 </div>
@@ -86,7 +86,7 @@
                     <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
                     @endif
                     <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
-                        <span class="absolute h-0 w-0 rounded-full bg-green-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
                 </div>
@@ -143,7 +143,7 @@
                     <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
                     @endif
                     <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
-                        <span class="absolute h-0 w-0 rounded-full bg-green-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
                 </div>
@@ -173,7 +173,7 @@
                     <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
                     @endif
                     <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
-                        <span class="absolute h-0 w-0 rounded-full bg-green-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
                 </div>
@@ -207,7 +207,7 @@
                     <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
                     @endif
                     <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
-                        <span class="absolute h-0 w-0 rounded-full bg-green-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
                 </div>
@@ -250,7 +250,7 @@
                     <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
                     @endif
                     <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
-                        <span class="absolute h-0 w-0 rounded-full bg-green-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
                 </div>

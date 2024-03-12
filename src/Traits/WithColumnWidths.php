@@ -26,10 +26,10 @@ trait WithColumnWidths
                 $padding = 4;
                 break;
             case 20:
-                $padding = 4;
+                $padding = 3.5;
                 break;
             case 16.66:
-                $padding = 4;
+                $padding = 3;
                 break;
             case 14.28:
                 $padding = 3;
