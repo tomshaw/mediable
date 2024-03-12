@@ -9,7 +9,7 @@ trait WithFileSize
         if ($bytes === null) {
             return '0 B';
         }
-        
+
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);

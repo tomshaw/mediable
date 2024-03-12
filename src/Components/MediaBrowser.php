@@ -511,8 +511,6 @@ class MediaBrowser extends Component
 
         $this->attachment = AttachmentState::fromAttachment($item);
 
-        $this->clearSelected();
-
         $this->resetPage();
 
         $this->editHistory = [];
