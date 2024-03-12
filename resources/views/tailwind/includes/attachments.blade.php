@@ -43,13 +43,16 @@
           <span class="audio-animation inline-block bg-[#555] w-1/3 h-[75%]" style="animation-delay: -3.7s"></span>
         </button>
 
-        <div class="absolute left-1 bottom-1 w-full overflow-hidden whitespace-nowrap text-left text-xs font-normal text-neutral-600 px-1.5" id="audioProgress{{$item->id}}"></div>
+        <div class="absolute inset-x-0 bottom-0 overflow-hidden max-h-full whitespace-nowrap text-left text-xs font-normal px-1.5">
+          <div class="absolute inset-y-0 left-0 h-full w-0 bg-blue-500 z-0" id="audioProgress{{$item->id}}"></div>
+          <span class="inline-block align-middle text-white text-xs font-light py-1 relative z-10" id="audioText{{$item->id}}"></span>
+        </div>
 
       </div>
       @else
       <div class="relative object-contain">
-        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center cursor-pointer">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-white">
+        <div class="flex items-center justify-center text-white bg-[#555] rounded-full cursor-pointer w-12 h-12">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 ">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 2v20h12V8l-6-6zm6 4v4h6"></path>
           </svg>
         </div>

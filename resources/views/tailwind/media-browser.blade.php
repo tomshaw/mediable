@@ -138,7 +138,8 @@
 
         audioStart(id) {
             const audio = document.getElementById('audioPlayer' + id);
-            const progressBar = document.getElementById('audioProgress' + id);
+            const audioProgress = document.getElementById('audioProgress' + id);
+            const audioText = document.getElementById('audioText' + id);
 
             if (audio) {
                 audio.play();
@@ -149,8 +150,9 @@
                         const currentTime = audio.currentTime.toFixed(2);
                         const duration = audio.duration.toFixed(2);
 
-                        if (progressBar) {
-                            progressBar.innerHTML = `${progress}%   ${currentTime} / ${duration}`;
+                        if (audioProgress) {
+                            audioProgress.style.width = progress + '%';
+                            audioText.innerHTML = `${progress}%   ${currentTime} / ${duration}`;
                         }
                     }
                 });
@@ -160,7 +162,7 @@
                         id: id
                     });
 
-                    //progressBar.style.width = '0%';
+                    audioProgress.style.width = '0%';
                 });
             }
         },
