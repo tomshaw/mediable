@@ -12,24 +12,21 @@
 
                 <div class="bg-gray-200 h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
 
+                    @if($show->isShowMetaInfo() && !$panel->isUploadMode())
                     <div class="relative bg-gray-200 border-r border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
                         <div class="relative flex items-center justify-center h-full overflow-hidden">
-                            @if(!$panel->isEditorMode() && !$panel->isUploadMode())
-                            
-                            @if($show->isShowMetaInfo() && count($selected))
+                            @if(!$panel->isEditorMode())
+                            @if(count($selected))
                             @include("mediable::tailwind.includes.meta")
-                            @elseif($show->isShowAppStats() && !count($selected))
+                            @elseif($show->isShowAppStats())
                             @include("mediable::tailwind.includes.stats")
                             @endif
-
-                            @elseif($panel->isEditorMode() && !$panel->isUploadMode())
-                            @include("mediable::tailwind.includes.form")
-                            @elseif($panel->isEditorMode() && !$panel->isUploadMode())
+                            @elseif($panel->isEditorMode())
                             @include("mediable::tailwind.includes.form")
                             @endif
-
                         </div>
                     </div>
+                    @endif
 
                     <div class="bg-gray-200 w-full h-full overflow-y-auto">
                         <div class="flex flex-col h-full">
