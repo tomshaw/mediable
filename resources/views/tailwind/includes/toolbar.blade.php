@@ -2,9 +2,11 @@
 
   @if($panel->isUploadMode())
   <div class="flex items-center justify-start gap-1.5 xl:gap-2">
+    @if(!$data->isEmpty())
     <button wire:click="enableThumbMode" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-white transition active:scale-95">
       <x-icons.close />
     </button>
+    @endif
   </div>
   @if(count($files) >= 1)
   <div class="flex items-center justify-end gap-1.5 xl:gap-2">
@@ -12,9 +14,9 @@
       <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
       <span class="relative">Reset</span>
     </button>
-    <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50" wire:click="createAttachments" wire:loading.attr="disabled">
+    <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] py-1.5 px-4 font-normal text-xs text-neutral-50" wire:click="createAttachments" wire:loading.attr="disabled">
       <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
-      <span class="relative" wire:loading.remove wire:target="createAttachments">Submit Attachments</span>
+      <span class="relative" wire:loading.remove wire:target="createAttachments">Submit</span>
       <span class="relative" wire:loading wire:target="createAttachments">Processing...</span>
     </button>
   </div>

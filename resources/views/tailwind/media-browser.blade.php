@@ -12,7 +12,7 @@
 
                 <div class="bg-gray-200 h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
 
-                    @if($show->isShowMetaInfo() && !$panel->isUploadMode())
+                    @if($show->isShowMetaInfo() && !$panel->isUploadMode() && !$data->isEmpty())
                     <div class="relative bg-gray-200 border-r border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
                         <div class="relative flex items-center justify-center h-full overflow-hidden">
                             @if(!$panel->isEditorMode())
@@ -77,7 +77,7 @@
                         </div>
                     </div>
 
-                    @if($show->isShowSidebar() && !$panel->isUploadMode())
+                    @if($show->isShowSidebar() && !$panel->isUploadMode() && !$data->isEmpty())
                     <div class="relative bg-gray-200 border-l border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
                         @include("mediable::tailwind.includes.sidebar")
                     </div>
@@ -85,7 +85,7 @@
 
                 </div>
 
-                @if($show->isShowImageStrip() && !$panel->isUploadMode() && !$panel->isEditorMode())
+                @if($show->isShowImageStrip() && !$panel->isUploadMode() && !$panel->isEditorMode() && !$data->isEmpty())
                 <div class="hidden 2xl:block bg-[#e5e7eb] border-b border-gray-300 h-[100px] max-h-[100px] min-h-[100px] w-full overflow-hidden">
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
                         @include("mediable::tailwind.includes.strip")
@@ -93,7 +93,7 @@
                 </div>
                 @endif
 
-                @if(!$panel->isUploadMode() && !$panel->isEditorMode() && count($this->selected))
+                @if(!$panel->isUploadMode() && !$panel->isEditorMode() && count($this->selected) && !$data->isEmpty())
                 <div class="bg-[#e6e6e6] h-[60px] max-h-[60px] min-h-[60px] w-full">
                     @include("mediable::tailwind.includes.footer")
                 </div>

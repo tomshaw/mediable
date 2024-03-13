@@ -20,7 +20,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Installs and publishes (config, views, images) provided by Mediable.';
+    protected $description = 'Installs and publishes (config, views, images, fonts) provided by Mediable.';
 
     /**
      * Execute the console command.
@@ -35,6 +35,9 @@ class InstallCommand extends Command
 
         $this->comment('Publishing Mediable Images...');
         $this->callSilent('vendor:publish', ['--tag' => 'mediable.images']);
+
+        $this->comment('Publishing Mediable Fonts...');
+        $this->callSilent('vendor:publish', ['--tag' => 'mediable.fonts']);
 
         $this->comment('Building Mediable Assets...');
         $this->buildAssets();

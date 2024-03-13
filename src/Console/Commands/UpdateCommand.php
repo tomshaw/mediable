@@ -27,7 +27,7 @@ class UpdateCommand extends Command
      */
     public function handle()
     {
-        $this->info('This will overwrite Mediable (config, views, images).');
+        $this->info('This will overwrite Mediable (config, views, images, fonts).');
 
         if ($this->confirm('Do you wish to continue?', true)) {
             $this->comment('Updating Mediable Config...');
@@ -38,6 +38,9 @@ class UpdateCommand extends Command
 
             $this->comment('Updating Mediable Images...');
             $this->callSilent('vendor:publish', ['--tag' => 'mediable.images', '--force' => true]);
+
+            $this->comment('Updating Mediable Fonts...');
+            $this->callSilent('vendor:publish', ['--tag' => 'mediable.fonts', '--force' => true]);
 
             $this->comment('Building Mediable Assets...');
             $this->buildAssets();

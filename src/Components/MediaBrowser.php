@@ -609,6 +609,10 @@ class MediaBrowser extends Component
 
         $paginator = Eloquent::paginate($this->perPage);
 
+        if ($paginator->isEmpty()) {
+            $this->enableUploadMode();
+        }
+
         return $this->renderView($paginator);
     }
 }
