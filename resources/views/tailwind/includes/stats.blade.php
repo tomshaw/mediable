@@ -9,7 +9,7 @@
 
     <div class="flex-grow border-b border-t border-[#ccc] scrollY h-auto p-2">
         <div class="flex items-start justify-center p-0 m-0 w-full h-full">
-            <div class="flex flex-col items-start justify-start w-full p-2 gap-y-1.5">
+            <div class="flex flex-col items-start justify-start w-full p-3 gap-y-1.5">
 
                 @if ($this->mimeTypeTotals->total)
                 <div class="flex items-center justify-between bg-[#555] hover:bg-[#444] select-none overflow-hidden rounded font-medium text-xs tracking-wider text-neutral-50 w-full py-1.5 px-2">
