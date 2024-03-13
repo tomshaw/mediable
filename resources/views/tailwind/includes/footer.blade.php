@@ -1,11 +1,11 @@
 <div class="flex items-center justify-between h-full py-0 px-4">
   <div class="flex items-center justify-start gap-2">
     @if (count($selected))
-    <button wire:click="confirmDelete" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-[#555] py-1.5 px-3 text-xs font-normal text-white">
+    <button wire:click="confirmDelete" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-[#555] py-1.5 px-2 font-medium text-xs tracking-wider text-neutral-50">
       <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
       <span class="relative">[#]</span>
     </button>
-    <button wire:click="clearSelected" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-[#555] py-1.5 px-3 text-xs font-normal text-white">
+    <button wire:click="clearSelected" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-[#555] py-1.5 px-2 font-medium text-xs tracking-wider text-neutral-50">
       <span class="absolute h-0 w-0 rounded-full bg-blue-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
       <span class="relative">Clear Selected</span>
     </button>
@@ -30,9 +30,9 @@
   </div>
   <div class="flex items-center justify-start gap-2">
     @if (count($selected))
-    <button wire:click="insertMedia" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-[#555] py-1.5 px-3 text-xs font-normal text-white">
+    <button wire:click="insertMedia" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-[#555] py-1.5 px-3 font-medium text-xs tracking-wider text-neutral-50">
       <span class="absolute h-0 w-0 rounded-full bg-blue-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
-      <span class="relative">Insert Selected</span>
+      <span class="relative">Attach Selected</span>
     </button>
     @endif
   </div>

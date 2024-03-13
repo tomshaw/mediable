@@ -19,7 +19,7 @@
 
                 @if($selectedForm == '')
                 @foreach($this->availableForms as $key => $value)
-                <button wire:click="setForm('{{$key}}')" class="group relative inline-flex items-center justify-center text-xs font-normal text-white bg-[#555] hover:bg-[#444] rounded-full select-none appearance-none overflow-hidden h-7 w-full mb-1.5">
+                <button wire:click="setForm('{{$key}}')" class="group relative inline-flex items-center justify-center bg-[#555] hover:bg-[#444] rounded-full select-none appearance-none overflow-hidden h-7 w-full mb-1.5 font-medium text-xs tracking-wider text-neutral-50">
                     <span>{{ $value }}</span>
                     <div class="w-0 translate-x-[100%] pl-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-1 group-hover:opacity-100">
                         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5">

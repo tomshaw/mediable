@@ -68,6 +68,7 @@
         font-size: .75rem;
         font-weight: 500;
         line-height: 1.25rem;
+        letter-spacing: 0.02em;
     }
 
     .mediable .control-select {
@@ -80,7 +81,9 @@
         padding-top: 0.25rem;
         padding-bottom: 0.25rem;
         font-size: .75rem;
+        font-weight: 500;
         line-height: 1rem;
+        letter-spacing: 0.02em;
         color: #fff;
     }
 
