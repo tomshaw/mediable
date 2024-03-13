@@ -59,7 +59,7 @@
 
     .mediable .control-input {
         display: block;
-        color: #696969;
+        color: rgb(82 82 82);
         border: 1px solid #dfdfdf;
         width: 100%;
         padding: 0.4rem 0.75rem;
@@ -84,7 +84,7 @@
         font-weight: 500;
         line-height: 1rem;
         letter-spacing: 0.02em;
-        color: #fff;
+        color: #fafafa;
     }
 
     .bg-pattern {

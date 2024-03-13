@@ -6,9 +6,9 @@
 
       <div class="absolute left-2 top-1 cursor-pointer bg-transparent">
         @if(in_array($item->id, array_column($this->selected, 'id')))
-        <span class="text-left bg-transparent font-medium text-xs tracking-wider text-neutral-700">{{$item->id}}</span>
+        <span class="text-left bg-transparent font-medium text-xs tracking-wider text-neutral-600">{{$item->id}}</span>
         @else
-        <span class="text-left bg-transparent font-medium text-xs tracking-wider text-neutral-700">{{$item->id}}</span>
+        <span class="text-left bg-transparent font-medium text-xs tracking-wider text-neutral-600">{{$item->id}}</span>
         @endif
       </div>
 

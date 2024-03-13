@@ -12,23 +12,23 @@
             <form class="w-full" wire:submit.prevent="updateAttachment" role="form">
                 <div class="p-2 m-0">
                     <div class="mb-1">
-                        <label class="inline-block text-gray-500 mb-1 text-xs font-normal tracking-wide">Title</label>
+                        <label class="inline-block mb-1 font-medium text-xs tracking-wider text-neutral-600">Title</label>
                         <input type="text" class="control-input" wire:model="attachment.title" spellcheck="false">
                     </div>
                     <div class="mb-1">
-                        <label class="inline-block text-gray-500 mb-1 text-xs font-normal tracking-wide">Caption</label>
+                        <label class="inline-block mb-1 font-medium text-xs tracking-wider text-neutral-600">Caption</label>
                         <input type="text" class="control-input" wire:model="attachment.caption" spellcheck="false">
                     </div>
                     <div class="mb-1">
-                        <label class="inline-block text-gray-500 mb-1 text-xs font-normal tracking-wide">Order</label>
+                        <label class="inline-block mb-1 font-medium text-xs tracking-wider text-neutral-600">Order</label>
                         <input type="text" class="control-input" wire:model="attachment.sort_order" spellcheck="false">
                     </div>
                     <div class="mb-1">
-                        <label class="inline-block text-gray-500 mb-1 text-xs font-normal tracking-wide">Styles</label>
+                        <label class="inline-block mb-1 font-medium text-xs tracking-wider text-neutral-600">Styles</label>
                         <input type="text" class="control-input" wire:model="attachment.styles" spellcheck="false">
                     </div>
                     <div class="mb-1">
-                        <label class="inline-block text-gray-500 mb-1 text-xs font-normal tracking-wide">Description</label>
+                        <label class="inline-block mb-1 font-medium text-xs tracking-wider text-neutral-600">Description</label>
                         <textarea class="control-input focus:ring-0" wire:model="attachment.description" rows="4" spellcheck="false"></textarea>
                     </div>
                 </div>

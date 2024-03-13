@@ -12,14 +12,14 @@
             <div class="flex flex-col items-start justify-start w-full p-2 gap-y-1.5">
 
                 @if ($this->mimeTypeTotals->total)
-                <div class="flex items-center justify-between text-xs font-normal text-white bg-[#555] hover:bg-[#444] select-none overflow-hidden w-full py-1.5 px-2">
+                <div class="flex items-center justify-between bg-[#555] hover:bg-[#444] select-none overflow-hidden rounded font-medium text-xs tracking-wider text-neutral-50 w-full py-1.5 px-2">
                     <span>FILES</span>
                     <span>{{ $this->mimeTypeTotals->total }} &ndash; {{ $this->formatBytes($this->mimeTypeTotals->total_size) }}</span>
                 </div>
                 @endif
 
                 @foreach($this->mimeTypeStats as $item)
-                <div class="flex items-center justify-between text-xs font-normal text-white bg-[#555] hover:bg-[#444] select-none overflow-hidden w-full py-1.5 px-2">
+                <div class="flex items-center justify-between bg-[#555] hover:bg-[#444] select-none overflow-hidden rounded font-medium text-xs tracking-wider text-neutral-50 w-full py-1.5 px-2">
                     <span>{{ strtoupper(collect(explode('/', $item->file_type))->last()) }}</span>
                     <span>{{ $item->total }} &ndash; {{ $this->formatBytes($item->total_size) }}</span>
                 </div>

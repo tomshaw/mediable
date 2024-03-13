@@ -100,14 +100,12 @@
       </div>
 
       <div>
-        <p class="hidden 2xl:block text-sm text-gray-700 leading-5">
-          <span>{!! __('Showing') !!}</span>
+        <p class="hidden 2xl:block text-sm text-neutral-600 leading-5">
           <span class="font-medium">{{ $paginator->firstItem() }}</span>
-          <span>{!! __('to') !!}</span>
+          <span>&ndash;</span>
           <span class="font-medium">{{ $paginator->lastItem() }}</span>
           <span>{!! __('of') !!}</span>
           <span class="font-medium">{{ $paginator->total() }}</span>
-          <span>{!! __('results') !!}.</span>
         </p>
       </div>
 

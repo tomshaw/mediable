@@ -41,16 +41,22 @@
                     </select>
                 </div>
                 <div class="flex flex-col justify-start items-stretch w-full mt-2 gap-y-2">
-                    <button wire:click="flipImage" wire:loading.attr="disabled" class="text-xs font-normal text-white group relative inline-flex items-center justify-center overflow-hidden rounded-full cursor-pointer bg-[#555] py-1.5 px-3">
+                    <button wire:click="flipImage" wire:loading.attr="disabled" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full font-medium text-xs tracking-wider text-neutral-50 cursor-pointer bg-[#555] py-1.5 px-3">
                         <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-56 group-hover:w-full"></span>
                         <span class="relative" wire:loading.remove wire:target="flipImage">Apply</span>
                         <span class="relative" wire:loading wire:target="flipImage">Processing...</span>
                     </button>
                     @if(count($editHistory))
-                    <button type="button" wire:click="undoEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Undo</button>
-                    <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
+                    <button type="button" wire:click="undoEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Undo</span>
+                    </button>
+                    <button type="button" wire:click="saveEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Save</span>
+                    </button>
                     @endif
-                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
+                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
                         <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
@@ -76,16 +82,22 @@
                     <input type="number" class="control-input w-full" id="scaleHeight" wire:model.live.debounce.500ms="scaleHeight">
                 </div>
                 <div class="flex flex-col justify-start items-stretch w-full mt-2 gap-y-2">
-                    <button wire:click="scaleImage" wire:loading.attr="disabled" class="text-xs font-normal text-white group relative inline-flex items-center justify-center overflow-hidden rounded-full cursor-pointer bg-[#555] py-1.5 px-3">
+                    <button wire:click="scaleImage" wire:loading.attr="disabled" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full font-medium text-xs tracking-wider text-neutral-50 cursor-pointer bg-[#555] py-1.5 px-3">
                         <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-56 group-hover:w-full"></span>
                         <span class="relative" wire:loading.remove wire:target="scaleImage">Apply</span>
                         <span class="relative" wire:loading wire:target="scaleImage">Processing...</span>
                     </button>
                     @if(count($editHistory))
-                    <button type="button" wire:click="undoEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Undo</button>
-                    <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
+                    <button type="button" wire:click="undoEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Undo</span>
+                    </button>
+                    <button type="button" wire:click="saveEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Save</span>
+                    </button>
                     @endif
-                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
+                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
                         <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
@@ -133,16 +145,22 @@
                 </div>
                 @endif
                 <div class="flex flex-col justify-start items-stretch w-full mt-2 gap-y-2">
-                    <button wire:click="filterImage" wire:loading.attr="disabled" class="text-xs font-normal text-white group relative inline-flex items-center justify-center overflow-hidden rounded-full cursor-pointer bg-[#555] py-1.5 px-3">
+                    <button wire:click="filterImage" wire:loading.attr="disabled" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full font-medium text-xs tracking-wider text-neutral-50 cursor-pointer bg-[#555] py-1.5 px-3">
                         <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-56 group-hover:w-full"></span>
                         <span class="relative" wire:loading.remove wire:target="filterImage">Apply</span>
                         <span class="relative" wire:loading wire:target="filterImage">Processing...</span>
                     </button>
                     @if(count($editHistory))
-                    <button type="button" wire:click="undoEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Undo</button>
-                    <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
+                    <button type="button" wire:click="undoEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Undo</span>
+                    </button>
+                    <button type="button" wire:click="saveEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Save</span>
+                    </button>
                     @endif
-                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
+                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
                         <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
@@ -163,16 +181,22 @@
                     <input type="checkbox" class="control-input w-full" id="rotateIgnoreTransparent" wire:model="rotateIgnoreTransparent" />
                 </div>
                 <div class="flex flex-col justify-start items-stretch w-full mt-2 gap-y-2">
-                    <button wire:click="rotateImage" wire:loading.attr="disabled" class="text-xs font-normal text-white group relative inline-flex items-center justify-center overflow-hidden rounded-full cursor-pointer bg-[#555] py-1.5 px-3">
+                    <button wire:click="rotateImage" wire:loading.attr="disabled" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full font-medium text-xs tracking-wider text-neutral-50 cursor-pointer bg-[#555] py-1.5 px-3">
                         <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-56 group-hover:w-full"></span>
                         <span class="relative" wire:loading.remove wire:target="rotateImage">Apply</span>
                         <span class="relative" wire:loading wire:target="rotateImage">Processing...</span>
                     </button>
                     @if(count($editHistory))
-                    <button type="button" wire:click="undoEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Undo</button>
-                    <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
+                    <button type="button" wire:click="undoEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Undo</span>
+                    </button>
+                    <button type="button" wire:click="saveEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Save</span>
+                    </button>
                     @endif
-                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
+                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
                         <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
@@ -197,16 +221,22 @@
                     <input type="number" class="control-input w-full" id="cropHeight" wire:model="cropHeight">
                 </div>
                 <div class="flex flex-col justify-start items-stretch w-full mt-2 gap-y-2">
-                    <button wire:click="cropImage" wire:loading.attr="disabled" class="text-xs font-normal text-white group relative inline-flex items-center justify-center overflow-hidden rounded-full cursor-pointer bg-[#555] py-1.5 px-3">
+                    <button wire:click="cropImage" wire:loading.attr="disabled" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full font-medium text-xs tracking-wider text-neutral-50 cursor-pointer bg-[#555] py-1.5 px-3">
                         <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-56 group-hover:w-full"></span>
                         <span class="relative" wire:loading.remove wire:target="cropImage">Apply</span>
                         <span class="relative" wire:loading wire:target="cropImage">Processing...</span>
                     </button>
                     @if(count($editHistory))
-                    <button type="button" wire:click="undoEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Undo</button>
-                    <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
+                    <button type="button" wire:click="undoEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Undo</span>
+                    </button>
+                    <button type="button" wire:click="saveEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Save</span>
+                    </button>
                     @endif
-                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
+                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
                         <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
@@ -240,16 +270,22 @@
                     <input type="range" class="control-input w-full" id="imageTextAngle" wire:model="imageTextAngle" min="0" max="360">
                 </div>
                 <div class="flex flex-col justify-start items-stretch w-full mt-2 gap-y-2">
-                    <button wire:click="addText" wire:loading.attr="disabled" class="text-xs font-normal text-white group relative inline-flex items-center justify-center overflow-hidden rounded-full cursor-pointer bg-[#555] py-1.5 px-3">
+                    <button wire:click="addText" wire:loading.attr="disabled" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full font-medium text-xs tracking-wider text-neutral-50 cursor-pointer bg-[#555] py-1.5 px-3">
                         <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-56 group-hover:w-full"></span>
                         <span class="relative" wire:loading.remove wire:target="addText">Apply</span>
                         <span class="relative" wire:loading wire:target="addText">Processing...</span>
                     </button>
                     @if(count($editHistory))
-                    <button type="button" wire:click="undoEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Undo</button>
-                    <button type="button" wire:click="saveEditorChanges" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in">Save</button>
+                    <button type="button" wire:click="undoEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Undo</span>
+                    </button>
+                    <button type="button" wire:click="saveEditorChanges" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+                        <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="relative">Save</span>
+                    </button>
                     @endif
-                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-normal text-xs text-neutral-50">
+                    <button type="button" wire:click="resetForm" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
                         <span class="absolute h-0 w-0 rounded-full bg-[#444] transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
                         <span class="relative">Back</span>
                     </button>
