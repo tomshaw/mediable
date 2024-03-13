@@ -511,8 +511,6 @@ class MediaBrowser extends Component
 
         $this->attachment = AttachmentState::fromAttachment($item);
 
-        $this->resetPage();
-
         $this->editHistory = [];
 
         $this->selectedForm = '';
@@ -520,22 +518,28 @@ class MediaBrowser extends Component
 
     public function saveEditorChanges()
     {
+        if (! $this->attachment->id) {
+            return;
+        }
+
         Eloquent::enable($this->attachment->id);
 
         $this->fillEditorProperties();
+
+        $this->resetPage();
 
         $this->editHistory = [];
 
         $this->primaryId = null;
 
         $this->enableThumbMode();
-
-        $this->resetPage();
     }
 
     public function undoEditorChanges()
     {
-        $this->fillEditorProperties();
+        if (! $this->primaryId) {
+            return;
+        }
 
         $row = Eloquent::load($this->primaryId);
 
@@ -551,10 +555,6 @@ class MediaBrowser extends Component
 
         $this->attachment = AttachmentState::fromAttachment($item);
 
-        $this->clearSelected();
-
-        $this->resetPage();
-
         $this->editHistory = [];
     }
 
@@ -567,25 +567,6 @@ class MediaBrowser extends Component
         $this->primaryId = null;
 
         $this->enableThumbMode();
-    }
-
-    public function fillEditorProperties()
-    {
-        $this->fill([
-            'flipMode' => null,
-            'filterMode' => null,
-            'contrast' => 0,
-            'brightness' => 0,
-            'colorize' => null,
-            'colorizeRed' => -50,
-            'colorizeGreen' => -50,
-            'colorizeBlue' => 50,
-            'smoothLevel' => 0,
-            'pixelateBlockSize' => 1,
-            'scaleWidth' => 100,
-            'scaleHeight' => -1,
-            'scaleMode' => null,
-        ]);
     }
 
     public function generateUniqueId()

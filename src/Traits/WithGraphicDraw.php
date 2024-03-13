@@ -51,7 +51,7 @@ trait WithGraphicDraw
 
     public string $imageFont = '';
 
-    public float $imageFontSize = 14.0;
+    public float $imageFontSize = 42.0;
 
     public string $imageTextColor = '#000000';
 
@@ -314,5 +314,36 @@ trait WithGraphicDraw
             'imageTextAngle' => $this->imageTextAngle,
             'primaryId' => $this->primaryId,
         ];
+    }
+
+    public function fillEditorProperties()
+    {
+        $this->fill([
+            'flipMode' => null,
+            'filterMode' => null,
+            'contrast' => 0,
+            'brightness' => 0,
+            'colorize' => '',
+            'colorizeRed' => -50,
+            'colorizeGreen' => -50,
+            'colorizeBlue' => 50,
+            'smoothLevel' => 0,
+            'pixelateBlockSize' => 1,
+            'scaleWidth' => 0,
+            'scaleHeight' => 0,
+            'scaleMode' => 4,
+            'rotateAngle' => 0,
+            'rotateBgColor' => '#000000',
+            'rotateIgnoreTransparent' => false,
+            'cropX' => 0,
+            'cropY' => 0,
+            'cropWidth' => 0,
+            'cropHeight' => 0,
+            'imageText' => '',
+            'imageFont' => '',
+            'imageFontSize' => 42.0,
+            'imageTextColor' => '#000000',
+            'imageTextAngle' => 0,
+        ]);
     }
 }
