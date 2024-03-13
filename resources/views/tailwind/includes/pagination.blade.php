@@ -69,7 +69,7 @@
               <span class="relative inline-flex items-center px-4 py-1.5 -ml-px text-sm font-medium text-white bg-[#555] border border-[#e6e6e6] cursor-default leading-5 select-none">{{ $page }}</span>
             </span>
             @else
-            <button type="button" wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')" class="relative inline-flex items-center px-4 py-1.5 -ml-px text-sm font-medium text-neutral-200 bg-[#555] border border-[#e6e6e6] leading-5 hover:text-white focus:outline-none transition ease-in-out duration-150" aria-label="{{ __('Go to page :page', ['page' => $page]) }}">
+            <button type="button" wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')" class="relative inline-flex items-center px-4 py-1.5 -ml-px text-sm font-medium text-neutral-400 bg-[#555] border border-[#e6e6e6] leading-5 hover:text-white focus:outline-none transition ease-in-out duration-150" aria-label="{{ __('Go to page :page', ['page' => $page]) }}">
               {{ $page }}
             </button>
             @endif
