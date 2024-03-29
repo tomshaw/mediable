@@ -160,10 +160,6 @@ MEDIABLE_WEBP_QUALITY=80
 MEDIABLE_AVIF_QUALITY=80
 ```
 
-## Requirements
-
-The package is compatible with Laravel 10 and PHP 8.1.
-
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
