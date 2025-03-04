@@ -48,12 +48,16 @@ class EloquentManager
                 continue;
             }
 
-            $store = $file->store($disk);
+            $fileName = $this->prepareFileName($file->getClientOriginalName());
 
-            $create = $this->createDataArray($file, $store, $driver);
+            $storePath = $file->storePubliclyAs(path: 'uploads', name: $fileName, options: $disk);
+
+            $fullPath = Storage::disk($disk)->path($storePath);
+
+            $data = $this->createDataArray($file, $storePath, $fullPath, $fileName);
 
             try {
-                Attachment::create($create);
+                Attachment::create($data);
             } catch (Exception $e) {
                 throw new MediaBrowserException($e->getMessage());
             }
@@ -61,7 +65,7 @@ class EloquentManager
             if (str_starts_with($file->getMimeType(), 'image/')) {
 
                 try {
-                    $image = imagecreatefromstring(file_get_contents($file->getRealPath()));
+                    $image = imagecreatefromstring(file_get_contents($fullPath));
                 } catch (Exception $e) {
                     continue;
                 }
@@ -69,17 +73,20 @@ class EloquentManager
                 if (config('mediable.create_webp')) {
 
                     try {
-                        $path = $this->createImageResource($image, $store, $disk, 'image/webp', config('mediable.webp_quality'));
+                        $path = $this->createImageResource($image, $storePath, $disk, 'image/webp', config('mediable.webp_quality'));
                     } catch (Exception $e) {
                         continue;
                     }
 
-                    $create = $this->createDataArray($file, $path, $driver);
+                    $create = $this->createDataArray($file, $path, $fullPath, $fileName);
 
                     $create['file_type'] = 'image/webp';
 
-                    if (Storage::exists($path)) {
-                        $create['file_size'] = Storage::size($path);
+                    if (Storage::disk($disk)->exists($path)) {
+                        $create['file_dir'] = Storage::disk($disk)->path($path);
+                        $create['title'] = pathinfo($path, PATHINFO_FILENAME);
+                        $create['file_name'] = pathinfo($path, PATHINFO_BASENAME);
+                        $create['file_size'] = Storage::disk($disk)->size($path);
                     }
 
                     Attachment::create($create);
@@ -88,17 +95,20 @@ class EloquentManager
                 if (config('mediable.create_avif')) {
 
                     try {
-                        $path = $this->createImageResource($image, $store, $disk, 'image/avif', config('mediable.avif_quality'));
+                        $path = $this->createImageResource($image, $storePath, $disk, 'image/avif', config('mediable.avif_quality'));
                     } catch (Exception $e) {
                         continue;
                     }
 
-                    $create = $this->createDataArray($file, $path, $driver);
+                    $create = $this->createDataArray($file, $path, $fullPath, $fileName);
 
                     $create['file_type'] = 'image/avif';
 
-                    if (Storage::exists($path)) {
-                        $create['file_size'] = Storage::size($path);
+                    if (Storage::disk($disk)->exists($path)) {
+                        $create['file_dir'] = Storage::disk($disk)->path($path);
+                        $create['title'] = pathinfo($path, PATHINFO_FILENAME);
+                        $create['file_name'] = pathinfo($path, PATHINFO_BASENAME);
+                        $create['file_size'] = Storage::disk($disk)->size($path);
                     }
 
                     Attachment::create($create);
@@ -109,24 +119,25 @@ class EloquentManager
         }
     }
 
-    private function createDataArray(TemporaryUploadedFile $file, string $store, array $driver): array
+    private function createDataArray(TemporaryUploadedFile $file, string $storagePath, string $fullPath, string $fileName): array
     {
         return [
-            'file_name' => $file->getFilename(),
+            'file_name' => $fileName,
             'file_original_name' => $file->getClientOriginalName(),
             'file_type' => $file->getMimeType(),
             'file_size' => $file->getSize(),
-            'file_dir' => $store,
-            'file_url' => $driver['url'].'/'.basename($store),
-            'title' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
+            'file_dir' => $fullPath,
+            'file_url' => asset('storage/'.$storagePath),
+            'title' => pathinfo($fileName, PATHINFO_FILENAME),
         ];
     }
 
     private function createImageResource(GdImage $image, string $stored, string $disk, string $type = 'image/webp', int $quality = -1)
     {
         $extension = ($type === 'image/webp') ? 'webp' : 'avif';
-
-        $path = pathinfo($stored, PATHINFO_FILENAME).'.'.$extension;
+        $directory = 'uploads';
+        $baseName = pathinfo($stored, PATHINFO_FILENAME);
+        $path = $directory.'/'.$baseName.'.'.$extension;
 
         ob_start();
         if ($type === 'image/webp') {
@@ -265,6 +276,16 @@ class EloquentManager
         $directory = pathinfo($source, PATHINFO_DIRNAME);
 
         return $directory.DIRECTORY_SEPARATOR.$destinationFilename;
+    }
+
+    public function prepareFileName(string $fileName): string
+    {
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+        $name = pathinfo($fileName, PATHINFO_FILENAME);
+
+        $slug = Str::slug($name);
+
+        return $slug.'-'.time().'.'.$extension;
     }
 
     public function search(string $searchTerm, array $searchColumns): void
