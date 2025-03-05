@@ -230,8 +230,6 @@ class EloquentManager
 
         $disk = $diskConfig['disk'];
 
-        $driver = $diskConfig['driver'];
-
         $filePath = Storage::disk($disk)->path($destination);
 
         $file = $this->fileObject($filePath);
