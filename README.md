@@ -121,7 +121,7 @@ The `max` rule specifies the maximum file size, in kilobytes. To change the maxi
 You can configure the storage disk used for file uploads in the `mediable.php` config file. The `disk` option is used to specify the disk name:
 
 ```php
-'disk' => env('FILESYSTEM_DRIVER', 'public'),
+'disk' => env('MEDIABLE_DISK_DRIVER', 'public'),
 ```
 
 The value of `disk` is the key of `disks` in your Laravel application's `config/filesystems.php` file. By default, it uses the disk specified by the `FILESYSTEM_DRIVER` environment variable, or 'public' if the environment variable is not set.
@@ -133,6 +133,14 @@ You can change the `disk` option to use a different disk for file uploads. For e
 ```
 
 Remember to configure the chosen disk correctly in your `config/filesystems.php` file and to clear your config cache after making changes by running `php artisan config:clear` in your terminal.
+
+## Disk Folder
+
+You can configure the folder used for file uploads on the specified disk. This configuration allows you to organize and manage and your uploaded files.
+
+```php
+'folder' => env('MEDIABLE_DISK_FOLDER', 'uploads'),
+```
 
 ### Image Conversion Settings
 

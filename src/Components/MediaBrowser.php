@@ -113,10 +113,10 @@ class MediaBrowser extends Component
 
         Eloquent::garbage();
 
-        // if ($this->hasStoreAttachmentId()) {
-        //     $id = $this->getStoreAttachmentId();
-        //     $this->toggleAttachment($id);
-        // }
+        if ($this->hasStoreAttachmentId()) {
+            $id = $this->getStoreAttachmentId();
+            $this->toggleAttachment($id);
+        }
     }
 
     public function boot()

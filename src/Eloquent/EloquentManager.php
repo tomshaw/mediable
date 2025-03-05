@@ -18,7 +18,8 @@ class EloquentManager
 {
     public function __construct(
         public Builder $query,
-    ) {}
+    ) {
+    }
 
     public function load(int $id)
     {
@@ -40,7 +41,7 @@ class EloquentManager
 
         $disk = $diskConfig['disk'];
 
-        $driver = $diskConfig['driver'];
+        $folder = config('mediable.folder');
 
         foreach ($files as $file) {
             if (is_null($file)) {
@@ -49,11 +50,11 @@ class EloquentManager
 
             $fileName = $this->prepareFileName($file->getClientOriginalName());
 
-            $storePath = $file->storePubliclyAs(path: 'uploads', name: $fileName, options: $disk);
+            $storagePath = $file->storePubliclyAs(path: $folder, name: $fileName, options: $disk);
 
-            $fullPath = Storage::disk($disk)->path($storePath);
+            $fullPath = Storage::disk($disk)->path($storagePath);
 
-            $data = $this->createDataArray($file, $storePath, $fullPath, $fileName);
+            $data = $this->createDataArray($file, $storagePath, $fileName);
 
             try {
                 Attachment::create($data);
@@ -72,17 +73,17 @@ class EloquentManager
                 if (config('mediable.create_webp')) {
 
                     try {
-                        $path = $this->createImageResource($image, $storePath, $disk, 'image/webp', config('mediable.webp_quality'));
+                        $path = $this->createImageResource($image, $storagePath, $disk, 'image/webp', config('mediable.webp_quality'));
                     } catch (Exception $e) {
                         continue;
                     }
 
-                    $create = $this->createDataArray($file, $path, $fullPath, $fileName);
+                    $create = $this->createDataArray($file, $path, $fileName);
 
                     $create['file_type'] = 'image/webp';
 
                     if (Storage::disk($disk)->exists($path)) {
-                        $create['file_dir'] = $storePath;
+                        $create['file_dir'] = $storagePath;
                         $create['title'] = pathinfo($path, PATHINFO_FILENAME);
                         $create['file_name'] = pathinfo($path, PATHINFO_BASENAME);
                         $create['file_size'] = Storage::disk($disk)->size($path);
@@ -94,17 +95,17 @@ class EloquentManager
                 if (config('mediable.create_avif')) {
 
                     try {
-                        $path = $this->createImageResource($image, $storePath, $disk, 'image/avif', config('mediable.avif_quality'));
+                        $path = $this->createImageResource($image, $storagePath, $disk, 'image/avif', config('mediable.avif_quality'));
                     } catch (Exception $e) {
                         continue;
                     }
 
-                    $create = $this->createDataArray($file, $path, $fullPath, $fileName);
+                    $create = $this->createDataArray($file, $path, $fileName);
 
                     $create['file_type'] = 'image/avif';
 
                     if (Storage::disk($disk)->exists($path)) {
-                        $create['file_dir'] = $storePath;
+                        $create['file_dir'] = $storagePath;
                         $create['title'] = pathinfo($path, PATHINFO_FILENAME);
                         $create['file_name'] = pathinfo($path, PATHINFO_BASENAME);
                         $create['file_size'] = Storage::disk($disk)->size($path);
@@ -118,7 +119,7 @@ class EloquentManager
         }
     }
 
-    private function createDataArray(TemporaryUploadedFile $file, string $storagePath, string $fullPath, string $fileName): array
+    private function createDataArray(TemporaryUploadedFile $file, string $storagePath, string $fileName): array
     {
         return [
             'file_name' => $fileName,
@@ -134,7 +135,8 @@ class EloquentManager
     private function createImageResource(GdImage $image, string $stored, string $disk, string $type = 'image/webp', int $quality = -1)
     {
         $extension = ($type === 'image/webp') ? 'webp' : 'avif';
-        $directory = 'uploads';
+
+        $directory = config('mediable.folder');
         $baseName = pathinfo($stored, PATHINFO_FILENAME);
         $path = $directory.'/'.$baseName.'.'.$extension;
 
@@ -147,8 +149,6 @@ class EloquentManager
         $content = ob_get_clean();
 
         Storage::disk($disk)->put($path, $content);
-
-        $path = dirname($stored).'/'.pathinfo($stored, PATHINFO_FILENAME).'.'.$extension;
 
         return $path;
     }
@@ -242,7 +242,6 @@ class EloquentManager
             'file_type' => $file->getMimeType(),
             'file_size' => $file->getSize(),
             'file_dir' => $destination,
-            //'file_url' => $driver['url'].'/'.basename($destination),
             'file_url' => asset('storage/'.$destination),
             'title' => $attachment->title,
             'caption' => $attachment->caption,

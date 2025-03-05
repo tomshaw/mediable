@@ -33,10 +33,19 @@ return [
     | Storage Disk
     |--------------------------------------------------------------------------
     |
-    | The disk name to store file, the value is key of `disks` in `config/filesystems.php`
-    | config('filesystems.disks')
+    | The disk defined in the filesystems.php config file to use for storing
+    | uploaded files.
     */
-    'disk' => env('FILESYSTEM_DRIVER', 'public'),
+    'disk' => env('MEDIABLE_DISK_DRIVER', 'public'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Folder
+    |--------------------------------------------------------------------------
+    |
+    | The folder on the system disk to store uploaded files.
+    */
+    'folder' => env('MEDIABLE_DISK_FOLDER', 'uploads'),
 
     /*
     |--------------------------------------------------------------------------
@@ -53,7 +62,7 @@ return [
     |
     */
     'create_webp' => env('MEDIABLE_CREATE_WEBP', true),
-    'create_avif' => env('MEDIABLE_CREATE_AVIF', false),
+    'create_avif' => env('MEDIABLE_CREATE_AVIF', true),
     'webp_quality' => env('MEDIABLE_WEBP_QUALITY', 80),
     'avif_quality' => env('MEDIABLE_AVIF_QUALITY', 80),
 ];
