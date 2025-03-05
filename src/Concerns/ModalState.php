@@ -9,8 +9,7 @@ final class ModalState implements Wireable
     public function __construct(
         public bool $show = false,
         public string $elementId = ''
-    ) {
-    }
+    ) {}
 
     public function toLivewire()
     {
