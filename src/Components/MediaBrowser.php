@@ -89,15 +89,15 @@ class MediaBrowser extends Component
     {
         $this->generateUniqueId();
 
-        $this->modal = new ModalState();
+        $this->modal = new ModalState;
 
-        $this->alert = new AlertState();
+        $this->alert = new AlertState;
 
-        $this->attachment = new AttachmentState();
+        $this->attachment = new AttachmentState;
 
         $this->panel = new PanelState(thumbMode: true);
 
-        $this->show = new ShowState();
+        $this->show = new ShowState;
 
         $this->theme = $theme ?? config('mediable.theme');
 
@@ -301,7 +301,7 @@ class MediaBrowser extends Component
 
         $this->dispatch('mediable.scroll', id: $this->attachment->id);
 
-        $this->alert = new AlertState();
+        $this->alert = new AlertState;
 
         $this->storeAttachmentId($this->attachment->id);
     }
@@ -320,7 +320,7 @@ class MediaBrowser extends Component
 
         $this->enablePreviewMode();
 
-        $this->alert = new AlertState();
+        $this->alert = new AlertState;
 
         $this->storeAttachmentId($this->attachment->id);
     }
@@ -329,7 +329,7 @@ class MediaBrowser extends Component
     {
         $this->selected = [];
 
-        $this->attachment = new AttachmentState();
+        $this->attachment = new AttachmentState;
 
         $this->resetPage();
 
@@ -357,7 +357,7 @@ class MediaBrowser extends Component
             }
         } else {
             $this->deleteStoreAttachmentId();
-            $this->attachment = new AttachmentState();
+            $this->attachment = new AttachmentState;
         }
 
         $this->alert = new AlertState(
@@ -384,7 +384,7 @@ class MediaBrowser extends Component
             message: $message
         );
 
-        $this->attachment = new AttachmentState();
+        $this->attachment = new AttachmentState;
 
         $this->clearSelected();
     }
@@ -425,7 +425,7 @@ class MediaBrowser extends Component
 
     public function closeAlert(): void
     {
-        $this->alert = new AlertState();
+        $this->alert = new AlertState;
     }
 
     public function updatedFiles(): void

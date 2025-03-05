@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/tomshaw/mediable/compare/v0.5.2...v0.6.0) (2025-03-04)
+
+
+### Features
+
+* save files as publicly stored with SEO-friendly file names ([9afe078](https://github.com/tomshaw/mediable/commit/9afe078380b8031039a32172cecb861af9f15ee7))
+
 ## [0.5.2](https://github.com/tomshaw/mediable/compare/v0.5.1...v0.5.2) (2025-02-03)
 
 
