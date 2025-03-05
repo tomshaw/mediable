@@ -112,9 +112,16 @@ trait WithGraphicDraw
         return GraphicDraw::getImageExtension($imageType);
     }
 
+    public function getDiskImagePath()
+    {
+        $disk = config('mediable.disk');
+
+        return Storage::disk($disk)->path($this->attachment->file_dir);
+    }
+
     public function updatedScaleWidth()
     {
-        $image = GraphicDraw::imagecreatefrompath(Storage::path($this->attachment->file_dir));
+        $image = GraphicDraw::imagecreatefrompath($this->getDiskImagePath());
 
         $originalWidth = GraphicDraw::imagesx($image);
         $originalHeight = GraphicDraw::imagesy($image);
@@ -126,7 +133,7 @@ trait WithGraphicDraw
 
     public function updatedScaleHeight()
     {
-        $image = GraphicDraw::imagecreatefrompath(Storage::path($this->attachment->file_dir));
+        $image = GraphicDraw::imagecreatefrompath($this->getDiskImagePath());
 
         $originalWidth = GraphicDraw::imagesx($image);
         $originalHeight = GraphicDraw::imagesy($image);
@@ -142,7 +149,7 @@ trait WithGraphicDraw
             return;
         }
 
-        GraphicDraw::flipAndSave(Storage::path($this->attachment->file_dir), $this->flipMode);
+        GraphicDraw::flipAndSave($this->getDiskImagePath(), $this->flipMode);
 
         $this->generateUniqueId();
 
@@ -155,7 +162,7 @@ trait WithGraphicDraw
             return;
         }
 
-        GraphicDraw::scaleAndSave(Storage::path($this->attachment->file_dir), $this->scaleWidth, $this->scaleHeight, $this->scaleMode);
+        GraphicDraw::scaleAndSave($this->getDiskImagePath(), $this->scaleWidth, $this->scaleHeight, $this->scaleMode);
 
         $this->generateUniqueId();
 
@@ -185,7 +192,7 @@ trait WithGraphicDraw
             $args[] = $this->pixelateBlockSize;
         }
 
-        GraphicDraw::filterAndSave(Storage::path($this->attachment->file_dir), $this->filterMode, $args);
+        GraphicDraw::filterAndSave($this->getDiskImagePath(), $this->filterMode, $args);
 
         $this->generateUniqueId();
 
@@ -200,7 +207,7 @@ trait WithGraphicDraw
 
         $backgroundColor = $this->normalizeHexValue($this->rotateBgColor);
 
-        GraphicDraw::rotateAndSave(Storage::path($this->attachment->file_dir), $this->rotateAngle, $backgroundColor, $this->rotateIgnoreTransparent);
+        GraphicDraw::rotateAndSave($this->getDiskImagePath(), $this->rotateAngle, $backgroundColor, $this->rotateIgnoreTransparent);
 
         $this->generateUniqueId();
 
@@ -211,7 +218,7 @@ trait WithGraphicDraw
     {
         $rect = ['x' => $this->cropX, 'y' => $this->cropY, 'width' => $this->cropWidth, 'height' => $this->cropHeight];
 
-        GraphicDraw::cropAndSave(Storage::path($this->attachment->file_dir), $rect);
+        GraphicDraw::cropAndSave($this->getDiskImagePath(), $rect);
 
         $this->generateUniqueId();
 
@@ -240,7 +247,7 @@ trait WithGraphicDraw
 
         $centered = $this->centerText();
 
-        GraphicDraw::textAndSave(Storage::path($this->attachment->file_dir), $this->imageFontSize, $this->imageTextAngle, $centered[0], $centered[1], $color, $this->imageFont, $this->imageText);
+        GraphicDraw::textAndSave($this->getDiskImagePath(), $this->imageFontSize, $this->imageTextAngle, $centered[0], $centered[1], $color, $this->imageFont, $this->imageText);
 
         $this->generateUniqueId();
 
@@ -271,7 +278,7 @@ trait WithGraphicDraw
 
     public function centerText()
     {
-        [$imageWidth, $imageHeight] = getimagesize(Storage::path($this->attachment->file_dir));
+        [$imageWidth, $imageHeight] = getimagesize($this->getDiskImagePath());
 
         $bbox = imagettfbbox($this->imageFontSize, $this->imageTextAngle, $this->imageFont, $this->imageText);
 

@@ -83,7 +83,7 @@ class EloquentManager
                     $create['file_type'] = 'image/webp';
 
                     if (Storage::disk($disk)->exists($path)) {
-                        $create['file_dir'] = Storage::disk($disk)->path($path);
+                        $create['file_dir'] = $storePath;
                         $create['title'] = pathinfo($path, PATHINFO_FILENAME);
                         $create['file_name'] = pathinfo($path, PATHINFO_BASENAME);
                         $create['file_size'] = Storage::disk($disk)->size($path);
@@ -105,7 +105,7 @@ class EloquentManager
                     $create['file_type'] = 'image/avif';
 
                     if (Storage::disk($disk)->exists($path)) {
-                        $create['file_dir'] = Storage::disk($disk)->path($path);
+                        $create['file_dir'] = $storePath;
                         $create['title'] = pathinfo($path, PATHINFO_FILENAME);
                         $create['file_name'] = pathinfo($path, PATHINFO_BASENAME);
                         $create['file_size'] = Storage::disk($disk)->size($path);
@@ -126,7 +126,7 @@ class EloquentManager
             'file_original_name' => $file->getClientOriginalName(),
             'file_type' => $file->getMimeType(),
             'file_size' => $file->getSize(),
-            'file_dir' => $fullPath,
+            'file_dir' => $storagePath,
             'file_url' => asset('storage/'.$storagePath),
             'title' => pathinfo($fileName, PATHINFO_FILENAME),
         ];
@@ -204,16 +204,20 @@ class EloquentManager
 
     public function copyImageFromTo(string $source, string $destination): string
     {
-        if (! Storage::exists($source)) {
+        $diskConfig = $this->getAndValidateDisk(config('mediable.disk'));
+
+        $disk = $diskConfig['disk'];
+
+        if (! Storage::disk($disk)->exists($source)) {
             throw new MediaBrowserException('Source file not found.');
         }
 
-        if (Storage::exists($destination)) {
+        if (Storage::disk($disk)->exists($destination)) {
             throw new MediaBrowserException('Destination file already exists.');
         }
 
         try {
-            Storage::copy($source, $destination);
+            Storage::disk($disk)->copy($source, $destination);
         } catch (Exception $e) {
             throw new MediaBrowserException($e->getMessage());
         }
@@ -225,11 +229,13 @@ class EloquentManager
     {
         $diskConfig = $this->getAndValidateDisk(config('mediable.disk'));
 
+        $disk = $diskConfig['disk'];
+
         $driver = $diskConfig['driver'];
 
-        $filepath = Storage::path($destination);
+        $filePath = Storage::disk($disk)->path($destination);
 
-        $file = $this->fileObject($filepath);
+        $file = $this->fileObject($filePath);
 
         $create = [
             'file_name' => $file->getFilename(),
@@ -237,7 +243,8 @@ class EloquentManager
             'file_type' => $file->getMimeType(),
             'file_size' => $file->getSize(),
             'file_dir' => $destination,
-            'file_url' => $driver['url'].'/'.basename($destination),
+            //'file_url' => $driver['url'].'/'.basename($destination),
+            'file_url' => asset('storage/'.$destination),
             'title' => $attachment->title,
             'caption' => $attachment->caption,
             'description' => $attachment->description,
@@ -253,7 +260,11 @@ class EloquentManager
 
     public function getFilePath(string $filename): string
     {
-        return Storage::path($filename);
+        $diskConfig = $this->getAndValidateDisk(config('mediable.disk'));
+
+        $disk = $diskConfig['disk'];
+
+        return Storage::disk($disk)->path($filename);
     }
 
     public function fileObject(string $path, bool $checkPath = true): File
@@ -312,15 +323,15 @@ class EloquentManager
         return $this->query->paginate($perPage);
     }
 
-    public function getAndValidateDisk(string $disk): array
+    public function getAndValidateDisk(string $name): array
     {
         $disks = config('filesystems.disks');
 
-        if (! array_key_exists($disk, $disks)) {
+        if (! array_key_exists($name, $disks)) {
             throw new MediaBrowserException('Storage disk not found.');
         }
 
-        return ['disk' => $disk, 'driver' => $disks[$disk]];
+        return ['disk' => $name, 'driver' => $disks[$name]];
     }
 
     public function getMimeTypeStats()

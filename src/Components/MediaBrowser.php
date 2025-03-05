@@ -479,7 +479,7 @@ class MediaBrowser extends Component
     public function applyImageInfo($item): void
     {
         if ($this->mimeTypeImage($item['file_type'])) {
-            [$width, $height, $type] = $this->getImageSize($item['file_dir']);
+            [$width, $height, $type] = $this->getImageSize(Eloquent::getFilePath($item['file_dir']));
 
             if ($type) {
                 $this->fill([
