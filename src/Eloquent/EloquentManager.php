@@ -242,7 +242,7 @@ class EloquentManager
             'file_type' => $file->getMimeType(),
             'file_size' => $file->getSize(),
             'file_dir' => $destination,
-            //'file_url' => $driver['url'].'/'.basename($destination),
+            // 'file_url' => $driver['url'].'/'.basename($destination),
             'file_url' => asset('storage/'.$destination),
             'title' => $attachment->title,
             'caption' => $attachment->caption,
