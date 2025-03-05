@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/tomshaw/mediable/compare/v0.6.1...v0.7.0) (2025-03-05)
+
+
+### Features
+
+* added option to set file system folder ([8079bdb](https://github.com/tomshaw/mediable/commit/8079bdb40e3c3894166f76f316d78e94de984fad))
+
 ## [0.6.1](https://github.com/tomshaw/mediable/compare/v0.6.0...v0.6.1) (2025-03-05)
 
 
