@@ -21,8 +21,7 @@ final class ShowState implements Wireable
         public bool $showImageStrip = true,
         public bool $showMetaInfo = true,
         public bool $showAppStats = true,
-    ) {
-    }
+    ) {}
 
     public function isShowPagination(): bool
     {
