@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/tomshaw/mediable/compare/v0.6.0...v0.6.1) (2025-03-05)
+
+
+### Bug Fixes
+
+* attempt to quickly fix latest updates ([07f8e5f](https://github.com/tomshaw/mediable/commit/07f8e5ff7e81a6cd8b9073571294449ad58932e5))
+
 ## [0.6.0](https://github.com/tomshaw/mediable/compare/v0.5.2...v0.6.0) (2025-03-04)
 
 
