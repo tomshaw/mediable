@@ -10,8 +10,7 @@ final class AlertState implements Wireable
         public bool $show = false,
         public string $type = '',
         public string $message = ''
-    ) {
-    }
+    ) {}
 
     public function toLivewire()
     {
