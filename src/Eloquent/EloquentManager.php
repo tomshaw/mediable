@@ -18,7 +18,8 @@ class EloquentManager
 {
     public function __construct(
         public Builder $query,
-    ) {}
+    ) {
+    }
 
     public function load(int $id)
     {

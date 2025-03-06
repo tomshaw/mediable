@@ -24,7 +24,8 @@ final class AttachmentState implements Wireable
         public ?bool $hidden = false,
         public ?string $created_at = null,
         public ?string $updated_at = null
-    ) {}
+    ) {
+    }
 
     public static function fromAttachment(Attachment $attachment): self
     {

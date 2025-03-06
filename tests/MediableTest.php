@@ -71,8 +71,8 @@ it('dispatched the correct event', function () {
     $this->component->call('insertMedia')->assertDispatched(BrowserEvents::DEFAULT->value);
 });
 
-// Test that the 'set' method correctly updates the 'file_name' property of the component
-// it('sets the correct data', function () {
-//     $this->component->set('file_name', 'new_file_name.jpg');
-//     expect($this->component->get('file_name'))->toBe('new_file_name.jpg');
-// });
+// Test that the 'set' method correctly updates the 'theme' property of the component
+it('sets the correct data', function () {
+    $this->component->set('theme', 'tailwind');
+    expect($this->component->get('theme'))->toBe('tailwind');
+});
