@@ -13,6 +13,17 @@ Mediable is a light weight easy to use Laravel Livewire Media Manager. Mediable 
 #### Screenshot
 ![Mediable](https://raw.github.com/tomshaw/mediable/master/docs/mediable.jpg)
 
+## Features
+
+- **Easy Integration**: Seamlessly integrate Mediable into your Laravel Livewire applications.
+- **File Uploads**: Supports uploading various file types including images, videos, and documents.
+- **Image Conversion**: Automatically create WebP and AVIF versions of your image uploads.
+- **Customizable**: Configure allowable file types, maximum file size, storage disk, and folder.
+- **SEO-Friendly**: Generate SEO-friendly file names for your uploads.
+- **Event Handling**: Dispatch events to handle selected attachments and other actions.
+- **Database Integration**: Store upload information in the database with the included migration.
+- **Graphic Draw**: Perform various image manipulations using the GD Library.
+
 ## Installation
 
 You can install the package via composer:
@@ -142,7 +153,18 @@ You can configure the folder used for file uploads on the specified disk. This c
 'folder' => env('MEDIABLE_DISK_FOLDER', 'uploads'),
 ```
 
-### Image Conversion Settings
+## GD Library Graphic Draw
+
+Mediable includes a set of tools for performing various image manipulations using the GD Library. Here are some of the things you can do:
+
+- **Flip Image**: Flip the image horizontally or vertically.
+- **Scale Image**: Resize the image while maintaining the aspect ratio.
+- **Apply Filters**: Apply various filters such as contrast, brightness, colorize, smooth, and pixelate.
+- **Rotate Image**: Rotate the image by a specified angle with a background color.
+- **Crop Image**: Crop the image to a specified rectangle.
+- **Add Text**: Add text to the image with specified font, size, color, and angle.
+
+## Image Conversion Settings
 
 Mediable can automatically create WebP and AVIF versions of your image uploads. You can control this behavior with the following environment variables:
 
