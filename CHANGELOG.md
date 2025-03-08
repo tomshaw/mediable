@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.2](https://github.com/tomshaw/mediable/compare/v0.7.1...v0.7.2) (2025-03-08)
+
+
+### Miscellaneous Chores
+
+* minor adjustments, bump version to 0.7.2 ([5a39261](https://github.com/tomshaw/mediable/commit/5a39261442615c1a7213205b7b0a80a77e23588e))
+
 ## [0.7.1](https://github.com/tomshaw/mediable/compare/v0.7.0...v0.7.1) (2025-03-06)
 
 
