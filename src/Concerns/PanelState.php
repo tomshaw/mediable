@@ -12,7 +12,8 @@ final class PanelState implements Wireable
         public bool $uploadMode = false,
         public bool $editorMode = false,
         public bool $formMode = false
-    ) {}
+    ) {
+    }
 
     public function isThumbMode(): bool
     {

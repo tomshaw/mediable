@@ -18,7 +18,8 @@ class EloquentManager
 {
     public function __construct(
         public Builder $query,
-    ) {}
+    ) {
+    }
 
     public function load(int $id)
     {
@@ -85,6 +86,7 @@ class EloquentManager
                         $create['file_dir'] = $storagePath;
                         $create['title'] = pathinfo($path, PATHINFO_FILENAME);
                         $create['file_name'] = pathinfo($path, PATHINFO_BASENAME);
+                        $create['file_original_name'] = pathinfo($path, PATHINFO_BASENAME);
                         $create['file_size'] = Storage::disk($disk)->size($path);
                     }
 
@@ -107,6 +109,7 @@ class EloquentManager
                         $create['file_dir'] = $storagePath;
                         $create['title'] = pathinfo($path, PATHINFO_FILENAME);
                         $create['file_name'] = pathinfo($path, PATHINFO_BASENAME);
+                        $create['file_original_name'] = pathinfo($path, PATHINFO_BASENAME);
                         $create['file_size'] = Storage::disk($disk)->size($path);
                     }
 
