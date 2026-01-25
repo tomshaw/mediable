@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/tomshaw/mediable/compare/v0.7.2...v0.8.0) (2026-01-25)
+
+
+### Features
+
+* trigger release for PHP 8.5 and Laravel 12 support ([ae2a144](https://github.com/tomshaw/mediable/commit/ae2a14403e92829a9470bafb6ca8beadfe62f205))
+
 ## [0.7.2](https://github.com/tomshaw/mediable/compare/v0.7.1...v0.7.2) (2025-03-08)
 
 
