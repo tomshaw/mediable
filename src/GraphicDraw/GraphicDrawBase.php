@@ -177,9 +177,9 @@ class GraphicDrawBase
         return imageflip($image, $mode);
     }
 
-    public function rotate(GdImage $image, float $angle, int $bgd_color, bool $ignore_transparent = false): GdImage|false
+    public function rotate(GdImage $image, float $angle, int $bgd_color): GdImage|false
     {
-        return imagerotate($image, $angle, $bgd_color, $ignore_transparent);
+        return imagerotate($image, $angle, $bgd_color);
     }
 
     public function filter(GdImage $image, int $filter, array $args): bool

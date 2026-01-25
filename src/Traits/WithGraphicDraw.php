@@ -37,8 +37,6 @@ trait WithGraphicDraw
 
     public string $rotateBgColor = '#000000';
 
-    public bool $rotateIgnoreTransparent = false;
-
     public int $cropX = 0;
 
     public int $cropY = 0;
@@ -207,7 +205,7 @@ trait WithGraphicDraw
 
         $backgroundColor = $this->normalizeHexValue($this->rotateBgColor);
 
-        GraphicDraw::rotateAndSave($this->getDiskImagePath(), $this->rotateAngle, $backgroundColor, $this->rotateIgnoreTransparent);
+        GraphicDraw::rotateAndSave($this->getDiskImagePath(), $this->rotateAngle, $backgroundColor);
 
         $this->generateUniqueId();
 
@@ -227,7 +225,7 @@ trait WithGraphicDraw
 
     public function addText()
     {
-        if (! is_numeric($this->imageFontSize) || $this->imageFontSize <= 0) {
+        if ($this->imageFontSize <= 0) {
             return;
         }
 
@@ -235,11 +233,11 @@ trait WithGraphicDraw
             return;
         }
 
-        if (! is_string($this->imageText) || trim($this->imageText) === '') {
+        if (trim($this->imageText) === '') {
             return;
         }
 
-        if (! is_numeric($this->imageTextAngle) || $this->imageTextAngle < 0 || $this->imageTextAngle > 360) {
+        if ($this->imageTextAngle < 0 || $this->imageTextAngle > 360) {
             return;
         }
 
@@ -309,7 +307,6 @@ trait WithGraphicDraw
             'scaleMode' => $this->scaleMode,
             'rotateAngle' => $this->rotateAngle,
             'rotateBgColor' => $this->rotateBgColor,
-            'rotateIgnoreTransparent' => $this->rotateIgnoreTransparent,
             'cropX' => $this->cropX,
             'cropY' => $this->cropY,
             'cropWidth' => $this->cropWidth,
@@ -341,7 +338,6 @@ trait WithGraphicDraw
             'scaleMode' => 4,
             'rotateAngle' => 0,
             'rotateBgColor' => '#000000',
-            'rotateIgnoreTransparent' => false,
             'cropX' => 0,
             'cropY' => 0,
             'cropWidth' => 0,

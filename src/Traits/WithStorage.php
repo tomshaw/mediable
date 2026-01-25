@@ -4,6 +4,7 @@ namespace TomShaw\Mediable\Traits;
 
 use Illuminate\Support\Facades\Storage;
 
+/** @phpstan-ignore trait.unused */
 trait WithStorage
 {
     public function path(string $path): string

@@ -43,7 +43,7 @@ class GraphicDrawManager extends GraphicDrawBase
         return $this->save($filename, $result);
     }
 
-    public function rotateAndSave(string $filename, float $angle, int $bgd_color, bool $ignore_transparent = false): bool
+    public function rotateAndSave(string $filename, float $angle, int $bgd_color): bool
     {
         $image = $this->create($filename);
 
@@ -51,7 +51,7 @@ class GraphicDrawManager extends GraphicDrawBase
             return false;
         }
 
-        $result = $this->rotate($image, $angle, $bgd_color, $ignore_transparent);
+        $result = $this->rotate($image, $angle, $bgd_color);
 
         return $this->save($filename, $result);
     }
