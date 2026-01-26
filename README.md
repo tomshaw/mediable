@@ -8,8 +8,6 @@ Mediable is a light weight easy to use Laravel Livewire Media Manager. Mediable 
 ![stars](https://img.shields.io/github/stars/tomshaw/mediable?style=flat&logo=appveyor)
 [![GitHub license](https://img.shields.io/github/license/tomshaw/mediable)](https://github.com/tomshaw/mediable/blob/master/LICENSE)
 
-> For a complete demonstration see the [Mediable Demo](https://github.com/tomshaw/mediable-demo) repository.
-
 ## Requirements
 
 - PHP 8.3, 8.4, or 8.5
