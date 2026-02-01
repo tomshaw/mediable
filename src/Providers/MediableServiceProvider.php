@@ -38,8 +38,8 @@ class MediableServiceProvider extends ServiceProvider
      */
     protected function loadViews(): void
     {
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'mediable');
-        $this->loadViewsFrom(__DIR__ . '/../../resources/icons', 'icons');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'mediable');
+        $this->loadViewsFrom(__DIR__.'/../../resources/icons', 'icons');
     }
 
     /**
@@ -47,7 +47,7 @@ class MediableServiceProvider extends ServiceProvider
      */
     protected function loadMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../../resources/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../resources/database/migrations');
     }
 
     /**
@@ -86,16 +86,16 @@ class MediableServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../../resources/config/config.php' => config_path('mediable.php'),
+                __DIR__.'/../../resources/config/config.php' => config_path('mediable.php'),
             ], 'mediable.config');
             $this->publishes([
-                __DIR__ . '/../../resources/views' => resource_path('views/vendor/mediable'),
+                __DIR__.'/../../resources/views' => resource_path('views/vendor/mediable'),
             ], 'mediable.views');
             $this->publishes([
-                __DIR__ . '/../../resources/images' => public_path('vendor/mediable/images'),
+                __DIR__.'/../../resources/images' => public_path('vendor/mediable/images'),
             ], 'mediable.images');
             $this->publishes([
-                __DIR__ . '/../resources/fonts' => public_path('vendor/mediable/fonts'),
+                __DIR__.'/../resources/fonts' => public_path('vendor/mediable/fonts'),
             ], 'mediable.fonts');
         }
     }
@@ -119,7 +119,7 @@ class MediableServiceProvider extends ServiceProvider
      */
     protected function mergeConfig(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../../resources/config/config.php', 'mediable');
+        $this->mergeConfigFrom(__DIR__.'/../../resources/config/config.php', 'mediable');
     }
 
     /**
@@ -148,6 +148,6 @@ class MediableServiceProvider extends ServiceProvider
             return $publishedComponentsPath;
         }
 
-        return __DIR__ . '/../../resources/views/livewire/mediable/components';
+        return __DIR__.'/../../resources/views/livewire/mediable/components';
     }
 }

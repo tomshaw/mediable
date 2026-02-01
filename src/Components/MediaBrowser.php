@@ -4,22 +4,12 @@ namespace TomShaw\Mediable\Components;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
-use Livewire\Component;
-use Livewire\WithPagination;
-use TomShaw\Mediable\Concerns\AlertState;
-use TomShaw\Mediable\Concerns\ModalState;
-use TomShaw\Mediable\Concerns\PanelState;
-use TomShaw\Mediable\Concerns\ShowState;
+use Livewire\{Component, WithPagination};
+use TomShaw\Mediable\Concerns\{AlertState, ModalState, PanelState, ShowState};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\ServerLimits;
-use TomShaw\Mediable\Traits\WithCache;
-use TomShaw\Mediable\Traits\WithColumnWidths;
-use TomShaw\Mediable\Traits\WithExtension;
-use TomShaw\Mediable\Traits\WithFileSize;
-use TomShaw\Mediable\Traits\WithMimeTypes;
-use TomShaw\Mediable\Traits\WithReporting;
+use TomShaw\Mediable\Traits\{ServerLimits, WithCache, WithColumnWidths, WithExtension, WithFileSize, WithMimeTypes, WithReporting};
 
 class MediaBrowser extends Component
 {
@@ -41,8 +31,6 @@ class MediaBrowser extends Component
     public ShowState $show;
 
     public $uniqueId;
-
-    public string $theme = 'tailwind';
 
     public bool $fullScreen = false;
 
@@ -76,7 +64,7 @@ class MediaBrowser extends Component
 
     public ?int $memoryLimit = null;
 
-    public function mount(?string $theme = null)
+    public function mount(): void
     {
         $this->generateUniqueId();
 
@@ -87,8 +75,6 @@ class MediaBrowser extends Component
         $this->panel = new PanelState(thumbMode: true);
 
         $this->show = new ShowState;
-
-        $this->theme = $theme ?? config('mediable.theme');
 
         $this->maxUploadSize = $this->getMaxUploadSize();
         $this->maxFileUploads = $this->getMaxFileUploads();
@@ -206,7 +192,7 @@ class MediaBrowser extends Component
     }
 
     #[On('attachment:active-changed')]
-    public function handleActiveAttachmentChanged(int $id): void
+    public function handleActiveAttachmentChanged(int $_id): void
     {
         $this->enablePreviewMode();
     }
@@ -370,9 +356,12 @@ class MediaBrowser extends Component
         $this->uniqueId = uniqid();
     }
 
-    private function renderView(LengthAwarePaginator $paginator)
+    private function renderView(LengthAwarePaginator $paginator): \Illuminate\Contracts\View\View
     {
-        return view('mediable::livewire.media-browser', [
+        /** @var view-string $view */
+        $view = 'mediable::livewire.media-browser';
+
+        return view($view, [
             'uniqueId' => $this->uniqueId,
             'data' => $paginator,
         ]);

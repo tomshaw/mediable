@@ -8,8 +8,6 @@ use TomShaw\Mediable\Models\Attachment;
 beforeEach(function () {
     $this->artisan('migrate');
 
-    $this->theme = config('mediable.theme');
-
     Attachment::create([
         'file_name' => 'temp_file_name.jpg',
         'file_original_name' => 'temp_file_name.jpg',
@@ -50,7 +48,7 @@ it('has the correct component instance', function () {
 
 // Test that the component has the correct view
 it('has the correct view', function () {
-    Livewire::test(MediaBrowser::class)->assertViewIs('mediable::'.$this->theme.'.media-browser');
+    Livewire::test(MediaBrowser::class)->assertViewIs('mediable::livewire.media-browser');
 });
 
 // Test that the component has the correct initial properties
@@ -68,11 +66,11 @@ it('can delete an attachment', function () {
 
 // Test that the 'insertMedia' method dispatches the 'DEFAULT' event
 it('dispatched the correct event', function () {
-    $this->component->call('insertMedia')->assertDispatched(BrowserEvents::DEFAULT->value);
+    $this->component->call('insertMedia', [1])->assertDispatched(BrowserEvents::DEFAULT->value);
 });
 
-// Test that the 'set' method correctly updates the 'theme' property of the component
+// Test that the 'set' method correctly updates component properties
 it('sets the correct data', function () {
-    $this->component->set('theme', 'tailwind');
-    expect($this->component->get('theme'))->toBe('tailwind');
+    $this->component->set('fullScreen', true);
+    expect($this->component->get('fullScreen'))->toBe(true);
 });

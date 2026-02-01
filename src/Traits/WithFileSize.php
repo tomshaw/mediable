@@ -2,6 +2,9 @@
 
 namespace TomShaw\Mediable\Traits;
 
+/**
+ * @property array<\Livewire\Features\SupportFileUploads\TemporaryUploadedFile> $files
+ */
 trait WithFileSize
 {
     public function getTotalUploadSize(): int
