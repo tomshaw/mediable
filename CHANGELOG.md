@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.9.0](https://github.com/tomshaw/mediable/compare/v0.8.0...v0.9.0) (2026-02-01)
+
+
+### Features
+
+* Add Livewire components for header, preview, sidebar, strip, toolbar, and uploads ([c640913](https://github.com/tomshaw/mediable/commit/c640913211f83be61bc2a272205390110a5ef840))
+* add Livewire components for mediable functionality including header, preview, sidebar, strip, toolbar, and uploads ([2a7a965](https://github.com/tomshaw/mediable/commit/2a7a9654ea645704622814262532651771974998))
+* Add media browser and upload panels with Livewire components ([f971eaa](https://github.com/tomshaw/mediable/commit/f971eaa232a206635621ef08431f26851152e287))
+* Refactor Livewire components to use non-nullable properties and improve event handling ([a464a04](https://github.com/tomshaw/mediable/commit/a464a047a928ca538170c6f4f7ec275415069fe2))
+* refactor media browser components to use Livewire and improve structure by removing old Blade includes ([0f11ad5](https://github.com/tomshaw/mediable/commit/0f11ad5eaeaad7b1344834d8c2d82e76f1f3db05))
+* refactor MediaBrowser component and related tests for improved readability and consistency ([b58b07d](https://github.com/tomshaw/mediable/commit/b58b07d1bf08cc17ced1267950506ec4b5e68aa6))
+* Replace toolbar include with Livewire component and add event handlers for toolbar interactions ([db8e519](https://github.com/tomshaw/mediable/commit/db8e519b9c71a88791ea46ee17925ed9959adb05))
+
+
+### Bug Fixes
+
+* update class for media browser to improve layout consistency ([b878f98](https://github.com/tomshaw/mediable/commit/b878f98b2d4069ba342842b5e3f6016aa45d4385))
+
+
+### Miscellaneous Chores
+
+* component updates. ([360a91f](https://github.com/tomshaw/mediable/commit/360a91f43a81804aa28a78649cae4023b270741a))
+* component updates. ([4cf3890](https://github.com/tomshaw/mediable/commit/4cf389025f1585699b195e52d5c316ada86d21e5))
+* component updates. ([738e0e2](https://github.com/tomshaw/mediable/commit/738e0e279a45cee2d29f10726de407ee6150dbec))
+* component updates. ([c60087d](https://github.com/tomshaw/mediable/commit/c60087d0453700d039e3b90f40c522babf51030d))
+* update .gitignore to include .claude ([daae1b7](https://github.com/tomshaw/mediable/commit/daae1b7b8f412f22c01c2a0f544e541661d13b1d))
+* update phpstan configuration to include ignoreErrors for unused traits ([b870576](https://github.com/tomshaw/mediable/commit/b870576bcc98c99add27415dd3d80ac9e141cc8d))
+
 ## [0.8.0](https://github.com/tomshaw/mediable/compare/v0.7.2...v0.8.0) (2026-01-25)
 
 
