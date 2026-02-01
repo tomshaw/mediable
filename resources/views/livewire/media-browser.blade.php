@@ -33,7 +33,7 @@
                             @endif
                             @elseif($panel->isEditorMode())
                             <livewire:mediable::form
-                                :attachment="$attachment"
+                                :initial-attachment="$attachment"
                                 :unique-id="$uniqueId"
                                 :key="'form-editor'"
                             />

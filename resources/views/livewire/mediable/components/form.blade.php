@@ -12,7 +12,9 @@ new class extends Component {
     use WithGraphicDraw;
 
     #[Reactive]
-    public ?AttachmentState $attachment;
+    public ?AttachmentState $initialAttachment;
+
+    public ?AttachmentState $attachment = null;
 
     public ?int $primaryId = null;
 
@@ -21,11 +23,19 @@ new class extends Component {
     public function mount(string $uniqueId = ''): void
     {
         $this->uniqueId = $uniqueId;
-        $this->initializeScaleDimensions();
+        $this->syncFromInitialAttachment();
     }
 
-    public function updatedAttachment(): void
+    public function updatedInitialAttachment(): void
     {
+        $this->syncFromInitialAttachment();
+    }
+
+    protected function syncFromInitialAttachment(): void
+    {
+        if ($this->initialAttachment) {
+            $this->attachment = clone $this->initialAttachment;
+        }
         $this->initializeScaleDimensions();
     }
 
@@ -76,7 +86,7 @@ new class extends Component {
 
     public function saveEditorChanges(): void
     {
-        if (! $this->attachment->id) {
+        if (! $this->attachment?->id) {
             return;
         }
 
