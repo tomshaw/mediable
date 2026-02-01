@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/tomshaw/mediable/compare/v0.9.0...v0.9.1) (2026-02-01)
+
+
+### Bug Fixes
+
+* add audio dispatch events for play and pause actions ([5ec25bc](https://github.com/tomshaw/mediable/commit/5ec25bca641b4518e977c873b1e7c99e4634eefc))
+
 ## [0.9.0](https://github.com/tomshaw/mediable/compare/v0.8.0...v0.9.0) (2026-02-01)
 
 
