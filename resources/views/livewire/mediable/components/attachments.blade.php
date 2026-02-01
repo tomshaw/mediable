@@ -1,15 +1,13 @@
 <?php
 
 use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
 new class extends Component {
     #[Reactive]
     public Collection $data;
-
-    #[Reactive]
-    public array $selected;
 
     #[Reactive]
     public ?int $audioElementId;
@@ -23,9 +21,46 @@ new class extends Component {
     #[Reactive]
     public int $defaultColumnWidth;
 
-    public function toggleAttachment(array $item): void
+    public array $selectedIds = [];
+
+    public function toggleAttachment(int $id): void
     {
-        $this->dispatch('footer:toggle-selected', item: $item);
+        if (in_array($id, $this->selectedIds)) {
+            $this->selectedIds = array_values(array_diff($this->selectedIds, [$id]));
+        } else {
+            $this->selectedIds[] = $id;
+        }
+
+        $this->dispatch('attachments:selection-changed',
+            selectedIds: $this->selectedIds,
+            activeId: $id
+        );
+
+        $this->dispatch('mediable.scroll', id: $id);
+    }
+
+    #[On('attachments:clear-selected')]
+    public function clearSelected(): void
+    {
+        $this->selectedIds = [];
+
+        $this->dispatch('attachments:selection-changed',
+            selectedIds: $this->selectedIds,
+            activeId: null
+        );
+    }
+
+    #[On('attachments:remove-item')]
+    public function removeItem(int $id): void
+    {
+        $this->selectedIds = array_values(array_diff($this->selectedIds, [$id]));
+
+        $activeId = count($this->selectedIds) ? end($this->selectedIds) : null;
+
+        $this->dispatch('attachments:selection-changed',
+            selectedIds: $this->selectedIds,
+            activeId: $activeId
+        );
     }
 
     public function playAudio(int $id): void
@@ -40,7 +75,7 @@ new class extends Component {
 
     public function isSelected(int $id): bool
     {
-        return in_array($id, array_column($this->selected, 'id'));
+        return in_array($id, $this->selectedIds);
     }
 
     public function mimeTypeImage(string $mimeType): bool
@@ -77,7 +112,7 @@ new class extends Component {
         <li @class([
             "attachment relative flex m-0 p-0 cursor-pointer list-none text-center select-none border-b border-r border-gray-300",
             $this->isSelected($item->id) ? "bg-gray-200" : "bg-gray-200"
-        ]) id="attachment-id-{{$item->id}}" wire:click="toggleAttachment({{ json_encode($item) }})" style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
+        ]) id="attachment-id-{{$item->id}}" wire:click="toggleAttachment({{ $item->id }})" style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
             <div class="relative cursor-pointer flex items-center justify-center min-w-full" style="padding: {{ $this->normalizeColumnPadding($columnWidths[$defaultColumnWidth]) }}rem;">
 
                 <div class="absolute left-2.5 top-1 cursor-pointer bg-transparent">

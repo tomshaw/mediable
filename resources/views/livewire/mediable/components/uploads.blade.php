@@ -3,8 +3,11 @@
 use Livewire\Attributes\{On, Reactive};
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use TomShaw\Mediable\Eloquent\Eloquent;
+use TomShaw\Mediable\Traits\WithFileSize;
 
 new class extends Component {
+    use WithFileSize;
     use WithFileUploads;
 
     public array $files = [];
@@ -27,46 +30,39 @@ new class extends Component {
     public function updatedFiles(): void
     {
         $this->validate(config('mediable.validation'));
+        $this->dispatchFileCount();
     }
 
     public function clearFile(int $index): void
     {
         array_splice($this->files, $index, 1);
+        $this->dispatchFileCount();
     }
 
+    #[On('uploads:reset')]
     public function clearFiles(): void
     {
         $this->files = [];
+        $this->dispatchFileCount();
     }
 
+    #[On('uploads:submit')]
     public function createAttachments(): void
     {
-        $this->dispatch('panel:create-attachments', files: $this->files);
+        Eloquent::create($this->files);
+
+        $count = count($this->files);
+        $message = ($count > 1) ? "Created $count attachment(s) successfully!" : 'Created attachment successfully!';
+
+        $this->dispatch('uploads:completed', message: $message);
+
         $this->files = [];
+        $this->dispatchFileCount();
     }
 
-    public function getTotalUploadSize(): int
+    protected function dispatchFileCount(): void
     {
-        return array_reduce($this->files, function ($carry, $file) {
-            return $carry + $file->getSize();
-        }, 0);
-    }
-
-    public function formatBytes(int $bytes, int $precision = 2): string
-    {
-        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-        $pow = min($pow, count($units) - 1);
-        $bytes /= (1 << (10 * $pow));
-
-        return round($bytes, $precision).' '.$units[$pow];
-    }
-
-    #[On('panel:alert')]
-    public function handleAlert(string $type, string $message): void
-    {
-        $this->dispatch('media.alert', event: ['type' => $type, 'message' => $message]);
+        $this->dispatch('uploads:files-changed', count: count($this->files));
     }
 }; ?>
 
@@ -85,7 +81,7 @@ new class extends Component {
                 <table class="border-collapse table-auto w-full text-sm shadow-md">
                     <thead class="bg-[#E6E6E6]">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-[20px]">Id</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-5">Id</th>
                             <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Name</th>
                             <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Type</th>
                             <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Size</th>
@@ -120,7 +116,7 @@ new class extends Component {
     </div>
     @else
     <form>
-        <div class="h-auto max-w-[500px] py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-red-500': enter }" x-on:click.prevent="fileClick($event)">
+        <div class="h-auto max-w-125 py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-red-500': enter }" x-on:click.prevent="fileClick($event)">
             <div class="m-0 p-2 flex items-center text-left">
                 <span class="text-blue-500 leading-none">
                     <img src="{{ asset("vendor/mediable/images/upload.png") }}" class="w-full h-full object-cover" alt="Upload files" />
@@ -183,9 +179,8 @@ new class extends Component {
             this.maxUploadFileSizeCheck(files);
 
             if (this.error) {
-                this.$wire.dispatch('panel:alert', {
-                    type: 'error',
-                    message: this.error,
+                this.$dispatch('mediable.alert', {
+                    event: { type: 'error', message: this.error }
                 });
                 return;
             }
@@ -198,9 +193,8 @@ new class extends Component {
                     this.error = error;
                     this.progress = 0;
 
-                    this.$wire.dispatch('panel:alert', {
-                        type: 'error',
-                        message: error || 'An error occurred while uploading the file'
+                    this.$dispatch('mediable.alert', {
+                        event: { type: 'error', message: error || 'An error occurred while uploading the file' }
                     });
                 },
                 (event) => {

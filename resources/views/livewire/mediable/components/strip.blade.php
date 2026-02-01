@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
@@ -9,19 +10,24 @@ new class extends Component {
     public Collection $data;
 
     #[Reactive]
-    public array $selected;
-
-    #[Reactive]
     public string $uniqueId;
 
-    public function toggleAttachment(int $id): void
+    public array $selectedIds = [];
+
+    #[On('attachments:selection-changed')]
+    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
-        $this->dispatch('panel:toggle-attachment', id: $id);
+        $this->selectedIds = $selectedIds;
+    }
+
+    public function setActiveAttachment(int $id): void
+    {
+        $this->dispatch('footer:set-active-attachment', id: $id);
     }
 
     public function isSelected(int $id): bool
     {
-        return in_array($id, array_column($this->selected, 'id'));
+        return in_array($id, $this->selectedIds);
     }
 
     public function mimeTypeImage(string $mimeType): bool
@@ -44,7 +50,7 @@ new class extends Component {
     @if ($data->count())
     <ul class="flex items-center justify-start gap-x-2">
         @foreach($data as $item)
-        <li class="shadow-md cursor-pointer" wire:click="toggleAttachment({{$item->id}})">
+        <li class="shadow-md cursor-pointer" wire:click="setActiveAttachment({{$item->id}})">
             <div @class(['border border-black w-16 h-16 overflow-hidden', $this->isSelected($item->id) ? 'border-black' : 'border-black'])>
                 @if ($this->mimeTypeImage($item['file_type']))
                 <img src="{{ $item['file_url'] }}?id={{ $uniqueId }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />

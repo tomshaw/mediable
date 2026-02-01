@@ -20,7 +20,7 @@
                     <div class="relative bg-gray-200 border-r border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
                         <div class="relative flex items-center justify-center h-full overflow-hidden">
                             @if(!$panel->isEditorMode())
-                            @if(count($selected))
+                            @if($selectedCount > 0)
                             <livewire:mediable::meta
                                 :attachment="$attachment"
                                 :image-width="$imageWidth"
@@ -36,8 +36,9 @@
                             @elseif($panel->isEditorMode())
                             <livewire:mediable::form
                                 :attachment="$attachment"
+                                :primary-id="$primaryId"
                                 :unique-id="$uniqueId"
-                                :key="'form-'.$uniqueId"
+                                :key="'form-editor'"
                             />
                             @endif
                         </div>
@@ -52,9 +53,6 @@
                                     :panel="$panel"
                                     :show="$show"
                                     :data="$data->getCollection()"
-                                    :files="$files"
-                                    :selected="$selected"
-                                    :attachment="$attachment"
                                     :order-columns="$orderColumns"
                                     :column-widths="$columnWidths"
                                     :unique-mime-types="$uniqueMimeTypes"
@@ -76,7 +74,6 @@
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isThumbMode()])>
                                             <livewire:mediable::attachments
                                                 :data="$data->getCollection()"
-                                                :selected="$selected"
                                                 :audio-element-id="$audioElementId"
                                                 :unique-id="$uniqueId"
                                                 :column-widths="$columnWidths"
@@ -150,7 +147,6 @@
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
                         <livewire:mediable::strip
                             :data="$data->getCollection()"
-                            :selected="$selected"
                             :unique-id="$uniqueId"
                             :key="'strip-'.$uniqueId"
                         />
@@ -158,11 +154,9 @@
                 </div>
                 @endif
 
-                @if(!$panel->isUploadMode() && !$panel->isEditorMode() && count($this->selected) && !$data->isEmpty())
+                @if(!$panel->isUploadMode() && !$panel->isEditorMode() && !$data->isEmpty())
                 <div class="bg-[#e6e6e6] h-[60px] max-h-[60px] min-h-[60px] w-full">
                     <livewire:mediable::footer
-                        :selected="$selected"
-                        :attachment="$attachment"
                         :unique-id="$uniqueId"
                         :key="'footer-'.$uniqueId"
                     />
@@ -192,7 +186,7 @@
 
         confirm(event) {
             if (window.confirm(event.message)) {
-                this.$dispatch(event.type);
+                this.$dispatch(event.type, { selectedIds: event.selectedIds || [] });
             }
         },
 

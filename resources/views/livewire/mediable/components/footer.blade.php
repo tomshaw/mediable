@@ -1,50 +1,61 @@
 <?php
 
+use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
+use TomShaw\Mediable\Models\Attachment;
 
 new class extends Component {
-    public array $selected = [];
-
-    public ?int $activeId = null;
-
     #[Reactive]
     public string $uniqueId;
 
-    #[On('footer:toggle-selected')]
-    public function toggleSelected(array $item): void
-    {
-        $index = array_search($item['id'], array_column($this->selected, 'id'));
+    public array $selectedIds = [];
 
-        if ($index !== false) {
-            array_splice($this->selected, $index, 1);
+    public ?int $activeId = null;
+
+    #[On('attachments:selection-changed')]
+    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
+    {
+        $this->selectedIds = $selectedIds;
+        $this->activeId = $activeId;
+    }
+
+    #[Computed]
+    public function selected(): Collection
+    {
+        if (empty($this->selectedIds)) {
+            return collect();
+        }
+
+        return Attachment::whereIn('id', $this->selectedIds)->get();
+    }
+
+    public function setActiveAttachment(int $id): void
+    {
+        if ($this->activeId === $id) {
             $this->activeId = null;
+            $this->dispatch('footer:clear-active-attachment');
         } else {
-            $this->selected[] = $item;
-            $this->activeId = $item['id'];
+            $this->activeId = $id;
+            $this->dispatch('footer:set-active-attachment', id: $id);
         }
     }
 
     public function confirmDelete(): void
     {
-        $this->dispatch('panel:confirm-delete');
+        $this->dispatch('panel:confirm-delete', selectedIds: $this->selectedIds);
     }
 
     public function clearSelected(): void
     {
-        $this->dispatch('panel:clear-selected');
-    }
-
-    public function setActiveAttachment(array $item): void
-    {
-        $this->activeId = $item['id'];
-        $this->dispatch('panel:set-active-attachment', item: $item);
+        $this->dispatch('attachments:clear-selected');
     }
 
     public function insertMedia(): void
     {
-        $this->dispatch('panel:insert-media');
+        $this->dispatch('panel:insert-media', selectedIds: $this->selectedIds);
     }
 
     public function mimeTypeImage(string $mimeType): bool
@@ -65,7 +76,7 @@ new class extends Component {
 
 <div class="flex items-center justify-between h-full py-0 px-4">
     <div class="flex items-center justify-start gap-2">
-        @if (count($selected))
+        @if (count($selectedIds))
         <button wire:click="confirmDelete" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-[#555] py-1.5 px-2 font-medium text-xs tracking-wider text-neutral-50">
             <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
             <span class="relative">[#]</span>
@@ -76,17 +87,17 @@ new class extends Component {
         </button>
         @endif
         <ul class="flex items-center justify-start ml-4 gap-x-2">
-            @foreach($selected as $item)
-            <li class="shadow-md cursor-pointer" wire:click="setActiveAttachment({{ json_encode($item) }})">
-                <div @class(['border border-black overflow-hidden', ($activeId && $item['id'] === $activeId) ? 'w-11 h-11' : 'w-9 h-9'])>
-                    @if ($this->mimeTypeImage($item['file_type']))
-                    <img src="{{ $item['file_url'] }}?id={{ $uniqueId }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
-                    @elseif ($this->mimeTypeVideo($item['file_type']))
-                    <img src="{{ asset("vendor/mediable/images/video.png") }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
-                    @elseif ($this->mimeTypeAudio($item['file_type']))
-                    <img src="{{ asset("vendor/mediable/images/audio.png") }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
+            @foreach($this->selected as $item)
+            <li class="shadow-md cursor-pointer" wire:click="setActiveAttachment({{ $item->id }})">
+                <div @class(['border border-black overflow-hidden', ($activeId && $item->id === $activeId) ? 'w-11 h-11' : 'w-9 h-9'])>
+                    @if ($this->mimeTypeImage($item->file_type))
+                    <img src="{{ $item->file_url }}?id={{ $uniqueId }}" class="w-full h-full object-cover" alt="{{ $item->title }}" />
+                    @elseif ($this->mimeTypeVideo($item->file_type))
+                    <img src="{{ asset("vendor/mediable/images/video.png") }}" class="w-full h-full object-cover" alt="{{ $item->title }}" />
+                    @elseif ($this->mimeTypeAudio($item->file_type))
+                    <img src="{{ asset("vendor/mediable/images/audio.png") }}" class="w-full h-full object-cover" alt="{{ $item->title }}" />
                     @else
-                    <img src="{{ asset("vendor/mediable/images/file.png") }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
+                    <img src="{{ asset("vendor/mediable/images/file.png") }}" class="w-full h-full object-cover" alt="{{ $item->title }}" />
                     @endif
                 </div>
             </li>
@@ -94,7 +105,7 @@ new class extends Component {
         </ul>
     </div>
     <div class="flex items-center justify-start gap-2">
-        @if (count($selected))
+        @if (count($selectedIds))
         <button wire:click="insertMedia" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-[#555] py-1.5 px-3 font-medium text-xs tracking-wider text-neutral-50">
             <span class="absolute h-0 w-0 rounded-full bg-blue-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
             <span class="relative">Attach Selected</span>

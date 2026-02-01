@@ -3,6 +3,8 @@
 use Livewire\Attributes\{On, Reactive};
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
+use TomShaw\Mediable\Eloquent\Eloquent;
+use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 use TomShaw\Mediable\Traits\{WithFonts, WithGraphicDraw};
 
 new class extends Component {
@@ -12,11 +14,39 @@ new class extends Component {
     #[Reactive]
     public ?AttachmentState $attachment;
 
+    #[Reactive]
+    public ?int $primaryId = null;
+
     public string $uniqueId = '';
 
     public function mount(string $uniqueId = ''): void
     {
         $this->uniqueId = $uniqueId;
+        $this->initializeScaleDimensions();
+    }
+
+    public function updatedAttachment(): void
+    {
+        $this->initializeScaleDimensions();
+    }
+
+    public function initializeScaleDimensions(): void
+    {
+        if (! $this->attachment || ! $this->mimeTypeImage($this->attachment->file_type ?? '')) {
+            return;
+        }
+
+        $filePath = Eloquent::getFilePath($this->attachment->file_dir);
+        if (! file_exists($filePath)) {
+            return;
+        }
+
+        [$width, $height, $type] = GraphicDraw::getimagesize($filePath);
+
+        if ($type) {
+            $this->scaleWidth = $width;
+            $this->scaleHeight = $height;
+        }
     }
 
     #[On('panel:regenerate-unique-id')]
@@ -33,12 +63,36 @@ new class extends Component {
 
     public function saveEditorChanges(): void
     {
-        $this->dispatch('panel:save-editor-changes');
+        if (! $this->attachment->id) {
+            return;
+        }
+
+        Eloquent::enable($this->attachment->id);
+
+        $this->editHistory = [];
+        $this->selectedForm = '';
+
+        $this->dispatch('form:editor-saved');
     }
 
     public function undoEditorChanges(): void
     {
-        $this->dispatch('panel:undo-editor-changes');
+        if (! $this->primaryId) {
+            return;
+        }
+
+        $row = Eloquent::load($this->primaryId);
+
+        $source = $row->file_dir;
+        $destination = Eloquent::randomizeName($source);
+        $destination = Eloquent::copyImageFromTo($source, $destination);
+
+        $item = Eloquent::saveImageToDatabase($this->attachment, $destination);
+
+        $this->attachment = AttachmentState::fromAttachment($item);
+        $this->editHistory = [];
+
+        $this->generateUniqueId();
     }
 
     public function mimeTypeImage(string $mimeType): bool
@@ -56,7 +110,7 @@ new class extends Component {
         </div>
     </div>
 
-    <div class="flex-grow border-b border-t border-[#ccc] scrollY h-auto p-2">
+    <div class="grow border-b border-t border-[#ccc] scrollY h-auto p-2">
         <div class="flex items-start justify-center p-0 m-0 w-full h-full">
             <div class="flex flex-col items-start justify-start w-full p-3">
 
@@ -70,7 +124,7 @@ new class extends Component {
                 @foreach($availableForms as $key => $value)
                 <button wire:click="setForm('{{$key}}')" class="group relative inline-flex items-center justify-center bg-[#555] hover:bg-[#444] rounded-full select-none appearance-none overflow-hidden h-7 w-full mb-1.5 font-medium text-xs tracking-wider text-neutral-50">
                     <span>{{ $value }}</span>
-                    <div class="w-0 translate-x-[100%] pl-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-1 group-hover:opacity-100">
+                    <div class="w-0 translate-x-full pl-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-1 group-hover:opacity-100">
                         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5">
                             <path d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
                         </svg>

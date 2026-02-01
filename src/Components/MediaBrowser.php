@@ -5,13 +5,24 @@ namespace TomShaw\Mediable\Components;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Attributes\On;
-use Livewire\{Component, WithFileUploads, WithPagination};
-use TomShaw\Mediable\Concerns\{AlertState, AttachmentState, ModalState, PanelState, ShowState};
+use Livewire\Component;
+use Livewire\WithPagination;
+use TomShaw\Mediable\Concerns\AlertState;
+use TomShaw\Mediable\Concerns\AttachmentState;
+use TomShaw\Mediable\Concerns\ModalState;
+use TomShaw\Mediable\Concerns\PanelState;
+use TomShaw\Mediable\Concerns\ShowState;
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
-use TomShaw\Mediable\Exceptions\MediaBrowserException;
+use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\{ServerLimits, WithCache, WithColumnWidths, WithExtension, WithFileSize, WithFonts, WithGraphicDraw, WithMimeTypes, WithReporting};
+use TomShaw\Mediable\Traits\ServerLimits;
+use TomShaw\Mediable\Traits\WithCache;
+use TomShaw\Mediable\Traits\WithColumnWidths;
+use TomShaw\Mediable\Traits\WithExtension;
+use TomShaw\Mediable\Traits\WithFileSize;
+use TomShaw\Mediable\Traits\WithMimeTypes;
+use TomShaw\Mediable\Traits\WithReporting;
 
 class MediaBrowser extends Component
 {
@@ -20,9 +31,6 @@ class MediaBrowser extends Component
     use WithColumnWidths;
     use WithExtension;
     use WithFileSize;
-    use WithFileUploads;
-    use WithFonts;
-    use WithGraphicDraw;
     use WithMimeTypes;
     use WithPagination;
     use WithReporting;
@@ -43,9 +51,7 @@ class MediaBrowser extends Component
 
     public bool $fullScreen = false;
 
-    public array $files = [];
-
-    public array $selected = [];
+    public int $selectedCount = 0;
 
     public array $uniqueMimeTypes = [];
 
@@ -85,6 +91,8 @@ class MediaBrowser extends Component
 
     public int $imageType = 0;
 
+    public ?int $primaryId = null;
+
     public function mount(?string $theme = null)
     {
         $this->generateUniqueId();
@@ -113,10 +121,7 @@ class MediaBrowser extends Component
 
         Eloquent::garbage();
 
-        if ($this->hasStoreAttachmentId()) {
-            $id = $this->getStoreAttachmentId();
-            $this->toggleAttachment($id);
-        }
+        $this->deleteStoreAttachmentId();
     }
 
     public function boot()
@@ -159,7 +164,7 @@ class MediaBrowser extends Component
         }
     }
 
-    #[On('media.alert')]
+    #[On('mediable.alert')]
     public function alert($event): void
     {
         $this->alert = new AlertState(
@@ -218,14 +223,9 @@ class MediaBrowser extends Component
         return $this;
     }
 
-    #[On('toolbar:create-attachments')]
-    public function createAttachments(): void
+    #[On('uploads:completed')]
+    public function handleUploadsCompleted(string $message): void
     {
-        Eloquent::create($this->files);
-
-        $count = count($this->files);
-        $message = (count($this->files) > 1) ? "Created $count attachment(s) successfully!" : 'Created attachment successfully!';
-
         $this->alert = new AlertState(
             show: true,
             type: 'success',
@@ -233,7 +233,6 @@ class MediaBrowser extends Component
         );
 
         $this->fill([
-            'files' => [],
             'orderBy' => 'id',
             'orderDir' => 'DESC',
         ]);
@@ -281,71 +280,39 @@ class MediaBrowser extends Component
         }
     }
 
-    public function toggleAttachment(int $id): void
+    #[On('attachments:selection-changed')]
+    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
-        $item = Attachment::find($id);
+        $this->selectedCount = count($selectedIds);
 
-        if (! $item) {
-            return;
-        }
-
-        $found = in_array($item['id'], array_column($this->selected, 'id'));
-
-        if ($found) {
-            foreach ($this->selected as $key => $value) {
-                if ($value['id'] === $item['id']) {
-                    unset($this->selected[$key]);
-                    break;
-                }
+        if ($activeId) {
+            $item = Attachment::find($activeId);
+            if ($item) {
+                $this->attachment = AttachmentState::fromAttachment($item);
+                $this->applyImageInfo($item);
             }
         } else {
-            array_push($this->selected, $item);
+            $this->attachment = new AttachmentState;
         }
 
-        $this->attachment = AttachmentState::fromAttachment($item);
-
-        $this->applyImageInfo($item);
-
-        $this->dispatch('mediable.scroll', id: $this->attachment->id);
-
         $this->alert = new AlertState;
-
-        $this->storeAttachmentId($this->attachment->id);
     }
 
-    public function setActiveAttachment(Attachment $item): void
+    #[On('footer:set-active-attachment')]
+    public function handleFooterSetActiveAttachment(int $id): void
     {
-        $found = in_array($item['id'], array_column($this->selected, 'id'));
-
-        if (! $found) {
-            return;
+        $item = Attachment::find($id);
+        if ($item) {
+            $this->attachment = AttachmentState::fromAttachment($item);
+            $this->applyImageInfo($item);
+            $this->enablePreviewMode();
         }
-
-        $this->attachment = AttachmentState::fromAttachment($item);
-
-        $this->applyImageInfo($item);
-
-        $this->enablePreviewMode();
-
-        $this->alert = new AlertState;
-
-        $this->storeAttachmentId($this->attachment->id);
     }
 
-    public function clearSelected(): void
+    #[On('footer:clear-active-attachment')]
+    public function handleFooterClearActiveAttachment(): void
     {
-        $this->selected = [];
-
-        $this->attachment = new AttachmentState;
-
-        $this->resetPage();
-
         $this->enableThumbMode();
-    }
-
-    public function confirmDelete()
-    {
-        $this->dispatch('mediable.confirm', type: 'delete.selected', message: 'Are you sure you want to delete selected attachments?');
     }
 
     #[On('toolbar:delete-attachment')]
@@ -353,20 +320,7 @@ class MediaBrowser extends Component
     {
         Eloquent::delete($id);
 
-        $this->selected = array_filter($this->selected, function ($item) use ($id) {
-            return $item['id'] !== $id;
-        });
-
-        if (count($this->selected)) {
-            $end = end($this->selected);
-            if ($end->count()) {
-                $this->attachment = AttachmentState::fromAttachment($end);
-                $this->storeAttachmentId($this->attachment->id);
-            }
-        } else {
-            $this->deleteStoreAttachmentId();
-            $this->attachment = new AttachmentState;
-        }
+        $this->dispatch('attachments:remove-item', id: $id);
 
         $this->alert = new AlertState(
             show: true,
@@ -376,13 +330,13 @@ class MediaBrowser extends Component
     }
 
     #[On('delete.selected')]
-    public function deleteSelected(): void
+    public function deleteSelected(array $selectedIds): void
     {
-        foreach ($this->selected as $item) {
-            Eloquent::delete($item['id']);
+        foreach ($selectedIds as $id) {
+            Eloquent::delete($id);
         }
 
-        $count = count($this->selected);
+        $count = count($selectedIds);
 
         $message = ($count > 1) ? "Deleted $count attachment(s) successfully!" : 'Deleted attachment successfully!';
 
@@ -393,24 +347,29 @@ class MediaBrowser extends Component
         );
 
         $this->attachment = new AttachmentState;
+        $this->selectedCount = 0;
 
-        $this->clearSelected();
+        $this->dispatch('attachments:clear-selected');
     }
 
     public function resetModal(): void
     {
-        $this->clearFiles();
-        $this->clearSelected();
+        $this->dispatch('uploads:reset');
+        $this->dispatch('attachments:clear-selected');
+        $this->selectedCount = 0;
+        $this->attachment = new AttachmentState;
         $this->enableThumbMode();
         $this->resetPage();
     }
 
-    public function insertMedia(): void
+    public function insertMedia(array $selectedIds): void
     {
+        $selected = Attachment::whereIn('id', $selectedIds)->get()->toArray();
+
         if ($this->modal->hasElementId()) {
-            $this->dispatch(BrowserEvents::INSERT->value, selected: $this->selected);
+            $this->dispatch(BrowserEvents::INSERT->value, selected: $selected);
         } else {
-            $this->dispatch(BrowserEvents::DEFAULT->value, $this->selected);
+            $this->dispatch(BrowserEvents::DEFAULT->value, $selected);
         }
 
         $this->closeModal();
@@ -446,21 +405,6 @@ class MediaBrowser extends Component
         $this->resetPage();
     }
 
-    public function clearFile(int $index): void
-    {
-        try {
-            array_splice($this->files, $index, 1);
-        } catch (MediaBrowserException $e) {
-            throw new MediaBrowserException($e->getMessage());
-        }
-    }
-
-    #[On('toolbar:clear-files')]
-    public function clearFiles(): void
-    {
-        $this->files = [];
-    }
-
     #[On('toolbar:order-dir-changed')]
     public function handleOrderDirChanged(string $orderDir): void
     {
@@ -491,13 +435,6 @@ class MediaBrowser extends Component
         $this->orderDir = $this->orderDir === 'asc' ? 'desc' : 'asc';
     }
 
-    public function getTotalUploadSize()
-    {
-        return array_reduce($this->files, function ($carry, $file) {
-            return $carry + $file->getSize();
-        }, 0);
-    }
-
     public function resetAudioElement()
     {
         if ($this->audioElementId) {
@@ -513,15 +450,12 @@ class MediaBrowser extends Component
     public function applyImageInfo($item): void
     {
         if ($this->mimeTypeImage($item['file_type'])) {
-            [$width, $height, $type] = $this->getImageSize(Eloquent::getFilePath($item['file_dir']));
+            [$width, $height, $type] = GraphicDraw::getimagesize(Eloquent::getFilePath($item['file_dir']));
 
             if ($type) {
                 $this->fill([
                     'imageWidth' => $width,
                     'imageHeight' => $height,
-                    'scaleWidth' => $width,
-                    'scaleHeight' => $height,
-                    'scaleMode' => null,
                 ]);
             }
         }
@@ -544,93 +478,36 @@ class MediaBrowser extends Component
         $item = Eloquent::saveImageToDatabase($this->attachment, $destination);
 
         $this->attachment = AttachmentState::fromAttachment($item);
-
-        $this->editHistory = [];
-
-        $this->selectedForm = '';
     }
 
-    #[On('panel:save-editor-changes')]
-    public function saveEditorChanges()
+    #[On('form:editor-saved')]
+    public function handleEditorSaved()
     {
-        if (! $this->attachment->id) {
-            return;
-        }
-
-        Eloquent::enable($this->attachment->id);
-
-        $this->fillEditorProperties();
+        $this->primaryId = null;
 
         $this->resetPage();
 
-        $this->editHistory = [];
-
-        $this->primaryId = null;
-
         $this->enableThumbMode();
-    }
-
-    #[On('panel:undo-editor-changes')]
-    public function undoEditorChanges()
-    {
-        if (! $this->primaryId) {
-            return;
-        }
-
-        $row = Eloquent::load($this->primaryId);
-
-        $this->primaryId = $row->id;
-
-        $source = $row->file_dir;
-
-        $destination = Eloquent::randomizeName($source);
-
-        $destination = Eloquent::copyImageFromTo($source, $destination);
-
-        $item = Eloquent::saveImageToDatabase($this->attachment, $destination);
-
-        $this->attachment = AttachmentState::fromAttachment($item);
-
-        $this->editHistory = [];
     }
 
     #[On('toolbar:close-image-editor')]
     public function closeImageEditor()
     {
-        $this->fillEditorProperties();
-
-        $this->editHistory = [];
-
         $this->primaryId = null;
 
         $this->enableThumbMode();
     }
 
-    #[On('panel:set-active-attachment')]
-    public function handleSetActiveAttachment(array $item): void
-    {
-        $attachment = Attachment::find($item['id']);
-        if ($attachment) {
-            $this->setActiveAttachment($attachment);
-        }
-    }
-
     #[On('panel:confirm-delete')]
-    public function handleConfirmDelete(): void
+    public function handleConfirmDelete(array $selectedIds): void
     {
-        $this->confirmDelete();
-    }
-
-    #[On('panel:clear-selected')]
-    public function handleClearSelected(): void
-    {
-        $this->clearSelected();
+        $this->dispatch('mediable.confirm', type: 'delete.selected', message: 'Are you sure you want to delete selected attachments?', selectedIds: $selectedIds);
     }
 
     #[On('panel:insert-media')]
-    public function handleInsertMedia(): void
+    public function handleInsertMedia(array $selectedIds): void
     {
-        $this->insertMedia();
+        $this->insertMedia($selectedIds);
     }
 
     #[On('panel:unique-id-updated')]

@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
-use TomShaw\Mediable\Concerns\{AttachmentState, PanelState, ShowState};
+use TomShaw\Mediable\Concerns\{PanelState, ShowState};
 
 new class extends Component {
     #[Reactive]
@@ -14,15 +15,6 @@ new class extends Component {
 
     #[Reactive]
     public Collection $data;
-
-    #[Reactive]
-    public array $files;
-
-    #[Reactive]
-    public array $selected;
-
-    #[Reactive]
-    public ?AttachmentState $attachment;
 
     #[Reactive]
     public array $orderColumns;
@@ -40,6 +32,25 @@ new class extends Component {
     public int $defaultColumnWidth = 4;
 
     public string $selectedMimeType = '';
+
+    public array $selectedIds = [];
+
+    public ?int $activeId = null;
+
+    public int $uploadFileCount = 0;
+
+    #[On('uploads:files-changed')]
+    public function handleFilesChanged(int $count): void
+    {
+        $this->uploadFileCount = $count;
+    }
+
+    #[On('attachments:selection-changed')]
+    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
+    {
+        $this->selectedIds = $selectedIds;
+        $this->activeId = $activeId;
+    }
 
     public function mount(
         string $orderBy = 'id',
@@ -85,12 +96,12 @@ new class extends Component {
 
     public function clearFiles(): void
     {
-        $this->dispatch('toolbar:clear-files');
+        $this->dispatch('uploads:reset');
     }
 
     public function createAttachments(): void
     {
-        $this->dispatch('toolbar:create-attachments');
+        $this->dispatch('uploads:submit');
     }
 
     public function toggleMetaInfo(): void
@@ -109,9 +120,11 @@ new class extends Component {
         $this->dispatch('toolbar:toggle-sidebar');
     }
 
-    public function deleteAttachment(int $id): void
+    public function deleteAttachment(): void
     {
-        $this->dispatch('toolbar:delete-attachment', id: $id);
+        if ($this->activeId) {
+            $this->dispatch('toolbar:delete-attachment', id: $this->activeId);
+        }
     }
 
     public function closeImageEditor(): void
@@ -130,7 +143,7 @@ new class extends Component {
     </button>
     @endif
   </div>
-  @if(count($files) >= 1)
+  @if($uploadFileCount >= 1)
   <div class="flex items-center justify-end gap-1.5 xl:gap-2">
     <button wire:click="clearFiles" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
       <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
@@ -195,9 +208,9 @@ new class extends Component {
   </div>
   <div class="flex items-center justify-end gap-1.5 xl:gap-2">
 
-    @if ($show->isShowEditor() && count($selected))
+    @if ($show->isShowEditor() && count($selectedIds))
     <button wire:click="enableEditorMode()" class="group relative inline-flex h-7 items-center justify-center rounded-full overflow-hidden bg-[#555] px-4 font-medium text-xs tracking-wider text-neutral-50"><span>Editor</span>
-      <div class="w-0 translate-x-[100%] pl-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-1 group-hover:opacity-100"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5">
+      <div class="w-0 translate-x-full pl-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-1 group-hover:opacity-100"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5">
           <path d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg></div>
     </button>
@@ -206,7 +219,7 @@ new class extends Component {
     @if ($show->isShowUpload())
     <button wire:click="enableUploadMode" class="group relative inline-flex h-7 items-center justify-center rounded-full bg-[#555] py-1.5 pl-5 pr-7 font-medium text-xs tracking-wider text-neutral-50"><span class="z-10 pr-2">Uploads</span>
       <div class="absolute right-1 inline-flex h-6 w-6 items-center justify-end rounded-full bg-[#696969] transition-[width] group-hover:w-[calc(100%-8px)]">
-        <div class="mr-[2px] flex items-center justify-center"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-neutral-50">
+        <div class="mr-0.5 flex items-center justify-center"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-neutral-50">
             <path d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
           </svg></div>
       </div>
@@ -237,16 +250,16 @@ new class extends Component {
   </div>
   <div class="flex flex-row items-center justify-end gap-1.5 xl:gap-2">
 
-    @if($attachment)
-    <button wire:click="deleteAttachment({{$attachment->id}})" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
+    @if($activeId)
+    <button wire:click="deleteAttachment" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50">
       <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
       <span class="relative">Trash</span>
     </button>
     @endif
 
-    @if ($show->isShowEditor() && count($selected))
+    @if ($show->isShowEditor() && count($selectedIds))
     <button wire:click="enableEditorMode()" class="group relative inline-flex h-7 items-center justify-center overflow-hidden rounded-full bg-[#555] px-4 font-medium text-xs tracking-wider text-neutral-50"><span>Editor</span>
-      <div class="w-0 translate-x-[100%] pl-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-1 group-hover:opacity-100"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5">
+      <div class="w-0 translate-x-full pl-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-1 group-hover:opacity-100"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5">
           <path d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg></div>
     </button>

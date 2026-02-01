@@ -60,7 +60,7 @@ new class extends Component {
         </div>
     </div>
 
-    <div class="flex-grow border-b border-t border-[#ccc] scrollY h-auto p-2">
+    <div class="grow border-b border-t border-[#ccc] scrollY h-auto p-2">
         <div class="flex items-start justify-center p-0 m-0 w-full h-full">
             <form class="w-full" wire:submit.prevent="updateAttachment" role="form">
                 <div class="p-2 m-0">

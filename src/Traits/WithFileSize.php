@@ -4,6 +4,13 @@ namespace TomShaw\Mediable\Traits;
 
 trait WithFileSize
 {
+    public function getTotalUploadSize(): int
+    {
+        return array_reduce($this->files, function ($carry, $file) {
+            return $carry + $file->getSize();
+        }, 0);
+    }
+
     public function formatBytes(int|float|null $bytes, int $precision = 2): string
     {
         if ($bytes === null) {
