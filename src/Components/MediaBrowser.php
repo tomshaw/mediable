@@ -169,6 +169,7 @@ class MediaBrowser extends Component
         );
     }
 
+    #[On('toolbar:enable-thumb-mode')]
     public function enableThumbMode(): self
     {
         $this->panel = new PanelState(thumbMode: true);
@@ -183,6 +184,7 @@ class MediaBrowser extends Component
         return $this;
     }
 
+    #[On('toolbar:enable-editor-mode')]
     public function enableEditorMode(): self
     {
         $this->panel = new PanelState(editorMode: true);
@@ -192,6 +194,7 @@ class MediaBrowser extends Component
         return $this;
     }
 
+    #[On('toolbar:enable-upload-mode')]
     public function enableUploadMode(): self
     {
         $this->panel = new PanelState(uploadMode: true);
@@ -199,6 +202,7 @@ class MediaBrowser extends Component
         return $this;
     }
 
+    #[On('toolbar:toggle-sidebar')]
     public function toggleSidebar(): self
     {
         $this->show = new ShowState(showSidebar: ! $this->show->isShowSidebar(), showMetaInfo: $this->show->isShowMetaInfo());
@@ -206,6 +210,7 @@ class MediaBrowser extends Component
         return $this;
     }
 
+    #[On('toolbar:toggle-meta-info')]
     public function toggleMetaInfo(): self
     {
         $this->show = new ShowState(showMetaInfo: ! $this->show->isShowMetaInfo(), showSidebar: $this->show->isShowSidebar());
@@ -213,6 +218,7 @@ class MediaBrowser extends Component
         return $this;
     }
 
+    #[On('toolbar:create-attachments')]
     public function createAttachments(): void
     {
         Eloquent::create($this->files);
@@ -235,9 +241,10 @@ class MediaBrowser extends Component
         $this->enableThumbMode();
     }
 
-    public function updateAttachment(): void
+    #[On('panel:update-attachment')]
+    public function updateAttachment(?array $data = null): void
     {
-        $data = [
+        $data = $data ?? [
             'title' => $this->attachment->title,
             'caption' => $this->attachment->caption,
             'description' => $this->attachment->description,
@@ -341,6 +348,7 @@ class MediaBrowser extends Component
         $this->dispatch('mediable.confirm', type: 'delete.selected', message: 'Are you sure you want to delete selected attachments?');
     }
 
+    #[On('toolbar:delete-attachment')]
     public function deleteAttachment(int $id): void
     {
         Eloquent::delete($id);
@@ -447,9 +455,16 @@ class MediaBrowser extends Component
         }
     }
 
+    #[On('toolbar:clear-files')]
     public function clearFiles(): void
     {
         $this->files = [];
+    }
+
+    #[On('toolbar:order-dir-changed')]
+    public function handleOrderDirChanged(string $orderDir): void
+    {
+        $this->orderDir = $orderDir;
     }
 
     public function toggleOrderDir()
@@ -516,6 +531,7 @@ class MediaBrowser extends Component
         $this->selectedForm = '';
     }
 
+    #[On('panel:save-editor-changes')]
     public function saveEditorChanges()
     {
         if (! $this->attachment->id) {
@@ -535,6 +551,7 @@ class MediaBrowser extends Component
         $this->enableThumbMode();
     }
 
+    #[On('panel:undo-editor-changes')]
     public function undoEditorChanges()
     {
         if (! $this->primaryId) {
@@ -558,6 +575,7 @@ class MediaBrowser extends Component
         $this->editHistory = [];
     }
 
+    #[On('toolbar:close-image-editor')]
     public function closeImageEditor()
     {
         $this->fillEditorProperties();
@@ -569,6 +587,13 @@ class MediaBrowser extends Component
         $this->enableThumbMode();
     }
 
+    #[On('panel:unique-id-updated')]
+    public function handleUniqueIdUpdated(string $uniqueId): void
+    {
+        $this->uniqueId = $uniqueId;
+        $this->dispatch('panel:regenerate-unique-id', uniqueId: $uniqueId);
+    }
+
     public function generateUniqueId()
     {
         $this->uniqueId = uniqid();
@@ -576,7 +601,7 @@ class MediaBrowser extends Component
 
     private function renderView(LengthAwarePaginator $paginator)
     {
-        return view('mediable::'.$this->theme.'.media-browser', [
+        return view('mediable::livewire.media-browser', [
             'uniqueId' => $this->uniqueId,
             'data' => $paginator,
         ]);

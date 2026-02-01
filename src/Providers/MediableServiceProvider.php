@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use TomShaw\Mediable\Assets\{Scripts, Styles};
-use TomShaw\Mediable\Components\MediaBrowser;
+use TomShaw\Mediable\Components\{MediaBrowser, Panels\AttachmentsPanel, Panels\EditorPanel, Panels\FooterPanel, Panels\FormPanel, Panels\HeaderPanel, Panels\PreviewPanel, Panels\SidebarPanel, Panels\StripPanel, Panels\ToolbarPanel, Panels\UploadsPanel};
 use TomShaw\Mediable\Console\Commands\{InstallCommand, UpdateCommand};
 
 class MediableServiceProvider extends ServiceProvider
@@ -56,6 +56,16 @@ class MediableServiceProvider extends ServiceProvider
     protected function registerLivewireComponents(): void
     {
         Livewire::component('mediable', MediaBrowser::class);
+        Livewire::component('mediable-attachments-panel', AttachmentsPanel::class);
+        Livewire::component('mediable-preview-panel', PreviewPanel::class);
+        Livewire::component('mediable-editor-panel', EditorPanel::class);
+        Livewire::component('mediable-uploads-panel', UploadsPanel::class);
+        Livewire::component('mediable-header-panel', HeaderPanel::class);
+        Livewire::component('mediable-footer-panel', FooterPanel::class);
+        Livewire::component('mediable-strip-panel', StripPanel::class);
+        Livewire::component('mediable-form-panel', FormPanel::class);
+        Livewire::component('mediable-sidebar-panel', SidebarPanel::class);
+        Livewire::component('mediable-toolbar-panel', ToolbarPanel::class);
     }
 
     /**

@@ -11,14 +11,14 @@
         <div class="flex items-start justify-center p-0 m-0 w-full h-full">
             <div class="flex flex-col items-start justify-start w-full p-3">
 
-                @if ($this->mimeTypeImage($this->attachment->file_type))
+                @if ($attachment && $this->mimeTypeImage($attachment->file_type))
                 <figure class="w-full mb-3">
-                    <img src="{{ $this->attachment->file_url }}?id={{ $uniqueId }}" class="w-full object-cover" />
+                    <img src="{{ $attachment->file_url }}?id={{ $uniqueId }}" class="w-full object-cover" />
                 </figure>
                 @endif
 
                 @if($selectedForm == '')
-                @foreach($this->availableForms as $key => $value)
+                @foreach($availableForms as $key => $value)
                 <button wire:click="setForm('{{$key}}')" class="group relative inline-flex items-center justify-center bg-[#555] hover:bg-[#444] rounded-full select-none appearance-none overflow-hidden h-7 w-full mb-1.5 font-medium text-xs tracking-wider text-neutral-50">
                     <span>{{ $value }}</span>
                     <div class="w-0 translate-x-[100%] pl-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-1 group-hover:opacity-100">

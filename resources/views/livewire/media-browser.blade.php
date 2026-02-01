@@ -7,7 +7,11 @@
             <div class="relative flex flex-col justify-between w-full h-full overflow-hidden">
 
                 <div class="bg-gray-100 h-12 min-h-12 max-h-12 xl:h-14 xl:min-h-14 xl:max-h-14 2xl:h-16 2xl:min-h-16 2xl:max-h-16 w-full">
-                    @include("mediable::tailwind.includes.header")
+                    <livewire:mediable-header-panel
+                        :show="$show"
+                        wire:model.live="searchTerm"
+                        :key="'header-'.$uniqueId"
+                    />
                 </div>
 
                 <div class="bg-gray-200 h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
@@ -22,7 +26,11 @@
                             @include("mediable::tailwind.includes.stats")
                             @endif
                             @elseif($panel->isEditorMode())
-                            @include("mediable::tailwind.includes.form")
+                            <livewire:mediable-form-panel
+                                :attachment="$attachment"
+                                :unique-id="$uniqueId"
+                                :key="'form-'.$uniqueId"
+                            />
                             @endif
                         </div>
                     </div>
@@ -40,16 +48,39 @@
                                 <div class="w-full h-full overflow-y-auto">
                                     <div class="relative p-0 m-0 h-full w-full">
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isThumbMode()])>
-                                            @include("mediable::tailwind.includes.attachments")
+                                            <livewire:mediable-attachments-panel
+                                                :data="$data"
+                                                :selected="$selected"
+                                                :audio-element-id="$audioElementId"
+                                                :unique-id="$uniqueId"
+                                                :column-widths="$columnWidths"
+                                                :default-column-width="$defaultColumnWidth"
+                                                :key="'attachments-'.$uniqueId"
+                                            />
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isPreviewMode()])>
-                                            @include("mediable::tailwind.includes.previews")
+                                            <livewire:mediable-preview-panel
+                                                :attachment="$attachment"
+                                                :unique-id="$uniqueId"
+                                                :key="'preview-'.$uniqueId"
+                                            />
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isEditorMode()])>
-                                            @include("mediable::tailwind.includes.editor")
+                                            <livewire:mediable-editor-panel
+                                                :attachment="$attachment"
+                                                :unique-id="$uniqueId"
+                                                :key="'editor-'.$uniqueId"
+                                            />
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isUploadMode()])>
-                                            @include("mediable::tailwind.includes.uploads")
+                                            <livewire:mediable-uploads-panel
+                                                :max-upload-size="$maxUploadSize"
+                                                :max-file-uploads="$maxFileUploads"
+                                                :max-upload-file-size="$maxUploadFileSize"
+                                                :post-max-size="$postMaxSize"
+                                                :memory-limit="$memoryLimit"
+                                                :key="'uploads-'.$uniqueId"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -79,7 +110,10 @@
 
                     @if($show->isShowSidebar() && !$panel->isUploadMode() && !$data->isEmpty())
                     <div class="relative bg-gray-200 border-l border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
-                        @include("mediable::tailwind.includes.sidebar")
+                        <livewire:mediable-sidebar-panel
+                            :attachment="$attachment"
+                            :key="'sidebar-'.$uniqueId"
+                        />
                     </div>
                     @endif
 
@@ -88,14 +122,24 @@
                 @if($show->isShowImageStrip() && !$panel->isUploadMode() && !$panel->isEditorMode() && !$data->isEmpty())
                 <div class="hidden 2xl:block bg-[#e5e7eb] border-b border-gray-300 h-[100px] max-h-[100px] min-h-[100px] w-full overflow-hidden">
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
-                        @include("mediable::tailwind.includes.strip")
+                        <livewire:mediable-strip-panel
+                            :data="$data"
+                            :selected="$selected"
+                            :unique-id="$uniqueId"
+                            :key="'strip-'.$uniqueId"
+                        />
                     </div>
                 </div>
                 @endif
 
                 @if(!$panel->isUploadMode() && !$panel->isEditorMode() && count($this->selected) && !$data->isEmpty())
                 <div class="bg-[#e6e6e6] h-[60px] max-h-[60px] min-h-[60px] w-full">
-                    @include("mediable::tailwind.includes.footer")
+                    <livewire:mediable-footer-panel
+                        :selected="$selected"
+                        :attachment="$attachment"
+                        :unique-id="$uniqueId"
+                        :key="'footer-'.$uniqueId"
+                    />
                 </div>
                 @endif
 
