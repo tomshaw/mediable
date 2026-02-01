@@ -36,10 +36,10 @@ new class extends Component {
     {
         if ($this->activeId === $id) {
             $this->activeId = null;
-            $this->dispatch('footer:clear-active-attachment');
+            $this->dispatch('attachment:active-cleared');
         } else {
             $this->activeId = $id;
-            $this->dispatch('footer:set-active-attachment', id: $id);
+            $this->dispatch('attachment:active-changed', id: $id);
         }
     }
 

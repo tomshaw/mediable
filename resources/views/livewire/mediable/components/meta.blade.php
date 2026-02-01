@@ -1,18 +1,19 @@
 <?php
 
+use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\GraphicDraw\GraphicDraw;
+use TomShaw\Mediable\Models\Attachment;
 use TomShaw\Mediable\Traits\{WithFileSize, WithMimeTypes};
 
 new class extends Component {
     use WithFileSize;
     use WithMimeTypes;
 
-    #[Reactive]
-    public ?AttachmentState $attachment;
+    public ?AttachmentState $attachment = null;
 
     #[Reactive]
     public ?string $uniqueId = null;
@@ -21,14 +22,40 @@ new class extends Component {
 
     public int $imageHeight = 0;
 
-    public function updatedAttachment(): void
+    #[On('attachments:selection-changed')]
+    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
-        $this->calculateImageDimensions();
+        $this->loadAttachment($activeId);
     }
 
-    public function mount(): void
+    #[On('attachment:active-changed')]
+    public function handleActiveAttachmentChanged(int $id): void
     {
-        $this->calculateImageDimensions();
+        $this->loadAttachment($id);
+    }
+
+    #[On('attachment:active-cleared')]
+    public function handleActiveAttachmentCleared(): void
+    {
+        $this->attachment = null;
+        $this->imageWidth = 0;
+        $this->imageHeight = 0;
+    }
+
+    protected function loadAttachment(?int $id): void
+    {
+        if ($id) {
+            $item = Attachment::find($id);
+            if ($item) {
+                $this->attachment = AttachmentState::fromAttachment($item);
+                $this->calculateImageDimensions();
+                return;
+            }
+        }
+
+        $this->attachment = null;
+        $this->imageWidth = 0;
+        $this->imageHeight = 0;
     }
 
     protected function calculateImageDimensions(): void

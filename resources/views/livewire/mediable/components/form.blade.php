@@ -1,18 +1,18 @@
 <?php
 
-use Livewire\Attributes\{On, Reactive};
+use Livewire\Attributes\On;
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\GraphicDraw\GraphicDraw;
+use TomShaw\Mediable\Models\Attachment;
 use TomShaw\Mediable\Traits\{WithFonts, WithGraphicDraw};
 
 new class extends Component {
     use WithFonts;
     use WithGraphicDraw;
 
-    #[Reactive]
-    public ?AttachmentState $initialAttachment;
+    public ?AttachmentState $selectedAttachment = null;
 
     public ?AttachmentState $attachment = null;
 
@@ -23,20 +23,67 @@ new class extends Component {
     public function mount(string $uniqueId = ''): void
     {
         $this->uniqueId = $uniqueId;
-        $this->syncFromInitialAttachment();
+        $this->dispatch('form:request-active-id');
     }
 
-    public function updatedInitialAttachment(): void
+    #[On('form:receive-active-id')]
+    public function handleReceiveActiveId(int $id): void
     {
-        $this->syncFromInitialAttachment();
+        $this->loadSelectedAttachment($id);
+        $this->prepareImageEditor();
     }
 
-    protected function syncFromInitialAttachment(): void
+    #[On('attachments:selection-changed')]
+    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
-        if ($this->initialAttachment) {
-            $this->attachment = clone $this->initialAttachment;
+        $this->loadSelectedAttachment($activeId);
+    }
+
+    #[On('attachment:active-changed')]
+    public function handleActiveAttachmentChanged(int $id): void
+    {
+        $this->loadSelectedAttachment($id);
+    }
+
+    #[On('attachment:active-cleared')]
+    public function handleActiveAttachmentCleared(): void
+    {
+        $this->selectedAttachment = null;
+    }
+
+    protected function loadSelectedAttachment(?int $id): void
+    {
+        if ($id) {
+            $item = Attachment::find($id);
+            if ($item) {
+                $this->selectedAttachment = AttachmentState::fromAttachment($item);
+                return;
+            }
         }
+
+        $this->selectedAttachment = null;
+    }
+
+
+    protected function prepareImageEditor(): void
+    {
+        if (! $this->selectedAttachment) {
+            return;
+        }
+
+        $originalId = $this->selectedAttachment->getId();
+        $source = $this->selectedAttachment->getFileDir();
+        $destination = Eloquent::randomizeName($source);
+        $destination = Eloquent::copyImageFromTo($source, $destination);
+
+        $item = Eloquent::saveImageToDatabase($this->selectedAttachment, $destination);
+
+        $this->attachment = AttachmentState::fromAttachment($item);
+        $this->primaryId = $originalId;
+
         $this->initializeScaleDimensions();
+
+        $this->dispatch('editor:attachment-updated', id: $this->attachment->getId());
     }
 
     public function initializeScaleDimensions(): void
@@ -58,16 +105,11 @@ new class extends Component {
         }
     }
 
-    #[On('form:editor-prepared')]
-    public function handleEditorPrepared(int $primaryId): void
-    {
-        $this->primaryId = $primaryId;
-    }
-
     #[On('toolbar:close-image-editor')]
     public function handleEditorClosed(): void
     {
         $this->primaryId = null;
+        $this->attachment = null;
         $this->editHistory = [];
         $this->selectedForm = '';
     }
@@ -117,6 +159,8 @@ new class extends Component {
         $this->editHistory = [];
 
         $this->generateUniqueId();
+
+        $this->dispatch('editor:attachment-updated', id: $this->attachment->getId());
     }
 
     public function mimeTypeImage(string $mimeType): bool

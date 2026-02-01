@@ -22,7 +22,7 @@ new class extends Component {
 
     public function setActiveAttachment(int $id): void
     {
-        $this->dispatch('footer:set-active-attachment', id: $id);
+        $this->dispatch('attachment:active-changed', id: $id);
     }
 
     public function isSelected(int $id): bool

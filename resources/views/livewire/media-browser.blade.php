@@ -20,20 +20,12 @@
                     <div class="relative bg-gray-200 border-r border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
                         <div class="relative flex items-center justify-center h-full overflow-hidden">
                             @if(!$panel->isEditorMode())
-                            @if($selectedCount > 0)
                             <livewire:mediable::meta
-                                :attachment="$attachment"
                                 :unique-id="$uniqueId"
                                 :key="'meta-'.$uniqueId"
                             />
-                            @elseif($show->isShowAppStats())
-                            <livewire:mediable::stats
-                                :key="'stats-'.$uniqueId"
-                            />
-                            @endif
-                            @elseif($panel->isEditorMode())
+                            @else
                             <livewire:mediable::form
-                                :initial-attachment="$attachment"
                                 :unique-id="$uniqueId"
                                 :key="'form-editor'"
                             />
@@ -79,16 +71,14 @@
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isPreviewMode()])>
                                             <livewire:mediable::preview
-                                                :attachment="$attachment"
                                                 :unique-id="$uniqueId"
                                                 :key="'preview-'.$uniqueId"
                                             />
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isEditorMode()])>
                                             <livewire:mediable::editor
-                                                :attachment="$attachment"
                                                 :unique-id="$uniqueId"
-                                                :key="'editor-'.$uniqueId"
+                                                :key="'editor'"
                                             />
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isUploadMode()])>
@@ -130,7 +120,6 @@
                     @if($show->isShowSidebar() && !$panel->isUploadMode() && !$data->isEmpty())
                     <div class="relative bg-gray-200 border-l border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
                         <livewire:mediable::sidebar
-                            :attachment="$attachment"
                             :key="'sidebar-'.$uniqueId"
                         />
                     </div>

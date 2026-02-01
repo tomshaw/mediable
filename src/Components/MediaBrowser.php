@@ -7,7 +7,6 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 use TomShaw\Mediable\Concerns\AlertState;
-use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Concerns\ModalState;
 use TomShaw\Mediable\Concerns\PanelState;
 use TomShaw\Mediable\Concerns\ShowState;
@@ -37,8 +36,6 @@ class MediaBrowser extends Component
 
     public ModalState $modal;
 
-    public AttachmentState $attachment;
-
     public PanelState $panel;
 
     public ShowState $show;
@@ -48,8 +45,6 @@ class MediaBrowser extends Component
     public string $theme = 'tailwind';
 
     public bool $fullScreen = false;
-
-    public int $selectedCount = 0;
 
     public array $uniqueMimeTypes = [];
 
@@ -88,8 +83,6 @@ class MediaBrowser extends Component
         $this->modal = new ModalState;
 
         $this->alert = new AlertState;
-
-        $this->attachment = new AttachmentState;
 
         $this->panel = new PanelState(thumbMode: true);
 
@@ -168,8 +161,6 @@ class MediaBrowser extends Component
     {
         $this->panel = new PanelState(editorMode: true);
 
-        $this->prepareImageEditor();
-
         return $this;
     }
 
@@ -214,35 +205,14 @@ class MediaBrowser extends Component
         $this->enableThumbMode();
     }
 
-    #[On('attachments:selection-changed')]
-    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
+    #[On('attachment:active-changed')]
+    public function handleActiveAttachmentChanged(int $id): void
     {
-        $this->selectedCount = count($selectedIds);
-
-        if ($activeId) {
-            $item = Attachment::find($activeId);
-            if ($item) {
-                $this->attachment = AttachmentState::fromAttachment($item);
-            }
-        } else {
-            $this->attachment = new AttachmentState;
-        }
-
-        $this->alert = new AlertState;
+        $this->enablePreviewMode();
     }
 
-    #[On('footer:set-active-attachment')]
-    public function handleFooterSetActiveAttachment(int $id): void
-    {
-        $item = Attachment::find($id);
-        if ($item) {
-            $this->attachment = AttachmentState::fromAttachment($item);
-            $this->enablePreviewMode();
-        }
-    }
-
-    #[On('footer:clear-active-attachment')]
-    public function handleFooterClearActiveAttachment(): void
+    #[On('attachment:active-cleared')]
+    public function handleActiveAttachmentCleared(): void
     {
         $this->enableThumbMode();
     }
@@ -278,9 +248,6 @@ class MediaBrowser extends Component
             message: $message
         );
 
-        $this->attachment = new AttachmentState;
-        $this->selectedCount = 0;
-
         $this->dispatch('attachments:clear-selected');
     }
 
@@ -288,8 +255,6 @@ class MediaBrowser extends Component
     {
         $this->dispatch('uploads:reset');
         $this->dispatch('attachments:clear-selected');
-        $this->selectedCount = 0;
-        $this->attachment = new AttachmentState;
         $this->enableThumbMode();
         $this->resetPage();
     }
@@ -371,27 +336,6 @@ class MediaBrowser extends Component
     public function updatingPage(): void
     {
         $this->dispatch('attachments:reset-audio');
-    }
-
-    public function prepareImageEditor(): void
-    {
-        if (! $this->panel->IsEditorMode()) {
-            return;
-        }
-
-        $originalId = $this->attachment->getId();
-
-        $source = $this->attachment->getFileDir();
-
-        $destination = Eloquent::randomizeName($source);
-
-        $destination = Eloquent::copyImageFromTo($source, $destination);
-
-        $item = Eloquent::saveImageToDatabase($this->attachment, $destination);
-
-        $this->attachment = AttachmentState::fromAttachment($item);
-
-        $this->dispatch('form:editor-prepared', primaryId: $originalId);
     }
 
     #[On('form:editor-saved')]

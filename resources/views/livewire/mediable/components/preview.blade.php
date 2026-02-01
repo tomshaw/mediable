@@ -1,15 +1,47 @@
 <?php
 
+use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
+use TomShaw\Mediable\Models\Attachment;
 
 new class extends Component {
-    #[Reactive]
-    public ?AttachmentState $attachment;
+    public ?AttachmentState $attachment = null;
 
     #[Reactive]
     public string $uniqueId;
+
+    #[On('attachments:selection-changed')]
+    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
+    {
+        $this->loadAttachment($activeId);
+    }
+
+    #[On('attachment:active-changed')]
+    public function handleActiveAttachmentChanged(int $id): void
+    {
+        $this->loadAttachment($id);
+    }
+
+    #[On('attachment:active-cleared')]
+    public function handleActiveAttachmentCleared(): void
+    {
+        $this->attachment = null;
+    }
+
+    protected function loadAttachment(?int $id): void
+    {
+        if ($id) {
+            $item = Attachment::find($id);
+            if ($item) {
+                $this->attachment = AttachmentState::fromAttachment($item);
+                return;
+            }
+        }
+
+        $this->attachment = null;
+    }
 
     public function mimeTypeImage(string $mimeType): bool
     {

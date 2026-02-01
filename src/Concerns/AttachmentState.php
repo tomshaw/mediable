@@ -70,22 +70,27 @@ final class AttachmentState implements Wireable
 
     public static function fromLivewire($value)
     {
+        return self::fromArray($value);
+    }
+
+    public static function fromArray(array $value): self
+    {
         return new self(
-            id: $value['id'],
-            file_name: $value['file_name'],
-            file_original_name: $value['file_original_name'],
-            file_type: $value['file_type'],
-            file_size: $value['file_size'],
-            file_dir: $value['file_dir'],
-            file_url: $value['file_url'],
-            title: $value['title'],
-            caption: $value['caption'],
-            description: $value['description'],
-            sort_order: $value['sort_order'],
-            styles: $value['styles'],
-            hidden: $value['hidden'],
-            created_at: $value['created_at'],
-            updated_at: $value['updated_at'],
+            id: $value['id'] ?? null,
+            file_name: $value['file_name'] ?? '',
+            file_original_name: $value['file_original_name'] ?? '',
+            file_type: $value['file_type'] ?? '',
+            file_size: $value['file_size'] ?? 0,
+            file_dir: $value['file_dir'] ?? '',
+            file_url: $value['file_url'] ?? '',
+            title: $value['title'] ?? '',
+            caption: $value['caption'] ?? '',
+            description: $value['description'] ?? '',
+            sort_order: $value['sort_order'] ?? 0,
+            styles: $value['styles'] ?? '',
+            hidden: $value['hidden'] ?? false,
+            created_at: $value['created_at'] ?? null,
+            updated_at: $value['updated_at'] ?? null,
         );
     }
 

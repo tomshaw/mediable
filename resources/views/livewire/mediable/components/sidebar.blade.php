@@ -1,14 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Validator;
-use Livewire\Attributes\Reactive;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Eloquent\Eloquent;
+use TomShaw\Mediable\Models\Attachment;
 
 new class extends Component {
-    #[Reactive]
-    public ?AttachmentState $attachment;
+    public ?AttachmentState $attachment = null;
 
     public string $title = '';
 
@@ -20,14 +20,25 @@ new class extends Component {
 
     public string $description = '';
 
-    public function mount(): void
+    #[On('attachments:selection-changed')]
+    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
-        $this->syncFormFromAttachment();
+        $this->loadAttachment($activeId);
     }
 
-    public function updatedAttachment(): void
+    protected function loadAttachment(?int $id): void
     {
-        $this->syncFormFromAttachment();
+        if ($id) {
+            $item = Attachment::find($id);
+            if ($item) {
+                $this->attachment = AttachmentState::fromAttachment($item);
+                $this->syncFormFromAttachment();
+                return;
+            }
+        }
+
+        $this->attachment = null;
+        $this->resetForm();
     }
 
     protected function syncFormFromAttachment(): void
@@ -39,6 +50,15 @@ new class extends Component {
             $this->styles = $this->attachment->styles ?? '';
             $this->description = $this->attachment->description ?? '';
         }
+    }
+
+    protected function resetForm(): void
+    {
+        $this->title = '';
+        $this->caption = '';
+        $this->sort_order = 0;
+        $this->styles = '';
+        $this->description = '';
     }
 
     public function updateAttachment(): void
@@ -66,7 +86,7 @@ new class extends Component {
         $validator = Validator::make($data, $rules);
 
         if ($validator->fails()) {
-            $this->dispatch('mediable.alert', event: [
+            $this->dispatch('mediable.alert', [
                 'type' => 'error',
                 'message' => $validator->errors()->first(),
             ]);
@@ -75,7 +95,7 @@ new class extends Component {
 
         Eloquent::update($this->attachment->id, $validator->validated());
 
-        $this->dispatch('mediable.alert', event: [
+        $this->dispatch('mediable.alert', [
             'type' => 'success',
             'message' => 'Attachment updated successfully!',
         ]);
