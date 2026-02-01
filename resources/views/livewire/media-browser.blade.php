@@ -7,7 +7,7 @@
             <div class="relative flex flex-col justify-between w-full h-full overflow-hidden">
 
                 <div class="bg-gray-100 h-12 min-h-12 max-h-12 xl:h-14 xl:min-h-14 xl:max-h-14 2xl:h-16 2xl:min-h-16 2xl:max-h-16 w-full">
-                    <livewire:mediable-header-panel
+                    <livewire:mediable-header
                         :show="$show"
                         wire:model.live="searchTerm"
                         :key="'header-'.$uniqueId"
@@ -26,7 +26,7 @@
                             @include("mediable::tailwind.includes.stats")
                             @endif
                             @elseif($panel->isEditorMode())
-                            <livewire:mediable-form-panel
+                            <livewire:mediable-form
                                 :attachment="$attachment"
                                 :unique-id="$uniqueId"
                                 :key="'form-'.$uniqueId"
@@ -40,7 +40,7 @@
                         <div class="flex flex-col h-full">
 
                             <div class="relative flex items-center justify-center h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
-                                <livewire:mediable-toolbar-panel
+                                <livewire:mediable-toolbar
                                     :panel="$panel"
                                     :show="$show"
                                     :data="$data->getCollection()"
@@ -63,7 +63,7 @@
                                 <div class="w-full h-full overflow-y-auto">
                                     <div class="relative p-0 m-0 h-full w-full">
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isThumbMode()])>
-                                            <livewire:mediable-attachments-panel
+                                            <livewire:mediable-attachments
                                                 :data="$data->getCollection()"
                                                 :selected="$selected"
                                                 :audio-element-id="$audioElementId"
@@ -74,21 +74,21 @@
                                             />
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isPreviewMode()])>
-                                            <livewire:mediable-preview-panel
+                                            <livewire:mediable-preview
                                                 :attachment="$attachment"
                                                 :unique-id="$uniqueId"
                                                 :key="'preview-'.$uniqueId"
                                             />
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isEditorMode()])>
-                                            <livewire:mediable-editor-panel
+                                            <livewire:mediable-editor
                                                 :attachment="$attachment"
                                                 :unique-id="$uniqueId"
                                                 :key="'editor-'.$uniqueId"
                                             />
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isUploadMode()])>
-                                            <livewire:mediable-uploads-panel
+                                            <livewire:mediable-uploads
                                                 :max-upload-size="$maxUploadSize"
                                                 :max-file-uploads="$maxFileUploads"
                                                 :max-upload-file-size="$maxUploadFileSize"
@@ -125,7 +125,7 @@
 
                     @if($show->isShowSidebar() && !$panel->isUploadMode() && !$data->isEmpty())
                     <div class="relative bg-gray-200 border-l border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
-                        <livewire:mediable-sidebar-panel
+                        <livewire:mediable-sidebar
                             :attachment="$attachment"
                             :key="'sidebar-'.$uniqueId"
                         />
@@ -137,7 +137,7 @@
                 @if($show->isShowImageStrip() && !$panel->isUploadMode() && !$panel->isEditorMode() && !$data->isEmpty())
                 <div class="hidden 2xl:block bg-[#e5e7eb] border-b border-gray-300 h-[100px] max-h-[100px] min-h-[100px] w-full overflow-hidden">
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
-                        <livewire:mediable-strip-panel
+                        <livewire:mediable-strip
                             :data="$data->getCollection()"
                             :selected="$selected"
                             :unique-id="$uniqueId"
@@ -149,7 +149,7 @@
 
                 @if(!$panel->isUploadMode() && !$panel->isEditorMode() && count($this->selected) && !$data->isEmpty())
                 <div class="bg-[#e6e6e6] h-[60px] max-h-[60px] min-h-[60px] w-full">
-                    <livewire:mediable-footer-panel
+                    <livewire:mediable-footer
                         :selected="$selected"
                         :attachment="$attachment"
                         :unique-id="$uniqueId"
