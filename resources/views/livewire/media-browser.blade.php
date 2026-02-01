@@ -40,7 +40,22 @@
                         <div class="flex flex-col h-full">
 
                             <div class="relative flex items-center justify-center h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
-                                @include("mediable::tailwind.includes.toolbar")
+                                <livewire:mediable-toolbar-panel
+                                    :panel="$panel"
+                                    :show="$show"
+                                    :data="$data"
+                                    :files="$files"
+                                    :selected="$selected"
+                                    :attachment="$attachment"
+                                    :order-columns="$orderColumns"
+                                    :column-widths="$columnWidths"
+                                    :unique-mime-types="$uniqueMimeTypes"
+                                    :order-by="$orderBy"
+                                    :order-dir="$orderDir"
+                                    :default-column-width="$defaultColumnWidth"
+                                    :selected-mime-type="$selectedMimeType"
+                                    :key="'toolbar-'.$uniqueId"
+                                />
                                 @include("mediable::tailwind.includes.alert")
                             </div>
 

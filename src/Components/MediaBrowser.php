@@ -467,6 +467,25 @@ class MediaBrowser extends Component
         $this->orderDir = $orderDir;
     }
 
+    #[On('toolbar:order-by-changed')]
+    public function handleOrderByChanged(string $orderBy): void
+    {
+        $this->orderBy = $orderBy;
+    }
+
+    #[On('toolbar:column-width-changed')]
+    public function handleColumnWidthChanged(string $defaultColumnWidth): void
+    {
+        $this->defaultColumnWidth = $defaultColumnWidth;
+    }
+
+    #[On('toolbar:mime-type-changed')]
+    public function handleMimeTypeChanged(string $selectedMimeType): void
+    {
+        $this->selectedMimeType = $selectedMimeType;
+        $this->resetPage();
+    }
+
     public function toggleOrderDir()
     {
         $this->orderDir = $this->orderDir === 'asc' ? 'desc' : 'asc';
