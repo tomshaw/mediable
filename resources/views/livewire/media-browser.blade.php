@@ -21,9 +21,17 @@
                         <div class="relative flex items-center justify-center h-full overflow-hidden">
                             @if(!$panel->isEditorMode())
                             @if(count($selected))
-                            @include("mediable::tailwind.includes.meta")
+                            <livewire:mediable::meta
+                                :attachment="$attachment"
+                                :image-width="$imageWidth"
+                                :image-height="$imageHeight"
+                                :unique-id="$uniqueId"
+                                :key="'meta-'.$uniqueId"
+                            />
                             @elseif($show->isShowAppStats())
-                            @include("mediable::tailwind.includes.stats")
+                            <livewire:mediable::stats
+                                :key="'stats-'.$uniqueId"
+                            />
                             @endif
                             @elseif($panel->isEditorMode())
                             <livewire:mediable::form
@@ -56,7 +64,10 @@
                                     :selected-mime-type="$selectedMimeType"
                                     :key="'toolbar-'.$uniqueId"
                                 />
-                                @include("mediable::tailwind.includes.alert")
+                                <livewire:mediable::alert
+                                    :alert="$alert"
+                                    :key="'alert-'.$uniqueId"
+                                />
                             </div>
 
                             <div class="flex items-center justify-center grow overflow-auto border-t border-b border-gray-300">
@@ -105,7 +116,7 @@
                             <div class="relative flex items-center justify-center h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
                                 <div class="flex items-center justify-between h-full w-full px-4">
                                     @if($show->isShowPagination() && method_exists($data, 'links'))
-                                    {!! $data->links("mediable::tailwind.includes.pagination") !!}
+                                    {!! $data->links("mediable::includes.pagination") !!}
                                     @endif
                                     @if($show->isShowPerPage() && method_exists($data, 'links') && $data->hasPages())
                                     <div class="hidden xl:block">

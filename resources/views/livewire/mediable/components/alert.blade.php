@@ -1,3 +1,19 @@
+<?php
+
+use Livewire\Attributes\Modelable;
+use Livewire\Component;
+use TomShaw\Mediable\Concerns\AlertState;
+
+new class extends Component {
+    #[Modelable]
+    public AlertState $alert;
+
+    public function closeAlert(): void
+    {
+        $this->alert = new AlertState;
+    }
+}; ?>
+
 <div :class="{
     'bg-red-100': alert.type === 'error',
     'bg-yellow-100': alert.type === 'warning',
@@ -9,7 +25,7 @@
     <span class="text-sm text-gray-700">{{$alert->message}}</span>
   </div>
   <div class="flex items-center justify-end gap-2">
-    <button type="button" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="closeAlert()">Dismiss</button>
+    <button type="button" class="relative flex items-center justify-center px-4 py-1.5 gap-x-2 bg-[#555] text-white rounded-full text-xs font-normal cursor-pointer transition-all duration-100 ease-in" wire:click="closeAlert">Dismiss</button>
   </div>
 </div>
 @script

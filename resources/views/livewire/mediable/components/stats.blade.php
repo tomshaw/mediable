@@ -1,3 +1,13 @@
+<?php
+
+use Livewire\Component;
+use TomShaw\Mediable\Traits\{WithFileSize, WithReporting};
+
+new class extends Component {
+    use WithFileSize;
+    use WithReporting;
+}; ?>
+
 <div class="flex flex-col justify-between p-0 m-0 w-full h-full">
 
     <div class="bg-gray-200 h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">

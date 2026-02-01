@@ -1,3 +1,27 @@
+<?php
+
+use Livewire\Attributes\Reactive;
+use Livewire\Component;
+use TomShaw\Mediable\Concerns\AttachmentState;
+use TomShaw\Mediable\Traits\{WithFileSize, WithMimeTypes};
+
+new class extends Component {
+    use WithFileSize;
+    use WithMimeTypes;
+
+    #[Reactive]
+    public ?AttachmentState $attachment;
+
+    #[Reactive]
+    public int $imageWidth = 0;
+
+    #[Reactive]
+    public int $imageHeight = 0;
+
+    #[Reactive]
+    public ?string $uniqueId = null;
+}; ?>
+
 <div class="flex flex-col justify-between p-0 m-0 w-full h-full">
 
     <div class="bg-gray-200 h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
@@ -11,62 +35,62 @@
         <div class="flex items-start justify-center p-0 m-0 w-full h-full">
             <div class="flex flex-col items-start justify-start w-full p-3 gap-y-1.5">
 
-                @if ($this->mimeTypeImage($this->attachment->file_type))
+                @if ($attachment && $this->mimeTypeImage($attachment->file_type))
                 <figure class="w-full mb-0">
-                    <img src="{{ $this->attachment->file_url }}?id={{ $uniqueId }}" class="w-full object-cover shadow rounded" />
-                    <figcaption class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full mt-3 py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>{{$this->attachment->title}}</figcaption>
+                    <img src="{{ $attachment->file_url }}?id={{ $uniqueId }}" class="w-full object-cover shadow rounded" />
+                    <figcaption class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full mt-3 py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>{{$attachment->title}}</figcaption>
                 </figure>
                 @endif
 
-                @if ($this->mimeTypeVideo($this->attachment->file_type))
+                @if ($attachment && $this->mimeTypeVideo($attachment->file_type))
                 <figure class="w-full mb-0">
-                    <video src="{{ asset($this->attachment->file_url) }}" controls></video>
-                    <figcaption class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full mt-3 py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>{{$this->attachment->title}}</figcaption>
+                    <video src="{{ asset($attachment->file_url) }}" controls></video>
+                    <figcaption class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full mt-3 py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>{{$attachment->title}}</figcaption>
                 </figure>
                 @endif
 
-                @if ($this->mimeTypeAudio($this->attachment->file_type))
+                @if ($attachment && $this->mimeTypeAudio($attachment->file_type))
                 <figure class="w-full mb-0">
                     <audio controls class="w-[223px] mb-2">
-                        <source src="{{ asset($this->attachment->file_url) }}" type="{{ $this->attachment->file_type }}">
+                        <source src="{{ asset($attachment->file_url) }}" type="{{ $attachment->file_type }}">
                     </audio>
-                    <figcaption class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full mt-3 py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>{{$this->attachment->title}}</figcaption>
+                    <figcaption class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full mt-3 py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>{{$attachment->title}}</figcaption>
                 </figure>
                 @endif
 
-                @if ($this->attachment->file_original_name)
+                @if ($attachment?->file_original_name)
                 <div class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>
-                    {{ $this->attachment->file_original_name }}
+                    {{ $attachment->file_original_name }}
                 </div>
                 @endif
 
-                @if ($this->attachment->file_size)
+                @if ($attachment?->file_size)
                 <div class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>
-                    {{ $this->formatBytes($this->attachment->file_size) }}
+                    {{ $this->formatBytes($attachment->file_size) }}
                 </div>
                 @endif
 
-                @if ($this->attachment->file_type)
+                @if ($attachment?->file_type)
                 <div class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>
-                    {{ $this->formatMimeType($this->attachment->file_type) }}
+                    {{ $this->formatMimeType($attachment->file_type) }}
                 </div>
                 @endif
 
-                @if ($this->attachment->file_size && $this->imageWidth && $this->imageHeight)
+                @if ($attachment?->file_size && $imageWidth && $imageHeight)
                 <div class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>
-                    {{ $this->imageWidth }}&times;{{ $this->imageHeight }}
+                    {{ $imageWidth }}&times;{{ $imageHeight }}
                 </div>
                 @endif
 
-                @if ($this->attachment->created_at)
+                @if ($attachment?->created_at)
                 <div class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>
-                    {{ $this->attachment->getCreatedAt() }}
+                    {{ $attachment->getCreatedAt() }}
                 </div>
                 @endif
 
-                @if ($this->attachment->updated_at)
+                @if ($attachment?->updated_at)
                 <div class="rounded font-medium text-xs tracking-wider text-neutral-50 overflow-hidden w-full py-1.5 px-2 bg-[#555] hover:bg-[#444] cursor-copy" data-textcopy>
-                    {{ $this->attachment->getUpdatedAt() }}
+                    {{ $attachment->getUpdatedAt() }}
                 </div>
                 @endif
 
