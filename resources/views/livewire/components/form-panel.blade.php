@@ -1,3 +1,52 @@
+<?php
+
+use Livewire\Attributes\{On, Reactive};
+use Livewire\Component;
+use TomShaw\Mediable\Concerns\AttachmentState;
+use TomShaw\Mediable\Traits\{WithFonts, WithGraphicDraw};
+
+new class extends Component {
+    use WithFonts;
+    use WithGraphicDraw;
+
+    #[Reactive]
+    public ?AttachmentState $attachment = null;
+
+    public string $uniqueId = '';
+
+    public function mount(string $uniqueId = ''): void
+    {
+        $this->uniqueId = $uniqueId;
+    }
+
+    #[On('panel:regenerate-unique-id')]
+    public function handleRegenerateUniqueId(string $uniqueId): void
+    {
+        $this->uniqueId = $uniqueId;
+    }
+
+    public function generateUniqueId(): void
+    {
+        $this->uniqueId = uniqid();
+        $this->dispatch('panel:unique-id-updated', uniqueId: $this->uniqueId);
+    }
+
+    public function saveEditorChanges(): void
+    {
+        $this->dispatch('panel:save-editor-changes');
+    }
+
+    public function undoEditorChanges(): void
+    {
+        $this->dispatch('panel:undo-editor-changes');
+    }
+
+    public function mimeTypeImage(string $mimeType): bool
+    {
+        return str_starts_with($mimeType, 'image/');
+    }
+}; ?>
+
 <div class="flex flex-col justify-between p-0 m-0 w-full h-full">
 
     <div class="bg-gray-200 h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">

@@ -1,3 +1,55 @@
+<?php
+
+use Livewire\Attributes\Reactive;
+use Livewire\Component;
+use TomShaw\Mediable\Concerns\AttachmentState;
+
+new class extends Component {
+    #[Reactive]
+    public array $selected = [];
+
+    #[Reactive]
+    public ?AttachmentState $attachment = null;
+
+    #[Reactive]
+    public string $uniqueId = '';
+
+    public function confirmDelete(): void
+    {
+        $this->dispatch('panel:confirm-delete');
+    }
+
+    public function clearSelected(): void
+    {
+        $this->dispatch('panel:clear-selected');
+    }
+
+    public function setActiveAttachment(array $item): void
+    {
+        $this->dispatch('panel:set-active-attachment', item: $item);
+    }
+
+    public function insertMedia(): void
+    {
+        $this->dispatch('panel:insert-media');
+    }
+
+    public function mimeTypeImage(string $mimeType): bool
+    {
+        return str_starts_with($mimeType, 'image/');
+    }
+
+    public function mimeTypeVideo(string $mimeType): bool
+    {
+        return str_starts_with($mimeType, 'video/');
+    }
+
+    public function mimeTypeAudio(string $mimeType): bool
+    {
+        return str_starts_with($mimeType, 'audio/');
+    }
+}; ?>
+
 <div class="flex items-center justify-between h-full py-0 px-4">
     <div class="flex items-center justify-start gap-2">
         @if (count($selected))

@@ -1,3 +1,27 @@
+<?php
+
+use Livewire\Attributes\{Modelable, Reactive};
+use Livewire\Component;
+use TomShaw\Mediable\Concerns\ShowState;
+
+new class extends Component {
+    #[Reactive]
+    public ?ShowState $show = null;
+
+    #[Modelable]
+    public string $searchTerm = '';
+
+    public function expandModal(): void
+    {
+        $this->dispatch('panel:expand-modal');
+    }
+
+    public function closeModal(): void
+    {
+        $this->dispatch('panel:close-modal');
+    }
+}; ?>
+
 <div class="flex items-center justify-between h-full px-8">
 
     <div class="flex items-center justify-end">

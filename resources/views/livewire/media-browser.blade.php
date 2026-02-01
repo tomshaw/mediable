@@ -43,7 +43,7 @@
                                 <livewire:mediable-toolbar-panel
                                     :panel="$panel"
                                     :show="$show"
-                                    :data="$data"
+                                    :data="$data->getCollection()"
                                     :files="$files"
                                     :selected="$selected"
                                     :attachment="$attachment"
@@ -64,7 +64,7 @@
                                     <div class="relative p-0 m-0 h-full w-full">
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isThumbMode()])>
                                             <livewire:mediable-attachments-panel
-                                                :data="$data"
+                                                :data="$data->getCollection()"
                                                 :selected="$selected"
                                                 :audio-element-id="$audioElementId"
                                                 :unique-id="$uniqueId"
@@ -138,7 +138,7 @@
                 <div class="hidden 2xl:block bg-[#e5e7eb] border-b border-gray-300 h-[100px] max-h-[100px] min-h-[100px] w-full overflow-hidden">
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
                         <livewire:mediable-strip-panel
-                            :data="$data"
+                            :data="$data->getCollection()"
                             :selected="$selected"
                             :unique-id="$uniqueId"
                             :key="'strip-'.$uniqueId"

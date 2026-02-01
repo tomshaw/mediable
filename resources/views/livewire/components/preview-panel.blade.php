@@ -1,3 +1,32 @@
+<?php
+
+use Livewire\Attributes\Reactive;
+use Livewire\Component;
+use TomShaw\Mediable\Concerns\AttachmentState;
+
+new class extends Component {
+    #[Reactive]
+    public ?AttachmentState $attachment = null;
+
+    #[Reactive]
+    public string $uniqueId = '';
+
+    public function mimeTypeImage(string $mimeType): bool
+    {
+        return str_starts_with($mimeType, 'image/');
+    }
+
+    public function mimeTypeVideo(string $mimeType): bool
+    {
+        return str_starts_with($mimeType, 'video/');
+    }
+
+    public function mimeTypeAudio(string $mimeType): bool
+    {
+        return str_starts_with($mimeType, 'audio/');
+    }
+}; ?>
+
 <div @class([
     "flex items-center justify-center overflow-hidden p-4 md:p-6 lg:p-8 m-0",
     ($attachment && $this->mimeTypeImage($attachment->file_type)) ? 'h-auto' : 'h-full'
