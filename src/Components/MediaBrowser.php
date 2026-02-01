@@ -474,7 +474,7 @@ class MediaBrowser extends Component
     }
 
     #[On('toolbar:column-width-changed')]
-    public function handleColumnWidthChanged(string $defaultColumnWidth): void
+    public function handleColumnWidthChanged(int $defaultColumnWidth): void
     {
         $this->defaultColumnWidth = $defaultColumnWidth;
     }
@@ -604,6 +604,33 @@ class MediaBrowser extends Component
         $this->primaryId = null;
 
         $this->enableThumbMode();
+    }
+
+    #[On('panel:set-active-attachment')]
+    public function handleSetActiveAttachment(array $item): void
+    {
+        $attachment = Attachment::find($item['id']);
+        if ($attachment) {
+            $this->setActiveAttachment($attachment);
+        }
+    }
+
+    #[On('panel:confirm-delete')]
+    public function handleConfirmDelete(): void
+    {
+        $this->confirmDelete();
+    }
+
+    #[On('panel:clear-selected')]
+    public function handleClearSelected(): void
+    {
+        $this->clearSelected();
+    }
+
+    #[On('panel:insert-media')]
+    public function handleInsertMedia(): void
+    {
+        $this->insertMedia();
     }
 
     #[On('panel:unique-id-updated')]

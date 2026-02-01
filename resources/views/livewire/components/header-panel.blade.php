@@ -6,7 +6,7 @@ use TomShaw\Mediable\Concerns\ShowState;
 
 new class extends Component {
     #[Reactive]
-    public ?ShowState $show = null;
+    public ?ShowState $show;
 
     #[Modelable]
     public string $searchTerm = '';

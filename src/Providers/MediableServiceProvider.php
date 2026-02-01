@@ -56,6 +56,20 @@ class MediableServiceProvider extends ServiceProvider
     protected function registerLivewireComponents(): void
     {
         Livewire::component('mediable', MediaBrowser::class);
+
+        // Register Single File Components
+        $sfcPath = __DIR__.'/../../resources/views/livewire/components';
+
+        Livewire::addComponent('mediable-header-panel', viewPath: $sfcPath.'/header-panel.blade.php');
+        Livewire::addComponent('mediable-toolbar-panel', viewPath: $sfcPath.'/toolbar-panel.blade.php');
+        Livewire::addComponent('mediable-attachments-panel', viewPath: $sfcPath.'/attachments-panel.blade.php');
+        Livewire::addComponent('mediable-preview-panel', viewPath: $sfcPath.'/preview-panel.blade.php');
+        Livewire::addComponent('mediable-editor-panel', viewPath: $sfcPath.'/editor-panel.blade.php');
+        Livewire::addComponent('mediable-uploads-panel', viewPath: $sfcPath.'/uploads-panel.blade.php');
+        Livewire::addComponent('mediable-form-panel', viewPath: $sfcPath.'/form-panel.blade.php');
+        Livewire::addComponent('mediable-sidebar-panel', viewPath: $sfcPath.'/sidebar-panel.blade.php');
+        Livewire::addComponent('mediable-strip-panel', viewPath: $sfcPath.'/strip-panel.blade.php');
+        Livewire::addComponent('mediable-footer-panel', viewPath: $sfcPath.'/footer-panel.blade.php');
     }
 
     /**

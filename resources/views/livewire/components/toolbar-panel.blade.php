@@ -16,35 +16,35 @@ new class extends Component {
     public Collection $data;
 
     #[Reactive]
-    public array $files = [];
+    public array $files;
 
     #[Reactive]
-    public array $selected = [];
+    public array $selected;
 
     #[Reactive]
-    public ?AttachmentState $attachment = null;
+    public ?AttachmentState $attachment;
 
     #[Reactive]
-    public array $orderColumns = [];
+    public array $orderColumns;
 
     #[Reactive]
-    public array $columnWidths = [];
+    public array $columnWidths;
 
     #[Reactive]
-    public array $uniqueMimeTypes = [];
+    public array $uniqueMimeTypes;
 
     public string $orderBy = 'id';
 
     public string $orderDir = 'DESC';
 
-    public string $defaultColumnWidth = '';
+    public int $defaultColumnWidth = 4;
 
     public string $selectedMimeType = '';
 
     public function mount(
         string $orderBy = 'id',
         string $orderDir = 'DESC',
-        string $defaultColumnWidth = '',
+        int $defaultColumnWidth = 4,
         string $selectedMimeType = ''
     ): void {
         $this->orderBy = $orderBy;

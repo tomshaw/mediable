@@ -10,7 +10,7 @@ new class extends Component {
     use WithGraphicDraw;
 
     #[Reactive]
-    public ?AttachmentState $attachment = null;
+    public ?AttachmentState $attachment;
 
     public string $uniqueId = '';
 

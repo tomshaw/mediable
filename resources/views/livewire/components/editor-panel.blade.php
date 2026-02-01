@@ -6,10 +6,10 @@ use TomShaw\Mediable\Concerns\AttachmentState;
 
 new class extends Component {
     #[Reactive]
-    public ?AttachmentState $attachment = null;
+    public ?AttachmentState $attachment;
 
     #[Reactive]
-    public string $uniqueId = '';
+    public string $uniqueId;
 
     public function mimeTypeImage(string $mimeType): bool
     {

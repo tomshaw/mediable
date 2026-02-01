@@ -9,10 +9,10 @@ new class extends Component {
     public Collection $data;
 
     #[Reactive]
-    public array $selected = [];
+    public array $selected;
 
     #[Reactive]
-    public string $uniqueId = '';
+    public string $uniqueId;
 
     public function toggleAttachment(int $id): void
     {

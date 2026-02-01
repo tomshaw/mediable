@@ -10,19 +10,19 @@ new class extends Component {
     public array $files = [];
 
     #[Reactive]
-    public ?int $maxUploadSize = null;
+    public ?int $maxUploadSize;
 
     #[Reactive]
-    public ?int $maxFileUploads = null;
+    public ?int $maxFileUploads;
 
     #[Reactive]
-    public ?int $maxUploadFileSize = null;
+    public ?int $maxUploadFileSize;
 
     #[Reactive]
-    public ?int $postMaxSize = null;
+    public ?int $postMaxSize;
 
     #[Reactive]
-    public ?int $memoryLimit = null;
+    public ?int $memoryLimit;
 
     public function updatedFiles(): void
     {

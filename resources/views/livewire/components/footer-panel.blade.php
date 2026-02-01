@@ -1,18 +1,30 @@
 <?php
 
+use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
-use TomShaw\Mediable\Concerns\AttachmentState;
 
 new class extends Component {
-    #[Reactive]
     public array $selected = [];
 
-    #[Reactive]
-    public ?AttachmentState $attachment = null;
+    public ?int $activeId = null;
 
     #[Reactive]
-    public string $uniqueId = '';
+    public string $uniqueId;
+
+    #[On('footer:toggle-selected')]
+    public function toggleSelected(array $item): void
+    {
+        $index = array_search($item['id'], array_column($this->selected, 'id'));
+
+        if ($index !== false) {
+            array_splice($this->selected, $index, 1);
+            $this->activeId = null;
+        } else {
+            $this->selected[] = $item;
+            $this->activeId = $item['id'];
+        }
+    }
 
     public function confirmDelete(): void
     {
@@ -26,6 +38,7 @@ new class extends Component {
 
     public function setActiveAttachment(array $item): void
     {
+        $this->activeId = $item['id'];
         $this->dispatch('panel:set-active-attachment', item: $item);
     }
 
@@ -65,7 +78,7 @@ new class extends Component {
         <ul class="flex items-center justify-start ml-4 gap-x-2">
             @foreach($selected as $item)
             <li class="shadow-md cursor-pointer" wire:click="setActiveAttachment({{ json_encode($item) }})">
-                <div @class(['border border-black overflow-hidden', ($attachment && $item['id'] === $attachment->id) ? 'w-11 h-11' : 'w-9 h-9'])>
+                <div @class(['border border-black overflow-hidden', ($activeId && $item['id'] === $activeId) ? 'w-11 h-11' : 'w-9 h-9'])>
                     @if ($this->mimeTypeImage($item['file_type']))
                     <img src="{{ $item['file_url'] }}?id={{ $uniqueId }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
                     @elseif ($this->mimeTypeVideo($item['file_type']))

@@ -6,7 +6,7 @@ use TomShaw\Mediable\Concerns\AttachmentState;
 
 new class extends Component {
     #[Reactive]
-    public ?AttachmentState $attachment = null;
+    public ?AttachmentState $attachment;
 
     public string $title = '';
 
