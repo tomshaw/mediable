@@ -10,9 +10,6 @@ new class extends Component {
     public Collection $data;
 
     #[Reactive]
-    public ?int $audioElementId;
-
-    #[Reactive]
     public string $uniqueId;
 
     #[Reactive]
@@ -22,6 +19,26 @@ new class extends Component {
     public int $defaultColumnWidth;
 
     public array $selectedIds = [];
+
+    public ?int $audioElementId = null;
+
+    public function playAudio(int $id): void
+    {
+        $this->audioElementId = $id;
+    }
+
+    public function pauseAudio(int $id): void
+    {
+        if ($this->audioElementId === $id) {
+            $this->audioElementId = null;
+        }
+    }
+
+    #[On('attachments:reset-audio')]
+    public function resetAudio(): void
+    {
+        $this->audioElementId = null;
+    }
 
     public function toggleAttachment(int $id): void
     {
@@ -61,16 +78,6 @@ new class extends Component {
             selectedIds: $this->selectedIds,
             activeId: $activeId
         );
-    }
-
-    public function playAudio(int $id): void
-    {
-        $this->dispatch('audio.start', id: $id);
-    }
-
-    public function pauseAudio(int $id): void
-    {
-        $this->dispatch('audio.pause', id: $id);
     }
 
     public function isSelected(int $id): bool

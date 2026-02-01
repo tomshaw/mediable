@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Validator;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
+use TomShaw\Mediable\Eloquent\Eloquent;
 
 new class extends Component {
     #[Reactive]
@@ -41,12 +43,41 @@ new class extends Component {
 
     public function updateAttachment(): void
     {
-        $this->dispatch('panel:update-attachment', data: [
+        if (! $this->attachment?->id) {
+            return;
+        }
+
+        $data = [
             'title' => $this->title,
             'caption' => $this->caption,
             'sort_order' => $this->sort_order,
             'styles' => $this->styles,
             'description' => $this->description,
+        ];
+
+        $rules = [
+            'title' => 'required|string|max:255',
+            'caption' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'sort_order' => 'required|integer',
+            'styles' => 'nullable|string|max:500',
+        ];
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            $this->dispatch('mediable.alert', event: [
+                'type' => 'error',
+                'message' => $validator->errors()->first(),
+            ]);
+            return;
+        }
+
+        Eloquent::update($this->attachment->id, $validator->validated());
+
+        $this->dispatch('mediable.alert', event: [
+            'type' => 'success',
+            'message' => 'Attachment updated successfully!',
         ]);
     }
 }; ?>

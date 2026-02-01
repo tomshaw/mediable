@@ -14,7 +14,6 @@ new class extends Component {
     #[Reactive]
     public ?AttachmentState $attachment;
 
-    #[Reactive]
     public ?int $primaryId = null;
 
     public string $uniqueId = '';
@@ -49,6 +48,20 @@ new class extends Component {
         }
     }
 
+    #[On('form:editor-prepared')]
+    public function handleEditorPrepared(int $primaryId): void
+    {
+        $this->primaryId = $primaryId;
+    }
+
+    #[On('toolbar:close-image-editor')]
+    public function handleEditorClosed(): void
+    {
+        $this->primaryId = null;
+        $this->editHistory = [];
+        $this->selectedForm = '';
+    }
+
     #[On('panel:regenerate-unique-id')]
     public function handleRegenerateUniqueId(string $uniqueId): void
     {
@@ -69,6 +82,7 @@ new class extends Component {
 
         Eloquent::enable($this->attachment->id);
 
+        $this->primaryId = null;
         $this->editHistory = [];
         $this->selectedForm = '';
 

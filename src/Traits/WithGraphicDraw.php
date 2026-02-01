@@ -55,8 +55,6 @@ trait WithGraphicDraw
 
     public int $imageTextAngle = 0;
 
-    public ?int $primaryId = null;
-
     public array $editHistory = [];
 
     public ?string $selectedForm = '';

@@ -3,6 +3,8 @@
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
+use TomShaw\Mediable\Eloquent\Eloquent;
+use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 use TomShaw\Mediable\Traits\{WithFileSize, WithMimeTypes};
 
 new class extends Component {
@@ -13,13 +15,44 @@ new class extends Component {
     public ?AttachmentState $attachment;
 
     #[Reactive]
+    public ?string $uniqueId = null;
+
     public int $imageWidth = 0;
 
-    #[Reactive]
     public int $imageHeight = 0;
 
-    #[Reactive]
-    public ?string $uniqueId = null;
+    public function updatedAttachment(): void
+    {
+        $this->calculateImageDimensions();
+    }
+
+    public function mount(): void
+    {
+        $this->calculateImageDimensions();
+    }
+
+    protected function calculateImageDimensions(): void
+    {
+        $this->imageWidth = 0;
+        $this->imageHeight = 0;
+
+        if (! $this->attachment?->file_type || ! $this->mimeTypeImage($this->attachment->file_type)) {
+            return;
+        }
+
+        $filePath = Eloquent::getFilePath($this->attachment->file_dir);
+
+        if (! file_exists($filePath)) {
+            return;
+        }
+
+        [$width, $height, $type] = GraphicDraw::getimagesize($filePath);
+
+        if ($type) {
+            $this->imageWidth = $width;
+            $this->imageHeight = $height;
+        }
+    }
 }; ?>
 
 <div class="flex flex-col justify-between p-0 m-0 w-full h-full">
