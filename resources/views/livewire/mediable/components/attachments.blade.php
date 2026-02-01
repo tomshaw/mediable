@@ -25,6 +25,7 @@ new class extends Component {
     public function playAudio(int $id): void
     {
         $this->audioElementId = $id;
+        $this->dispatch('audio.start', id: $id);
     }
 
     public function pauseAudio(int $id): void
@@ -32,6 +33,7 @@ new class extends Component {
         if ($this->audioElementId === $id) {
             $this->audioElementId = null;
         }
+        $this->dispatch('audio.pause', id: $id);
     }
 
     #[On('attachments:reset-audio')]
