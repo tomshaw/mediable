@@ -192,7 +192,7 @@ class MediaBrowser extends Component
     }
 
     #[On('attachment:active-changed')]
-    public function handleActiveAttachmentChanged(int $_id): void
+    public function handleActiveAttachmentChanged(int $id): void
     {
         $this->enablePreviewMode();
     }
