@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.2](https://github.com/tomshaw/mediable/compare/v0.9.1...v0.9.2) (2026-02-02)
+
+
+### Bug Fixes
+
+* rename parameter in handleActiveAttachmentChanged method for clarity ([cccb4ba](https://github.com/tomshaw/mediable/commit/cccb4ba86030b0309dc01bd9b789675823de01e6))
+
 ## [0.9.1](https://github.com/tomshaw/mediable/compare/v0.9.0...v0.9.1) (2026-02-01)
 
 
