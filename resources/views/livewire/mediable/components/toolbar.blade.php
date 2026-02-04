@@ -161,7 +161,7 @@ new class extends Component {
     {{-- Meta Toggle (thumb, preview, editor modes) --}}
     @if(!$panel->isUploadMode())
     <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50 cursor-pointer" wire:click="toggleMetaInfo">
-      <x-icons.arrow :show="$show->isShowMetaInfo()" direction="right" />
+      <x-icons.arrow :direction="$show->isShowMetaInfo() ? 'left' : 'right'" />
     </button>
     @endif
 
@@ -281,7 +281,7 @@ new class extends Component {
     {{-- Sidebar Toggle (thumb, preview, editor modes) --}}
     @if(!$panel->isUploadMode())
     <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50 cursor-pointer" wire:click="toggleSidebar">
-      <x-icons.arrow :show="$show->isShowSidebar()" direction="left" />
+      <x-icons.arrow :direction="$show->isShowSidebar() ? 'right' : 'left'" />
     </button>
     @endif
 
