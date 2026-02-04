@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/tomshaw/mediable/compare/v0.10.0...v0.10.1) (2026-02-04)
+
+
+### Miscellaneous Chores
+
+* remove demo link from README for clarity ([9a548e0](https://github.com/tomshaw/mediable/commit/9a548e02a7c733fffe306062da25f352858c7976))
+
 ## [0.10.0](https://github.com/tomshaw/mediable/compare/v0.9.2...v0.10.0) (2026-02-04)
 
 
