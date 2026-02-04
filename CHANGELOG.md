@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.10.0](https://github.com/tomshaw/mediable/compare/v0.9.2...v0.10.0) (2026-02-04)
+
+
+### Features
+
+* implement reusable form components for improved code organization and maintainability ([8c839ba](https://github.com/tomshaw/mediable/commit/8c839ba6d0b2bc731d86d7e4e79a9b96c2e09d7d))
+* replace inline form fields with reusable form-field component for improved maintainability ([6124181](https://github.com/tomshaw/mediable/commit/6124181704c809ac6c108c46e871587d8905b3db))
+
+
+### Bug Fixes
+
+* add cursor pointer to button elements for better UX ([af49243](https://github.com/tomshaw/mediable/commit/af492437d86120ad61a3331754cca74d6acec5b5))
+* add cursor pointer to button elements for better UX ([dcecb09](https://github.com/tomshaw/mediable/commit/dcecb0972cf42b2dccbe99c8320d17d0ed0c8157))
+* update arrow direction logic in toolbar buttons for correct display ([c2f60d5](https://github.com/tomshaw/mediable/commit/c2f60d5c2fc3a8c6c1ff73e88d7119a5595c45d3))
+
 ## [0.9.2](https://github.com/tomshaw/mediable/compare/v0.9.1...v0.9.2) (2026-02-02)
 
 
