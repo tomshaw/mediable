@@ -181,7 +181,7 @@ new class extends Component {
   @if($panel->isThumbMode())
   <div class="flex items-center justify-start gap-1.5 xl:gap-2">
 
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50" wire:click="toggleMetaInfo">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50 cursor-pointer" wire:click="toggleMetaInfo">
       <x-icons.arrow :show="$show->isShowMetaInfo()" direction="right" />
     </button>
 
@@ -194,7 +194,7 @@ new class extends Component {
     @endif
 
     @if($show->isShowOrderDir() && $data->count())
-    <button type="button" class="relative flex items-center justify-between w-[80px] min-w-[80px] max-w-[80px] px-3 py-1.5 bg-[#555] rounded-full font-medium text-xs tracking-wider text-neutral-50 cursor-pointer transition-all duration-100 ease-in" wire:click="toggleOrderDir()">
+    <button type="button" class="relative flex items-center justify-between w-20 min-w-20 max-w-20 px-3 py-1.5 bg-[#555] rounded-full font-medium text-xs tracking-wider text-neutral-50 cursor-pointer transition-all duration-100 ease-in" wire:click="toggleOrderDir()">
       @if(strtoupper($orderDir) == 'ASC')
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
@@ -246,7 +246,7 @@ new class extends Component {
     </button>
     @endif
 
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50" wire:click="toggleSidebar">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50 cursor-pointer" wire:click="toggleSidebar">
       <x-icons.arrow :show="$show->isShowSidebar()" direction="left" />
     </button>
   </div>
@@ -255,7 +255,7 @@ new class extends Component {
   @if($panel->isPreviewMode())
   <div class="flex items-center justify-start gap-1.5 xl:gap-2">
 
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50" wire:click="toggleMetaInfo">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50 cursor-pointer" wire:click="toggleMetaInfo">
       <x-icons.arrow :show="$show->isShowMetaInfo()" direction="right" />
     </button>
 
@@ -285,7 +285,7 @@ new class extends Component {
     </button>
     @endif
 
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50" wire:click="toggleSidebar">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50 cursor-pointer" wire:click="toggleSidebar">
       <x-icons.arrow :show="$show->isShowSidebar()" direction="left" />
     </button>
   </div>
@@ -293,7 +293,7 @@ new class extends Component {
 
   @if($panel->isEditorMode())
   <div class="flex items-center justify-start gap-1.5 xl:gap-2">
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50" wire:click="toggleMetaInfo">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50 cursor-pointer" wire:click="toggleMetaInfo">
       <x-icons.arrow :show="$show->isShowMetaInfo()" direction="right" />
     </button>
 
@@ -306,7 +306,7 @@ new class extends Component {
     </div>
   </div>
   <div class="flex flex-row items-center justify-end gap-1.5 xl:gap-2">
-    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50" wire:click="toggleSidebar">
+    <button type="button" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50 cursor-pointer" wire:click="toggleSidebar">
       <x-icons.arrow :show="$show->isShowSidebar()" direction="left" />
     </button>
   </div>
