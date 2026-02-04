@@ -115,26 +115,11 @@ new class extends Component {
         <div class="flex items-start justify-center p-0 m-0 w-full h-full">
             <form class="w-full" wire:submit.prevent="updateAttachment" role="form">
                 <div class="p-2 m-0">
-                    <div class="mb-1">
-                        <label class="inline-block mb-1 font-medium text-xs tracking-wider text-neutral-600">Title</label>
-                        <input type="text" class="control-input" wire:model="title" spellcheck="false">
-                    </div>
-                    <div class="mb-1">
-                        <label class="inline-block mb-1 font-medium text-xs tracking-wider text-neutral-600">Caption</label>
-                        <input type="text" class="control-input" wire:model="caption" spellcheck="false">
-                    </div>
-                    <div class="mb-1">
-                        <label class="inline-block mb-1 font-medium text-xs tracking-wider text-neutral-600">Order</label>
-                        <input type="text" class="control-input" wire:model="sort_order" spellcheck="false">
-                    </div>
-                    <div class="mb-1">
-                        <label class="inline-block mb-1 font-medium text-xs tracking-wider text-neutral-600">Styles</label>
-                        <input type="text" class="control-input" wire:model="styles" spellcheck="false">
-                    </div>
-                    <div class="mb-1">
-                        <label class="inline-block mb-1 font-medium text-xs tracking-wider text-neutral-600">Description</label>
-                        <textarea class="control-input focus:ring-0" wire:model="description" rows="4" spellcheck="false"></textarea>
-                    </div>
+                    <x-mediable::form-field label="Title" id="title" wire:model="title" spellcheck="false" />
+                    <x-mediable::form-field label="Caption" id="caption" wire:model="caption" spellcheck="false" />
+                    <x-mediable::form-field label="Order" id="sort_order" wire:model="sort_order" spellcheck="false" />
+                    <x-mediable::form-field label="Styles" id="styles" wire:model="styles" spellcheck="false" />
+                    <x-mediable::form-field label="Description" id="description" :rows="4" wire:model="description" spellcheck="false" />
                 </div>
                 <div class="flex flex-col items-start justify-start flex-nowrap gap-y-2 p-0 mt-1">
                     <button type="reset" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50 cursor-pointer">
