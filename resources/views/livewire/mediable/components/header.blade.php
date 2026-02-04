@@ -39,7 +39,7 @@ new class extends Component {
     @endif
 
     <div class="flex items-center justify-end">
-        <button class="text-[#555] focus:outline-none transform transition duration-500 hover:rotate-180" wire:click="closeModal()">
+        <button class="text-[#555] focus:outline-none transform transition duration-500 hover:rotate-180 cursor-pointer" wire:click="closeModal()">
             <x-icons.exit />
         </button>
     </div>
