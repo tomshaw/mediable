@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.2](https://github.com/tomshaw/mediable/compare/v0.10.1...v0.10.2) (2026-02-06)
+
+
+### Bug Fixes
+
+* update method signatures and improve type hinting across components ([ccc8d9b](https://github.com/tomshaw/mediable/commit/ccc8d9bd03b24591971e4d2c46e895b80b2dc43a))
+
 ## [0.10.1](https://github.com/tomshaw/mediable/compare/v0.10.0...v0.10.1) (2026-02-04)
 
 
