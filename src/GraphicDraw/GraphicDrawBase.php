@@ -6,13 +6,15 @@ use GdImage;
 
 class GraphicDrawBase
 {
-    public $flipModes = [
+    /** @var array<int, string> */
+    public array $flipModes = [
         IMG_FLIP_HORIZONTAL => 'Horizontal',
         IMG_FLIP_VERTICAL => 'Vertical',
         IMG_FLIP_BOTH => 'Both',
     ];
 
-    public $filterModes = [
+    /** @var array<int, string> */
+    public array $filterModes = [
         IMG_FILTER_NEGATE => 'Negate',
         IMG_FILTER_GRAYSCALE => 'Grayscale',
         IMG_FILTER_BRIGHTNESS => 'Brightness',
@@ -27,23 +29,27 @@ class GraphicDrawBase
         IMG_FILTER_PIXELATE => 'Pixelate',
     ];
 
-    public $scaleModes = [
+    /** @var array<int, string> */
+    public array $scaleModes = [
         IMG_NEAREST_NEIGHBOUR => 'Nearest Neighbour',
         IMG_BILINEAR_FIXED => 'Bilinear Fixed',
         IMG_BICUBIC => 'Bicubic',
     ];
 
-    public function getFlipModes()
+    /** @return array<int, string> */
+    public function getFlipModes(): array
     {
         return $this->flipModes;
     }
 
-    public function getFilterModes()
+    /** @return array<int, string> */
+    public function getFilterModes(): array
     {
         return $this->filterModes;
     }
 
-    public function getScaleModes()
+    /** @return array<int, string> */
+    public function getScaleModes(): array
     {
         return $this->scaleModes;
     }
@@ -167,7 +173,7 @@ class GraphicDrawBase
         return imagescale($image, $new_width, $new_height, $mode);
     }
 
-    public function crop(GdImage $image, array $rect): GdImage
+    public function crop(GdImage $image, array $rect): GdImage|false
     {
         return imagecrop($image, $rect);
     }

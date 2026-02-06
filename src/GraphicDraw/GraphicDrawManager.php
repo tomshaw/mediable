@@ -40,6 +40,10 @@ class GraphicDrawManager extends GraphicDrawBase
 
         $result = $this->scale($image, $new_width, $new_height, $mode);
 
+        if ($result === false) {
+            return false;
+        }
+
         return $this->save($filename, $result);
     }
 
@@ -53,6 +57,10 @@ class GraphicDrawManager extends GraphicDrawBase
 
         $result = $this->rotate($image, $angle, $bgd_color);
 
+        if ($result === false) {
+            return false;
+        }
+
         return $this->save($filename, $result);
     }
 
@@ -65,6 +73,10 @@ class GraphicDrawManager extends GraphicDrawBase
         }
 
         $result = $this->crop($image, $rect);
+
+        if ($result === false) {
+            return false;
+        }
 
         return $this->save($filename, $result);
     }

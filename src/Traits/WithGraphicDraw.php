@@ -119,7 +119,7 @@ trait WithGraphicDraw
         return Storage::disk($disk)->path($this->attachment->file_dir);
     }
 
-    public function updatedScaleWidth()
+    public function updatedScaleWidth(): void
     {
         $path = $this->getDiskImagePath();
         if (! $path) {
@@ -127,16 +127,23 @@ trait WithGraphicDraw
         }
 
         $image = GraphicDraw::imagecreatefrompath($path);
+        if ($image === false) {
+            return;
+        }
 
         $originalWidth = GraphicDraw::imagesx($image);
         $originalHeight = GraphicDraw::imagesy($image);
 
+        if ($originalHeight === 0 || $originalHeight === false) {
+            return;
+        }
+
         $aspectRatio = $originalWidth / $originalHeight;
 
-        $this->scaleHeight = intval($this->scaleWidth / $aspectRatio);
+        $this->scaleHeight = (int) ($this->scaleWidth / $aspectRatio);
     }
 
-    public function updatedScaleHeight()
+    public function updatedScaleHeight(): void
     {
         $path = $this->getDiskImagePath();
         if (! $path) {
@@ -144,16 +151,23 @@ trait WithGraphicDraw
         }
 
         $image = GraphicDraw::imagecreatefrompath($path);
+        if ($image === false) {
+            return;
+        }
 
         $originalWidth = GraphicDraw::imagesx($image);
         $originalHeight = GraphicDraw::imagesy($image);
 
+        if ($originalHeight === 0 || $originalHeight === false) {
+            return;
+        }
+
         $aspectRatio = $originalWidth / $originalHeight;
 
-        $this->scaleWidth = intval($this->scaleHeight * $aspectRatio);
+        $this->scaleWidth = (int) ($this->scaleHeight * $aspectRatio);
     }
 
-    public function flipImage()
+    public function flipImage(): void
     {
         $path = $this->getDiskImagePath();
 
@@ -168,7 +182,7 @@ trait WithGraphicDraw
         $this->editHistory[] = $this->getDrawSettings();
     }
 
-    public function scaleImage()
+    public function scaleImage(): void
     {
         $path = $this->getDiskImagePath();
 
@@ -183,7 +197,7 @@ trait WithGraphicDraw
         $this->editHistory[] = $this->getDrawSettings();
     }
 
-    public function filterImage()
+    public function filterImage(): void
     {
         $path = $this->getDiskImagePath();
 
@@ -215,7 +229,7 @@ trait WithGraphicDraw
         $this->editHistory[] = $this->getDrawSettings();
     }
 
-    public function rotateImage()
+    public function rotateImage(): void
     {
         $path = $this->getDiskImagePath();
 
@@ -232,11 +246,11 @@ trait WithGraphicDraw
         $this->editHistory[] = $this->getDrawSettings();
     }
 
-    public function cropImage()
+    public function cropImage(): void
     {
         $path = $this->getDiskImagePath();
 
-        if (! $path) {
+        if (! $path || $this->cropWidth <= 0 || $this->cropHeight <= 0) {
             return;
         }
 
@@ -249,7 +263,7 @@ trait WithGraphicDraw
         $this->editHistory[] = $this->getDrawSettings();
     }
 
-    public function addText()
+    public function addText(): void
     {
         $path = $this->getDiskImagePath();
 
@@ -283,7 +297,7 @@ trait WithGraphicDraw
         $this->editHistory[] = $this->getDrawSettings();
     }
 
-    public function normalizeColors()
+    public function normalizeColors(): void
     {
         [$r, $g, $b] = sscanf($this->colorize, '#%02x%02x%02x');
 
@@ -292,17 +306,19 @@ trait WithGraphicDraw
         $this->colorizeBlue = $b - 255;
     }
 
-    public function normalizeHexValue(string $hexColor)
+    public function normalizeHexValue(string $hexColor): int|false
     {
         $hexColor = ltrim($hexColor, '#');
 
-        $red = hexdec(substr($hexColor, 0, 2));
-        $green = hexdec(substr($hexColor, 2, 2));
-        $blue = hexdec(substr($hexColor, 4, 2));
+        $red = (int) hexdec(substr($hexColor, 0, 2));
+        $green = (int) hexdec(substr($hexColor, 2, 2));
+        $blue = (int) hexdec(substr($hexColor, 4, 2));
 
-        $image = imagecreatetruecolor(100, 100);
+        $image = imagecreatetruecolor(1, 1);
+        $color = imagecolorallocate($image, $red, $green, $blue);
+        imagedestroy($image);
 
-        return imagecolorallocate($image, $red, $green, $blue);
+        return $color;
     }
 
     public function centerText(): ?array
@@ -356,7 +372,7 @@ trait WithGraphicDraw
         ];
     }
 
-    public function fillEditorProperties()
+    public function fillEditorProperties(): void
     {
         $this->fill([
             'flipMode' => null,

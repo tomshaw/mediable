@@ -12,7 +12,7 @@ final class AlertState implements Wireable
         public string $message = ''
     ) {}
 
-    public function toLivewire()
+    public function toLivewire(): array
     {
         return [
             'show' => $this->show,
@@ -21,7 +21,7 @@ final class AlertState implements Wireable
         ];
     }
 
-    public static function fromLivewire($value)
+    public static function fromLivewire($value): self
     {
         return new self(
             show: $value['show'],

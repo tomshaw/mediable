@@ -39,7 +39,7 @@ final class PanelState implements Wireable
         return $this->formMode;
     }
 
-    public function toLivewire()
+    public function toLivewire(): array
     {
         return [
             'thumbMode' => $this->thumbMode,
@@ -50,7 +50,7 @@ final class PanelState implements Wireable
         ];
     }
 
-    public static function fromLivewire($value)
+    public static function fromLivewire($value): self
     {
         return new self(
             thumbMode: $value['thumbMode'],

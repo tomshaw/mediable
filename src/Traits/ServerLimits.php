@@ -82,29 +82,20 @@ trait ServerLimits
     /**
      * Convert a shorthand byte value from a PHP configuration directive to an integer.
      *
-     * This method takes a string that represents a byte value in shorthand notation
-     * (like '128M', '2G', or '1K') and converts it to an integer that represents the
-     * same byte value. If the string does not end with 'K', 'M', or 'G', it is assumed
-     * to be a byte value and is simply cast to an integer.
-     *
-     * @param  string  $value  The shorthand byte value to convert.
+     * @param  string  $value  The shorthand byte value to convert (e.g. '128M', '2G', '1K').
      * @return int The byte value as an integer.
      */
     private function convertToBytes(string $value): int
     {
         $value = trim($value);
-        $last = strtolower($value[strlen($value) - 1]);
-        $value = (int) $value;
+        $suffix = strtolower($value[strlen($value) - 1]);
+        $numeric = (int) $value;
 
-        switch ($last) {
-            case 'g':
-                $value *= 1024;
-            case 'm':
-                $value *= 1024;
-            case 'k':
-                $value *= 1024;
-        }
-
-        return $value;
+        return match ($suffix) {
+            'g' => $numeric * 1_073_741_824,
+            'm' => $numeric * 1_048_576,
+            'k' => $numeric * 1_024,
+            default => $numeric,
+        };
     }
 }

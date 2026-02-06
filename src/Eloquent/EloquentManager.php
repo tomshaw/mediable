@@ -20,7 +20,7 @@ class EloquentManager
         public Builder $query,
     ) {}
 
-    public function load(int $id)
+    public function load(int $id): ?Attachment
     {
         return Attachment::find($id);
     }
@@ -133,7 +133,7 @@ class EloquentManager
         ];
     }
 
-    private function createImageResource(GdImage $image, string $stored, string $disk, string $type = 'image/webp', int $quality = -1)
+    private function createImageResource(GdImage $image, string $stored, string $disk, string $type = 'image/webp', int $quality = -1): string
     {
         $extension = ($type === 'image/webp') ? 'webp' : 'avif';
 
@@ -177,7 +177,7 @@ class EloquentManager
     public function delete(int $id): void
     {
         try {
-            Attachment::find($id)->delete();
+            Attachment::findOrFail($id)->delete();
         } catch (Exception $e) {
             throw new MediaBrowserException($e->getMessage());
         }
@@ -186,17 +186,17 @@ class EloquentManager
     public function garbage(): void
     {
         try {
-            $attachments = Attachment::where('hidden', true)->get();
+            Attachment::where('hidden', true)->chunkById(100, function ($attachments): void {
+                foreach ($attachments as $attachment) {
+                    $fileDir = $attachment->file_dir;
 
-            foreach ($attachments as $attachment) {
-                $fileDir = $attachment->file_dir;
+                    if ($fileDir && Storage::exists($fileDir)) {
+                        Storage::delete($fileDir);
+                    }
 
-                if (Storage::exists($fileDir)) {
-                    Storage::delete($fileDir);
+                    $attachment->delete();
                 }
-
-                $attachment->delete();
-            }
+            });
         } catch (Exception $e) {
             throw new MediaBrowserException($e->getMessage());
         }
@@ -299,14 +299,15 @@ class EloquentManager
     public function search(string $searchTerm, array $searchColumns): void
     {
         if ($searchTerm) {
-
-            foreach ($searchColumns as $index => $column) {
-                if ($index === 0) {
-                    $this->query->where($column, 'like', "%{$searchTerm}%");
-                } else {
-                    $this->query->orWhere($column, 'like', "%{$searchTerm}%");
+            $this->query->where(function (Builder $query) use ($searchTerm, $searchColumns): void {
+                foreach ($searchColumns as $index => $column) {
+                    if ($index === 0) {
+                        $query->where($column, 'like', "%{$searchTerm}%");
+                    } else {
+                        $query->orWhere($column, 'like', "%{$searchTerm}%");
+                    }
                 }
-            }
+            });
         }
     }
 
@@ -331,14 +332,14 @@ class EloquentManager
         return ['disk' => $name, 'driver' => $disks[$name]];
     }
 
-    public function getMimeTypeStats()
+    public function getMimeTypeStats(): \Illuminate\Database\Eloquent\Collection
     {
         return Attachment::select('file_type', DB::raw('count(*) as total'), DB::raw('sum(file_size) as total_size'))
             ->groupBy('file_type')
             ->get();
     }
 
-    public function getMimeTypeTotals()
+    public function getMimeTypeTotals(): ?Attachment
     {
         return Attachment::select(DB::raw('count(*) as total'), DB::raw('sum(file_size) as total_size'))->first();
     }

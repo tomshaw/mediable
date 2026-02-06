@@ -4,7 +4,8 @@ namespace TomShaw\Mediable\Traits;
 
 trait WithMimeTypes
 {
-    protected $strategies = [
+    /** @var array<string, list<string>> */
+    protected array $strategies = [
         'image' => [
             'image/jpeg',
             'image/png',
@@ -29,7 +30,6 @@ trait WithMimeTypes
             'audio/flac',
             'audio/midi',
             'audio/mpeg',
-            'audio/ogg',
             'audio/ogg',
             'audio/opus',
             'audio/wav',
@@ -69,13 +69,10 @@ trait WithMimeTypes
             'application/x-gzip',
             'application/x-lzh',
             'application/x-lha',
-            'application/x-tar',
             'application/x-compress',
             'application/x-compressed',
             'application/x-stuffit',
             'application/x-stuffitx',
-            'application/x-gtar',
-            'application/x-gzip',
             'application/vnd.android.package-archive',
         ],
     ];

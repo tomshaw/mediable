@@ -35,8 +35,20 @@ class Attachment extends Model
         'title',
         'caption',
         'description',
-        'sortorder',
+        'sort_order',
         'styles',
         'hidden',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'file_size' => 'integer',
+            'sort_order' => 'integer',
+            'hidden' => 'boolean',
+        ];
+    }
 }

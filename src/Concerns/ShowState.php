@@ -93,7 +93,7 @@ final class ShowState implements Wireable
         return $this->showAppStats;
     }
 
-    public function toLivewire()
+    public function toLivewire(): array
     {
         return [
             'showPagination' => $this->showPagination,
@@ -113,7 +113,7 @@ final class ShowState implements Wireable
         ];
     }
 
-    public static function fromLivewire($value)
+    public static function fromLivewire($value): self
     {
         return new self(
             showPagination: $value['showPagination'],

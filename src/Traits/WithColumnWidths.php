@@ -10,50 +10,15 @@ trait WithColumnWidths
 
     public function normalizeColumnPadding(float $columnWidth): float
     {
-        $padding = 2;
-
-        switch ($columnWidth) {
-            case 100:
-                $padding = 6;
-                break;
-            case 50:
-                $padding = 5;
-                break;
-            case 33.3:
-                $padding = 4.5;
-                break;
-            case 25:
-                $padding = 4;
-                break;
-            case 20:
-                $padding = 3.5;
-                break;
-            case 16.66:
-                $padding = 3;
-                break;
-            case 14.28:
-                $padding = 3;
-                break;
-            case 12.5:
-                $padding = 3;
-                break;
-            case 11.11:
-                $padding = 2.5;
-                break;
-            case 10:
-                $padding = 2;
-                break;
-            case 9.09:
-                $padding = 2;
-                break;
-            case 8.33:
-                $padding = 2;
-                break;
-            default:
-                $padding = 2;
-                break;
-        }
-
-        return $padding;
+        return match ($columnWidth) {
+            100.0 => 6.0,
+            50.0 => 5.0,
+            33.3 => 4.5,
+            25.0 => 4.0,
+            20.0 => 3.5,
+            16.66, 14.28, 12.5 => 3.0,
+            11.11 => 2.5,
+            default => 2.0,
+        };
     }
 }

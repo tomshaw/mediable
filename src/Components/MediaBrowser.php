@@ -30,7 +30,7 @@ class MediaBrowser extends Component
 
     public ShowState $show;
 
-    public $uniqueId;
+    public string $uniqueId = '';
 
     public bool $fullScreen = false;
 
@@ -91,7 +91,7 @@ class MediaBrowser extends Component
         $this->deleteStoreAttachmentId();
     }
 
-    public function boot()
+    public function boot(): void
     {
         $this->dispatch(
             'server:limits',
@@ -220,9 +220,7 @@ class MediaBrowser extends Component
     #[On('delete.selected')]
     public function deleteSelected(array $selectedIds): void
     {
-        foreach ($selectedIds as $id) {
-            Eloquent::delete($id);
-        }
+        Attachment::whereIn('id', $selectedIds)->delete();
 
         $count = count($selectedIds);
 
@@ -314,7 +312,7 @@ class MediaBrowser extends Component
         $this->resetPage();
     }
 
-    public function toggleOrderDir()
+    public function toggleOrderDir(): void
     {
         $this->orderDir = $this->orderDir === 'asc' ? 'desc' : 'asc';
     }
@@ -351,7 +349,7 @@ class MediaBrowser extends Component
         $this->dispatch('panel:regenerate-unique-id', uniqueId: $uniqueId);
     }
 
-    public function generateUniqueId()
+    public function generateUniqueId(): void
     {
         $this->uniqueId = uniqid();
     }
@@ -367,7 +365,7 @@ class MediaBrowser extends Component
         ]);
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         Eloquent::query($this->orderBy, $this->orderDir, $this->selectedMimeType);
 

@@ -10,18 +10,18 @@ final class AttachmentState implements Wireable
 {
     public function __construct(
         public ?int $id = null,
-        public ?string $file_name = '',
-        public ?string $file_original_name = '',
-        public ?string $file_type = '',
-        public ?int $file_size = 0,
-        public ?string $file_dir = '',
-        public ?string $file_url = '',
-        public ?string $title = '',
-        public ?string $caption = '',
-        public ?string $description = '',
-        public ?int $sort_order = 0,
-        public ?string $styles = '',
-        public ?bool $hidden = false,
+        public string $file_name = '',
+        public string $file_original_name = '',
+        public string $file_type = '',
+        public int $file_size = 0,
+        public string $file_dir = '',
+        public string $file_url = '',
+        public string $title = '',
+        public string $caption = '',
+        public string $description = '',
+        public int $sort_order = 0,
+        public string $styles = '',
+        public bool $hidden = false,
         public ?string $created_at = null,
         public ?string $updated_at = null
     ) {}
@@ -30,24 +30,24 @@ final class AttachmentState implements Wireable
     {
         return new self(
             id: $attachment->id,
-            file_name: $attachment->file_name,
-            file_original_name: $attachment->file_original_name,
-            file_type: $attachment->file_type,
-            file_size: $attachment->file_size,
-            file_dir: $attachment->file_dir,
-            file_url: $attachment->file_url,
-            title: $attachment->title,
-            caption: $attachment->caption,
-            description: $attachment->description,
-            sort_order: $attachment->sort_order,
-            styles: $attachment->styles,
+            file_name: $attachment->file_name ?? '',
+            file_original_name: $attachment->file_original_name ?? '',
+            file_type: $attachment->file_type ?? '',
+            file_size: $attachment->file_size ?? 0,
+            file_dir: $attachment->file_dir ?? '',
+            file_url: $attachment->file_url ?? '',
+            title: $attachment->title ?? '',
+            caption: $attachment->caption ?? '',
+            description: $attachment->description ?? '',
+            sort_order: $attachment->sort_order ?? 0,
+            styles: $attachment->styles ?? '',
             hidden: $attachment->hidden,
             created_at: $attachment->created_at,
             updated_at: $attachment->updated_at,
         );
     }
 
-    public function toLivewire()
+    public function toLivewire(): array
     {
         return [
             'id' => $this->id,
@@ -68,7 +68,7 @@ final class AttachmentState implements Wireable
         ];
     }
 
-    public static function fromLivewire($value)
+    public static function fromLivewire($value): self
     {
         return self::fromArray($value);
     }
@@ -94,7 +94,7 @@ final class AttachmentState implements Wireable
         );
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
