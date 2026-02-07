@@ -160,16 +160,16 @@ new class extends Component
                         <source src="{{ asset($item['file_url']) }}" type="{{ $item['file_type'] }}">
                     </audio>
 
-                    <button wire:click.stop="playAudio({{ $item['id'] }})" id="playIcon{{ $item['id'] }}" @class(['w-12 h-12 bg-[#555] rounded-full items-center justify-center cursor-pointer', ($item['id'] === $audioElementId) ? 'hidden' : 'flex'])>
+                    <button wire:click.stop="playAudio({{ $item['id'] }})" id="playIcon{{ $item['id'] }}" @class(['w-12 h-12 bg-neutral-900 rounded-full items-center justify-center cursor-pointer', ($item['id'] === $audioElementId) ? 'hidden' : 'flex'])>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-white">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </button>
 
                     <button wire:click.stop="pauseAudio({{ $item['id'] }})" id="pauseIcon{{ $item['id'] }}" @class(['bg-white bg-opacity-10 w-12 h-12 justify-between items-end p-2 box-border cursor-pointer gap-x-[1px]', ($item['id'] === $audioElementId) ? 'flex' : 'hidden'])>
-                        <span class="audio-animation inline-block bg-[#555] w-1/3 h-[60%]" style="animation-delay: 0;"></span>
-                        <span class="audio-animation inline-block bg-[#555] w-1/3 h-[30%]" style="animation-delay: -2.2s;"></span>
-                        <span class="audio-animation inline-block bg-[#555] w-1/3 h-[75%]" style="animation-delay: -3.7s"></span>
+                        <span class="audio-animation inline-block bg-neutral-900 w-1/3 h-[60%]" style="animation-delay: 0;"></span>
+                        <span class="audio-animation inline-block bg-neutral-900 w-1/3 h-[30%]" style="animation-delay: -2.2s;"></span>
+                        <span class="audio-animation inline-block bg-neutral-900 w-1/3 h-[75%]" style="animation-delay: -3.7s"></span>
                     </button>
 
                     <div class="absolute inset-x-0 bottom-0 overflow-hidden max-h-full whitespace-nowrap text-left text-xs font-normal px-1.5">
@@ -180,7 +180,7 @@ new class extends Component
                 </div>
                 @else
                 <div class="relative object-contain">
-                    <div class="flex items-center justify-center text-white bg-[#555] rounded-full cursor-pointer w-12 h-12">
+                    <div class="flex items-center justify-center text-white bg-neutral-900 rounded-full cursor-pointer w-12 h-12">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 ">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 2v20h12V8l-6-6zm6 4v4h6"></path>
                         </svg>
