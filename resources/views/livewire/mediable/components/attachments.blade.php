@@ -65,6 +65,12 @@ new class extends Component
         $this->dispatch('mediable.scroll', id: $id);
     }
 
+    #[On('attachments:toggle-item')]
+    public function handleToggleItem(int $id): void
+    {
+        $this->toggleAttachment($id);
+    }
+
     #[On('attachments:clear-selected')]
     public function clearSelected(): void
     {

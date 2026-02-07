@@ -19,9 +19,9 @@ new class extends Component
         $this->selectedIds = $selectedIds;
     }
 
-    public function setActiveAttachment(int $id): void
+    public function toggleAttachment(int $id): void
     {
-        $this->dispatch('attachment:active-changed', id: $id);
+        $this->dispatch('attachments:toggle-item', id: $id);
     }
 
     public function isSelected(int $id): bool
@@ -49,7 +49,7 @@ new class extends Component
     @if (count($attachments))
     <ul class="flex items-center justify-start gap-x-2">
         @foreach($attachments as $item)
-        <li class="shadow-md cursor-pointer" wire:click="setActiveAttachment({{$item['id']}})">
+        <li class="shadow-md cursor-pointer" wire:click="toggleAttachment({{$item['id']}})">
             <div @class(['border border-black w-16 h-16 overflow-hidden', $this->isSelected($item['id']) ? 'border-black' : 'border-black'])>
                 @if ($this->mimeTypeImage($item['file_type']))
                 <img src="{{ $item['file_url'] }}?id={{ $uniqueId }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
