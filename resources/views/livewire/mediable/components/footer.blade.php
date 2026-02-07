@@ -44,7 +44,11 @@ new class extends Component
 
     public function confirmDelete(): void
     {
-        $this->dispatch('panel:confirm-delete', selectedIds: $this->selectedIds);
+        $this->dispatch('mediable.confirm',
+            message: 'Are you sure you want to delete the selected attachments?',
+            type: 'delete.selected',
+            selectedIds: $this->selectedIds,
+        );
     }
 
     public function clearSelected(): void
