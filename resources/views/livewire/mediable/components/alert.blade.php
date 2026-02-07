@@ -4,7 +4,8 @@ use Livewire\Attributes\Modelable;
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AlertState;
 
-new class extends Component {
+new class extends Component
+{
     #[Modelable]
     public AlertState $alert;
 

@@ -3,7 +3,8 @@
 use Livewire\Component;
 use TomShaw\Mediable\Traits\{WithFileSize, WithReporting};
 
-new class extends Component {
+new class extends Component
+{
     use WithFileSize;
     use WithReporting;
 }; ?>

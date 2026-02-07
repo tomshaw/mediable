@@ -7,7 +7,8 @@ use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Models\Attachment;
 
-new class extends Component {
+new class extends Component
+{
     public ?AttachmentState $attachment = null;
 
     public string $title = '';
@@ -33,6 +34,7 @@ new class extends Component {
             if ($item) {
                 $this->attachment = AttachmentState::fromAttachment($item);
                 $this->syncFormFromAttachment();
+
                 return;
             }
         }
@@ -90,6 +92,7 @@ new class extends Component {
                 'type' => 'error',
                 'message' => $validator->errors()->first(),
             ]);
+
             return;
         }
 

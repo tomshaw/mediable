@@ -1,13 +1,12 @@
 <?php
 
-use Illuminate\Database\Eloquent\Collection;
-use Livewire\Attributes\On;
-use Livewire\Attributes\Reactive;
+use Livewire\Attributes\{On, Reactive};
 use Livewire\Component;
 
-new class extends Component {
+new class extends Component
+{
     #[Reactive]
-    public Collection $data;
+    public array $attachments = [];
 
     #[Reactive]
     public string $uniqueId;
@@ -47,11 +46,11 @@ new class extends Component {
 }; ?>
 
 <div>
-    @if ($data->count())
+    @if (count($attachments))
     <ul class="flex items-center justify-start gap-x-2">
-        @foreach($data as $item)
-        <li class="shadow-md cursor-pointer" wire:click="setActiveAttachment({{$item->id}})">
-            <div @class(['border border-black w-16 h-16 overflow-hidden', $this->isSelected($item->id) ? 'border-black' : 'border-black'])>
+        @foreach($attachments as $item)
+        <li class="shadow-md cursor-pointer" wire:click="setActiveAttachment({{$item['id']}})">
+            <div @class(['border border-black w-16 h-16 overflow-hidden', $this->isSelected($item['id']) ? 'border-black' : 'border-black'])>
                 @if ($this->mimeTypeImage($item['file_type']))
                 <img src="{{ $item['file_url'] }}?id={{ $uniqueId }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
                 @elseif ($this->mimeTypeVideo($item['file_type']))

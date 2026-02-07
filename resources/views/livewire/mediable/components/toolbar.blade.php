@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Database\Eloquent\Collection;
-use Livewire\Attributes\On;
-use Livewire\Attributes\Reactive;
+use Livewire\Attributes\{On, Reactive};
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\{PanelState, ShowState};
 
-new class extends Component {
+new class extends Component
+{
     #[Reactive]
     public PanelState $panel;
 
@@ -14,7 +13,7 @@ new class extends Component {
     public ShowState $show;
 
     #[Reactive]
-    public Collection $data;
+    public array $attachments = [];
 
     #[Reactive]
     public array $orderColumns;
@@ -166,7 +165,7 @@ new class extends Component {
     @endif
 
     {{-- Close/Back Button --}}
-    @if($panel->isUploadMode() && !$data->isEmpty())
+    @if($panel->isUploadMode() && !empty($attachments))
     <button wire:click="enableThumbMode" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-[#555] font-medium text-xs tracking-wider text-neutral-50 cursor-pointer transition active:scale-95">
       <x-icons.close />
     </button>
@@ -183,7 +182,7 @@ new class extends Component {
     {{-- Thumb Mode Controls --}}
     @if($panel->isThumbMode())
 
-    @if($show->isShowOrderBy() && $data->count())
+    @if($show->isShowOrderBy() && count($attachments))
     <select class="control-select" wire:model.live="orderBy">
       @foreach($orderColumns as $key => $value)
       <option value="{{$key}}">{{ $value }}</option>
@@ -191,7 +190,7 @@ new class extends Component {
     </select>
     @endif
 
-    @if($show->isShowOrderDir() && $data->count())
+    @if($show->isShowOrderDir() && count($attachments))
     <button type="button" class="relative flex items-center justify-between w-20 min-w-20 max-w-20 px-3 py-1.5 bg-[#555] rounded-full font-medium text-xs tracking-wider text-neutral-50 cursor-pointer transition-all duration-100 ease-in" wire:click="toggleOrderDir()">
       @if(strtoupper($orderDir) == 'ASC')
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4">
@@ -206,7 +205,7 @@ new class extends Component {
     </button>
     @endif
 
-    @if($show->isShowColumnWidth() && $data->count())
+    @if($show->isShowColumnWidth() && count($attachments))
     <select class="control-select" wire:model.live="defaultColumnWidth">
       @foreach(array_reverse($columnWidths, true) as $key => $value)
       <option value="{{$key}}">{{ $value }}</option>

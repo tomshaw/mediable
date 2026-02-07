@@ -1,12 +1,12 @@
 <?php
 
-use Livewire\Attributes\On;
-use Livewire\Attributes\Reactive;
+use Livewire\Attributes\{On, Reactive};
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Models\Attachment;
 
-new class extends Component {
+new class extends Component
+{
     public ?AttachmentState $attachment = null;
 
     #[Reactive]
@@ -36,6 +36,7 @@ new class extends Component {
             $item = Attachment::find($id);
             if ($item) {
                 $this->attachment = AttachmentState::fromAttachment($item);
+
                 return;
             }
         }

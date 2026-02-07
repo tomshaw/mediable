@@ -8,7 +8,8 @@ use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 use TomShaw\Mediable\Models\Attachment;
 use TomShaw\Mediable\Traits\{WithFonts, WithGraphicDraw};
 
-new class extends Component {
+new class extends Component
+{
     use WithFonts;
     use WithGraphicDraw;
 
@@ -57,13 +58,13 @@ new class extends Component {
             $item = Attachment::find($id);
             if ($item) {
                 $this->selectedAttachment = AttachmentState::fromAttachment($item);
+
                 return;
             }
         }
 
         $this->selectedAttachment = null;
     }
-
 
     protected function prepareImageEditor(): void
     {

@@ -1,7 +1,6 @@
 <?php
 
-use Livewire\Attributes\On;
-use Livewire\Attributes\Reactive;
+use Livewire\Attributes\{On, Reactive};
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Eloquent\Eloquent;
@@ -9,7 +8,8 @@ use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 use TomShaw\Mediable\Models\Attachment;
 use TomShaw\Mediable\Traits\{WithFileSize, WithMimeTypes};
 
-new class extends Component {
+new class extends Component
+{
     use WithFileSize;
     use WithMimeTypes;
 
@@ -49,6 +49,7 @@ new class extends Component {
             if ($item) {
                 $this->attachment = AttachmentState::fromAttachment($item);
                 $this->calculateImageDimensions();
+
                 return;
             }
         }

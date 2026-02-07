@@ -1,13 +1,12 @@
 <?php
 
 use Illuminate\Support\Collection;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
-use Livewire\Attributes\Reactive;
+use Livewire\Attributes\{Computed, On, Reactive};
 use Livewire\Component;
 use TomShaw\Mediable\Models\Attachment;
 
-new class extends Component {
+new class extends Component
+{
     #[Reactive]
     public string $uniqueId;
 

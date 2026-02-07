@@ -1,12 +1,12 @@
 <?php
 
 use Livewire\Attributes\On;
-use Livewire\Component;
-use Livewire\WithFileUploads;
+use Livewire\{Component, WithFileUploads};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Traits\WithFileSize;
 
-new class extends Component {
+new class extends Component
+{
     use WithFileSize;
     use WithFileUploads;
 

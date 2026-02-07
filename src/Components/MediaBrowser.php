@@ -357,13 +357,18 @@ class MediaBrowser extends Component
         $this->uniqueId = uniqid();
     }
 
+    public function getUniqueId(): string
+    {
+        return uniqid();
+    }
+
     private function renderView(LengthAwarePaginator $paginator): \Illuminate\Contracts\View\View
     {
         /** @var view-string $view */
         $view = 'mediable::livewire.media-browser';
 
         return view($view, [
-            'uniqueId' => $this->uniqueId,
+            'uniqueId' => $this->getUniqueId(),
             'data' => $paginator,
         ]);
     }

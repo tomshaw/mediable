@@ -4,7 +4,8 @@ use Livewire\Attributes\{Modelable, Reactive};
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\ShowState;
 
-new class extends Component {
+new class extends Component
+{
     #[Reactive]
     public ?ShowState $show;
 
