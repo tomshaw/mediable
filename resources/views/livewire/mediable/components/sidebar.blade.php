@@ -118,11 +118,11 @@ new class extends Component
         <div class="flex items-start justify-center p-0 m-0 w-full h-full">
             <form class="w-full" wire:submit.prevent="updateAttachment" role="form">
                 <div class="p-2 m-0">
-                    <x-mediable::form-field label="Title" id="title" wire:model="title" spellcheck="false" />
-                    <x-mediable::form-field label="Caption" id="caption" wire:model="caption" spellcheck="false" />
-                    <x-mediable::form-field label="Order" id="sort_order" wire:model="sort_order" spellcheck="false" />
-                    <x-mediable::form-field label="Styles" id="styles" wire:model="styles" spellcheck="false" />
-                    <x-mediable::form-field label="Description" id="description" :rows="4" wire:model="description" spellcheck="false" />
+                    <x-mediable::form-input label="Title" id="title" wire:model="title" spellcheck="false" />
+                    <x-mediable::form-input label="Caption" id="caption" wire:model="caption" spellcheck="false" />
+                    <x-mediable::form-input label="Order" id="sort_order" wire:model="sort_order" spellcheck="false" />
+                    <x-mediable::form-input label="Styles" id="styles" wire:model="styles" spellcheck="false" />
+                    <x-mediable::form-textarea label="Description" id="description" :rows="4" wire:model="description" spellcheck="false" />
                 </div>
                 <div class="flex flex-col items-start justify-start flex-nowrap gap-y-2 p-0 mt-1">
                     <button type="reset" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50 cursor-pointer">

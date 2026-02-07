@@ -222,8 +222,8 @@ new class extends Component
                         wire:model="scaleMode"
                         wire:change="scaleImage"
                     />
-                    <x-mediable::form-field label="Width:" id="scaleWidth" type="number" wire:model.live.debounce.500ms="scaleWidth" />
-                    <x-mediable::form-field label="Height:" id="scaleHeight" type="number" wire:model.live.debounce.500ms="scaleHeight" />
+                    <x-mediable::form-input label="Width:" id="scaleWidth" type="number" wire:model.live.debounce.500ms="scaleWidth" />
+                    <x-mediable::form-input label="Height:" id="scaleHeight" type="number" wire:model.live.debounce.500ms="scaleHeight" />
                     <x-mediable::form-actions action="scaleImage" target="scaleImage" :showHistory="count($editHistory) > 0" />
                 @endif
 
@@ -236,40 +236,40 @@ new class extends Component
                         wire:model.live="filterMode"
                     />
                     @if($filterMode == IMG_FILTER_CONTRAST)
-                        <x-mediable::form-field label="Contrast:" id="contrast" type="number" wire:model="contrast" min="-100" max="100" step="1" />
+                        <x-mediable::form-input label="Contrast:" id="contrast" type="number" wire:model="contrast" min="-100" max="100" step="1" />
                     @endif
                     @if($filterMode == IMG_FILTER_BRIGHTNESS)
-                        <x-mediable::form-field label="Brightness:" id="brightness" type="number" wire:model="brightness" min="-255" max="255" step="1" />
+                        <x-mediable::form-input label="Brightness:" id="brightness" type="number" wire:model="brightness" min="-255" max="255" step="1" />
                     @endif
                     @if($filterMode == IMG_FILTER_COLORIZE)
-                        <x-mediable::form-field label="Colorize Color:" id="colorize" type="color" wire:model="colorize" />
+                        <x-mediable::form-input label="Colorize Color:" id="colorize" type="color" wire:model="colorize" />
                     @endif
                     @if($filterMode == IMG_FILTER_SMOOTH)
-                        <x-mediable::form-field label="Smooth Level:" id="smoothLevel" type="number" wire:model="smoothLevel" min="-10" max="10" step="1" />
+                        <x-mediable::form-input label="Smooth Level:" id="smoothLevel" type="number" wire:model="smoothLevel" min="-10" max="10" step="1" />
                     @endif
                     @if($filterMode == IMG_FILTER_PIXELATE)
-                        <x-mediable::form-field label="Pixelate Block Size:" id="pixelateBlockSize" type="number" wire:model="pixelateBlockSize" min="1" step="1" />
+                        <x-mediable::form-input label="Pixelate Block Size:" id="pixelateBlockSize" type="number" wire:model="pixelateBlockSize" min="1" step="1" />
                     @endif
                     <x-mediable::form-actions action="filterImage" target="filterImage" :showHistory="count($editHistory) > 0" />
                 @endif
 
                 @if($selectedForm == 'image-rotate')
-                    <x-mediable::form-field label="Enter rotation amount (in degrees):" id="rotateAngle" type="range" wire:model="rotateAngle" min="0" max="360" />
-                    <x-mediable::form-field label="Background Color:" id="rotateBgColor" type="color" wire:model="rotateBgColor" />
-                    <x-mediable::form-field label="Ignore Transparent:" id="rotateIgnoreTransparent" type="checkbox" wire:model="rotateIgnoreTransparent" />
+                    <x-mediable::form-input label="Enter rotation amount (in degrees):" id="rotateAngle" type="range" wire:model="rotateAngle" min="0" max="360" />
+                    <x-mediable::form-input label="Background Color:" id="rotateBgColor" type="color" wire:model="rotateBgColor" />
+                    <x-mediable::form-checkbox label="Ignore Transparent:" id="rotateIgnoreTransparent" wire:model="rotateIgnoreTransparent" />
                     <x-mediable::form-actions action="rotateImage" target="rotateImage" :showHistory="count($editHistory) > 0" />
                 @endif
 
                 @if($selectedForm == 'image-crop')
-                    <x-mediable::form-field label="X Coordinate:" id="cropX" type="number" wire:model="cropX" />
-                    <x-mediable::form-field label="Y Coordinate:" id="cropY" type="number" wire:model="cropY" />
-                    <x-mediable::form-field label="Width:" id="cropWidth" type="number" wire:model="cropWidth" />
-                    <x-mediable::form-field label="Height:" id="cropHeight" type="number" wire:model="cropHeight" />
+                    <x-mediable::form-input label="X Coordinate:" id="cropX" type="number" wire:model="cropX" />
+                    <x-mediable::form-input label="Y Coordinate:" id="cropY" type="number" wire:model="cropY" />
+                    <x-mediable::form-input label="Width:" id="cropWidth" type="number" wire:model="cropWidth" />
+                    <x-mediable::form-input label="Height:" id="cropHeight" type="number" wire:model="cropHeight" />
                     <x-mediable::form-actions action="cropImage" target="cropImage" :showHistory="count($editHistory) > 0" />
                 @endif
 
                 @if($selectedForm == 'image-text')
-                    <x-mediable::form-field label="Text:" id="imageText" type="text" wire:model="imageText" />
+                    <x-mediable::form-input label="Text:" id="imageText" type="text" wire:model="imageText" />
                     <x-mediable::form-select
                         label="Font face:"
                         id="imageFont"
@@ -277,9 +277,9 @@ new class extends Component
                         :options="$this->buildFontList()"
                         wire:model="imageFont"
                     />
-                    <x-mediable::form-field label="Font size:" id="imageFontSize" type="text" wire:model="imageFontSize" />
-                    <x-mediable::form-field label="Font color:" id="imageTextColor" type="color" wire:model="imageTextColor" />
-                    <x-mediable::form-field label="Font angle:" id="imageTextAngle" type="range" wire:model="imageTextAngle" min="0" max="360" />
+                    <x-mediable::form-input label="Font size:" id="imageFontSize" type="text" wire:model="imageFontSize" />
+                    <x-mediable::form-input label="Font color:" id="imageTextColor" type="color" wire:model="imageTextColor" />
+                    <x-mediable::form-input label="Font angle:" id="imageTextAngle" type="range" wire:model="imageTextAngle" min="0" max="360" />
                     <x-mediable::form-actions action="addText" target="addText" :showHistory="count($editHistory) > 0" />
                 @endif
 
