@@ -36,22 +36,6 @@ new class extends Component
 
     public ?int $activeId = null;
 
-    public int $uploadFileCount = 0;
-
-    public bool $isUploading = false;
-
-    #[On('uploads:files-changed')]
-    public function handleFilesChanged(int $count): void
-    {
-        $this->uploadFileCount = $count;
-    }
-
-    #[On('uploads:completed')]
-    public function handleUploadsCompleted(): void
-    {
-        $this->isUploading = false;
-    }
-
     #[On('attachments:selection-changed')]
     public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
@@ -119,17 +103,6 @@ new class extends Component
     public function enableEditorMode(): void
     {
         $this->dispatch('toolbar:enable-editor-mode');
-    }
-
-    public function clearFiles(): void
-    {
-        $this->dispatch('uploads:reset');
-    }
-
-    public function createAttachments(): void
-    {
-        $this->isUploading = true;
-        $this->dispatch('uploads:submit');
     }
 
     public function toggleMetaInfo(): void
@@ -231,22 +204,6 @@ new class extends Component
 
   {{-- Right Section --}}
   <div class="flex items-center justify-end gap-1.5 xl:gap-2">
-
-    {{-- Upload Mode Actions --}}
-    @if($panel->isUploadMode() && $uploadFileCount >= 1)
-    <button wire:click="clearFiles" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 py-1.5 px-4 font-medium text-xs tracking-wider text-gray-50 cursor-pointer">
-      <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
-      <span class="relative">Reset</span>
-    </button>
-    <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 py-1.5 px-4 font-medium text-xs tracking-wider text-gray-50 cursor-pointer" wire:click="createAttachments" @disabled($isUploading)>
-      <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
-      @if($isUploading)
-      <span class="spinner relative"></span>
-      @else
-      <span class="relative">Submit</span>
-      @endif
-    </button>
-    @endif
 
     {{-- Trash Button (preview mode only) --}}
     @if($panel->isPreviewMode() && $activeId)

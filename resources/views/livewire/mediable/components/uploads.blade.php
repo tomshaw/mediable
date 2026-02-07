@@ -57,9 +57,20 @@ new class extends Component
     <div class="flex flex-col items-center justify-center h-auto w-full max-w-screen-2xl p-4 md:p-6 lg:p-8 m-0">
         <div class="w-full">
             @if(count($files) >= 1)
-            <div class="flex justify-between gap-2 mb-2">
+            <div class="flex justify-between items-center gap-2 mb-2">
                 <span class="text-xs text-gray-500 font-bold uppercase">{{ count($files) }} files selected</span>
-                <span class="text-xs text-gray-500 font-bold uppercase">{{ $this->formatBytes($this->getTotalUploadSize()) }} upload size</span>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs text-gray-500 font-bold uppercase">{{ $this->formatBytes($this->getTotalUploadSize()) }} upload size</span>
+                    <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 py-1.5 px-4 font-medium text-xs tracking-wider text-gray-50 cursor-pointer" wire:click="clearFiles">
+                        <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
+                        <span class="relative">Reset</span>
+                    </button>
+                    <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 py-1.5 px-4 font-medium text-xs tracking-wider text-gray-50 cursor-pointer" wire:click="createAttachments" wire:loading.attr="disabled" wire:target="createAttachments">
+                        <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="spinner relative" wire:loading wire:target="createAttachments"></span>
+                        <span class="relative" wire:loading.remove wire:target="createAttachments">Submit</span>
+                    </button>
+                </div>
             </div>
             @endif
             <div class="overflow-x-auto md:overflow-visible">
