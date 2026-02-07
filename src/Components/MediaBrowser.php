@@ -54,16 +54,6 @@ class MediaBrowser extends Component
 
     public array $orderDirValues = ['ASC' => 'Ascending', 'DESC' => 'Descending'];
 
-    public ?int $maxUploadSize = null;
-
-    public ?int $maxFileUploads = null;
-
-    public ?int $maxUploadFileSize = null;
-
-    public ?int $postMaxSize = null;
-
-    public ?int $memoryLimit = null;
-
     public function mount(): void
     {
         $this->generateUniqueId();
@@ -75,12 +65,6 @@ class MediaBrowser extends Component
         $this->panel = new PanelState(thumbMode: true);
 
         $this->show = new ShowState;
-
-        $this->maxUploadSize = $this->getMaxUploadSize();
-        $this->maxFileUploads = $this->getMaxFileUploads();
-        $this->maxUploadFileSize = $this->getMaxUploadFileSize();
-        $this->postMaxSize = $this->getPostMaxSize();
-        $this->memoryLimit = $this->getMemoryLimit();
 
         $this->resetModal();
 
@@ -95,11 +79,11 @@ class MediaBrowser extends Component
     {
         $this->dispatch(
             'server:limits',
-            maxUploadSize: $this->maxUploadSize,
-            maxFileUploads: $this->maxFileUploads,
-            maxUploadFileSize: $this->maxUploadFileSize,
-            postMaxSize: $this->postMaxSize,
-            memoryLimit: $this->memoryLimit
+            maxUploadSize: $this->getMaxUploadSize(),
+            maxFileUploads: $this->getMaxFileUploads(),
+            maxUploadFileSize: $this->getMaxUploadFileSize(),
+            postMaxSize: $this->getPostMaxSize(),
+            memoryLimit: $this->getMemoryLimit(),
         );
 
         $this->uniqueMimeTypes = Eloquent::uniqueMimes();

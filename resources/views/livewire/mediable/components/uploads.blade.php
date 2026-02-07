@@ -1,6 +1,6 @@
 <?php
 
-use Livewire\Attributes\{On, Reactive};
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use TomShaw\Mediable\Eloquent\Eloquent;
@@ -11,21 +11,6 @@ new class extends Component {
     use WithFileUploads;
 
     public array $files = [];
-
-    #[Reactive]
-    public ?int $maxUploadSize;
-
-    #[Reactive]
-    public ?int $maxFileUploads;
-
-    #[Reactive]
-    public ?int $maxUploadFileSize;
-
-    #[Reactive]
-    public ?int $postMaxSize;
-
-    #[Reactive]
-    public ?int $memoryLimit;
 
     public function updatedFiles(): void
     {
