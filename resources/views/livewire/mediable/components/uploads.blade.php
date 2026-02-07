@@ -162,7 +162,7 @@ new class extends Component
         <livewire:mediable::uploads-list :data="$this->listData" :key="'uploads-list'" />
     @else
     <form>
-        <div class="h-auto max-w-125 py-6 px-7 text-center cursor-pointer border border-gray-400 border-dashed bg-gray-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-gray-600': enter }" x-on:click.prevent="fileClick($event)">
+        <div class="h-auto max-w-125 py-6 px-7 text-center cursor-pointer border border-gray-400 border-dashed bg-gray-100 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-gray-600': enter }" x-on:click.prevent="fileClick($event)">
             <div class="m-0 p-2 flex items-center text-left">
                 <span class="text-gray-500 leading-none">
                     <img src="{{ asset("vendor/mediable/images/upload.png") }}" class="w-full h-full object-cover" alt="Upload files" />
