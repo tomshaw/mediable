@@ -2,7 +2,6 @@
 
 namespace TomShaw\Mediable\Components;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithPagination};
 use TomShaw\Mediable\Concerns\{AlertState, ModalState, PanelState, ShowState};
@@ -362,17 +361,6 @@ class MediaBrowser extends Component
         return uniqid();
     }
 
-    private function renderView(LengthAwarePaginator $paginator): \Illuminate\Contracts\View\View
-    {
-        /** @var view-string $view */
-        $view = 'mediable::livewire.media-browser';
-
-        return view($view, [
-            'uniqueId' => $this->getUniqueId(),
-            'data' => $paginator,
-        ]);
-    }
-
     public function render(): \Illuminate\Contracts\View\View
     {
         Eloquent::query($this->orderBy, $this->orderDir, $this->selectedMimeType);
@@ -385,6 +373,12 @@ class MediaBrowser extends Component
             $this->enableUploadMode();
         }
 
-        return $this->renderView($paginator);
+        /** @var view-string $view */
+        $view = 'mediable::livewire.media-browser';
+
+        return view($view, [
+            'uniqueId' => $this->getUniqueId(),
+            'data' => $paginator,
+        ]);
     }
 }

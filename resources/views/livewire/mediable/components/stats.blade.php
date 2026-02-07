@@ -18,7 +18,7 @@ new class extends Component
         </div>
     </div>
 
-    <div class="grow border-b border-t border-[#ccc] scrollY h-auto p-2">
+    <div class="grow border-b border-t border-gray-300 scrollY h-auto p-2">
         <div class="flex items-start justify-center p-0 m-0 w-full h-full">
             <div class="flex flex-col items-start justify-start w-full p-3 gap-y-1.5">
 

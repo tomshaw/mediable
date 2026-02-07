@@ -123,7 +123,7 @@
                 </div>
 
                 @if($show->isShowImageStrip() && !$panel->isUploadMode() && !$panel->isEditorMode() && !$data->isEmpty())
-                <div class="hidden 2xl:block bg-[#e5e7eb] border-b border-gray-300 h-25 max-h-25 min-h-25 w-full overflow-hidden">
+                <div class="hidden 2xl:block bg-gray-200 border-b border-gray-300 h-25 max-h-25 min-h-25 w-full overflow-hidden">
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
                         <livewire:mediable::strip
                             :attachments="$data->getCollection()->toArray()"
@@ -135,7 +135,7 @@
                 @endif
 
                 @if(!$panel->isUploadMode() && !$panel->isEditorMode() && !$data->isEmpty())
-                <div class="bg-[#e6e6e6] h-15 max-h-15 min-h-15 w-full">
+                <div class="bg-gray-200 h-15 max-h-15 min-h-15 w-full">
                     <livewire:mediable::footer
                         :unique-id="$uniqueId"
                         :key="'footer-'.$uniqueId"

@@ -26,7 +26,7 @@ new class extends Component
 <div class="flex items-center justify-between h-full px-8">
 
     <div class="flex items-center justify-end">
-        <button class="text-[#222] w-28 cursor-pointer" wire:click="expandModal()" role="button">
+        <button class="text-gray-900 w-28 cursor-pointer" wire:click="expandModal()" role="button">
             <x-icons.logo />
         </button>
     </div>
@@ -40,7 +40,7 @@ new class extends Component
     @endif
 
     <div class="flex items-center justify-end">
-        <button class="text-[#555] focus:outline-none transform transition duration-500 hover:rotate-180 cursor-pointer" wire:click="closeModal()">
+        <button class="text-gray-700 focus:outline-none transform transition duration-500 hover:rotate-180 cursor-pointer" wire:click="closeModal()">
             <x-icons.exit />
         </button>
     </div>
