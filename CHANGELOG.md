@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.11.0](https://github.com/tomshaw/mediable/compare/v0.10.2...v0.11.0) (2026-02-07)
+
+
+### Features
+
+* add spinner component and loading indicators for file uploads ([a417004](https://github.com/tomshaw/mediable/commit/a417004c715e22dd6a445747de205309e4bf9403))
+* implement server limits for file uploads in MediaBrowser component ([69b2e53](https://github.com/tomshaw/mediable/commit/69b2e5399876572d89d7536c3398a39ba625a442))
+
 ## [0.10.2](https://github.com/tomshaw/mediable/compare/v0.10.1...v0.10.2) (2026-02-06)
 
 
