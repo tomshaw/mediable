@@ -211,14 +211,13 @@ new class extends Component {
             }
         },
 
-        init() {
-            window.addEventListener('server:limits', event => {
-                this.maxUploadSize = event.detail.maxUploadSize;
-                this.maxFileUploads = event.detail.maxFileUploads;
-                this.maxUploadFileSize = event.detail.maxUploadFileSize;
-                this.postMaxSize = event.detail.postMaxSize;
-                this.memoryLimit = event.detail.memoryLimit;
-            });
+        async init() {
+            const limits = await this.$wire.$parent.getServerLimits();
+            this.maxUploadSize = limits.maxUploadSize;
+            this.maxFileUploads = limits.maxFileUploads;
+            this.maxUploadFileSize = limits.maxUploadFileSize;
+            this.postMaxSize = limits.postMaxSize;
+            this.memoryLimit = limits.memoryLimit;
 
             let fileInput = document.querySelector('#fileInput');
 
