@@ -98,11 +98,7 @@
                                     @endif
                                     @if($show->isShowPerPage() && method_exists($data, 'links') && $data->hasPages())
                                     <div class="hidden xl:block">
-                                        <select class="control-select" wire:model.live="perPage">
-                                            @foreach($perPageValues as $value)
-                                            <option value="{{$value}}"> @if($value == 0) All @else {{ $value }} @endif</option>
-                                            @endforeach
-                                        </select>
+                                        <x-mediable::toolbar-select wire:model.live="perPage" :options="collect($perPageValues)->mapWithKeys(fn ($v) => [$v => $v == 0 ? 'All' : $v])->all()" />
                                     </div>
                                     @endif
                                 </div>

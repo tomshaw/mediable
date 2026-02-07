@@ -192,11 +192,7 @@ new class extends Component
     @if($panel->isThumbMode())
 
     @if($show->isShowOrderBy() && count($attachments))
-    <select class="control-select" wire:model.live="orderBy">
-      @foreach($orderColumns as $key => $value)
-      <option value="{{$key}}">{{ $value }}</option>
-      @endforeach
-    </select>
+    <x-mediable::toolbar-select wire:model.live="orderBy" :options="$orderColumns" />
     @endif
 
     @if($show->isShowOrderDir() && count($attachments))
@@ -215,20 +211,11 @@ new class extends Component
     @endif
 
     @if($show->isShowColumnWidth() && count($attachments))
-    <select class="control-select" wire:model.live="defaultColumnWidth">
-      @foreach(array_reverse($columnWidths, true) as $key => $value)
-      <option value="{{$key}}">{{ $value }}</option>
-      @endforeach
-    </select>
+    <x-mediable::toolbar-select wire:model.live="defaultColumnWidth" :options="array_reverse($columnWidths, true)" />
     @endif
 
     @if($show->isShowUniqueMimeTypes() && count($uniqueMimeTypes) >= 1)
-    <select class="control-select" wire:model.live="selectedMimeType">
-      <option value="">Mimes</option>
-      @foreach($uniqueMimeTypes as $mimeType)
-      <option value="{{$mimeType}}">{{ $mimeType }}</option>
-      @endforeach
-    </select>
+    <x-mediable::toolbar-select wire:model.live="selectedMimeType" placeholder="Mimes" :options="array_combine($uniqueMimeTypes, $uniqueMimeTypes)" />
     @endif
 
     @endif

@@ -57,35 +57,6 @@
         border: transparent;
     }
 
-    .mediable .control-input {
-        display: block;
-        color: rgb(82 82 82);
-        border: 1px solid #dfdfdf;
-        width: 100%;
-        padding: 0.4rem 0.75rem;
-        appearance: none;
-        border-radius: .5rem;
-        font-size: .75rem;
-        font-weight: 500;
-        line-height: 1.25rem;
-        letter-spacing: 0.02em;
-    }
-
-    .mediable .control-select {
-        display: block;
-        cursor: pointer;
-        border-radius: 9999px;
-        border-width: 2px;
-        border-color: transparent;
-        background-color: #555;
-        padding-top: 0.25rem;
-        padding-bottom: 0.25rem;
-        font-size: .75rem;
-        font-weight: 500;
-        line-height: 1rem;
-        letter-spacing: 0.02em;
-        color: #fafafa;
-    }
 
     .bg-pattern {
         background-color: #f3f4f6;
