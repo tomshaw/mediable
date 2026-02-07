@@ -131,8 +131,8 @@ new class extends Component
                     </button>
                     <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] w-full py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50 cursor-pointer" wire:click="updateAttachment" wire:loading.attr="disabled">
                         <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                        <span class="spinner relative" wire:loading wire:target="updateAttachment"></span>
                         <span class="relative" wire:loading.remove wire:target="updateAttachment">Submit</span>
-                        <span class="relative" wire:loading wire:target="updateAttachment">Saving...</span>
                     </button>
                 </div>
             </form>

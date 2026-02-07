@@ -38,10 +38,18 @@ new class extends Component
 
     public int $uploadFileCount = 0;
 
+    public bool $isUploading = false;
+
     #[On('uploads:files-changed')]
     public function handleFilesChanged(int $count): void
     {
         $this->uploadFileCount = $count;
+    }
+
+    #[On('uploads:completed')]
+    public function handleUploadsCompleted(): void
+    {
+        $this->isUploading = false;
     }
 
     #[On('attachments:selection-changed')]
@@ -120,6 +128,7 @@ new class extends Component
 
     public function createAttachments(): void
     {
+        $this->isUploading = true;
         $this->dispatch('uploads:submit');
     }
 
@@ -242,10 +251,13 @@ new class extends Component
       <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
       <span class="relative">Reset</span>
     </button>
-    <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50 cursor-pointer" wire:click="createAttachments" wire:loading.attr="disabled">
+    <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] py-1.5 px-4 font-medium text-xs tracking-wider text-neutral-50 cursor-pointer" wire:click="createAttachments" @disabled($isUploading)>
       <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
-      <span class="relative" wire:loading.remove wire:target="createAttachments">Submit</span>
-      <span class="relative" wire:loading wire:target="createAttachments">Processing...</span>
+      @if($isUploading)
+      <span class="spinner relative"></span>
+      @else
+      <span class="relative">Submit</span>
+      @endif
     </button>
     @endif
 

@@ -85,12 +85,10 @@ new class extends Component
                             <td class="px-6 py-2 hidden lg:table-cell">Pending</td>
                             <td class="px-6 py-2 hidden lg:table-cell">100%</td>
                             <td class="px-6 py-2 whitespace-nowrap flex items-center justify-center">
-
                                 <button wire:click="clearFile({{$index}})" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#555] py-1.5 px-4 text-xs font-normal text-white cursor-pointer">
                                     <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
                                     <span class="relative">Remove</span>
                                 </button>
-
                             </td>
                         </tr>
                         @endforeach

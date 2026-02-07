@@ -113,6 +113,31 @@
         }
     }
 
+    .spinner {
+        border: 4px solid #d1d5db;
+        border-left-color: #374151;
+        border-radius: 9999px;
+        width: 1.25rem;
+        height: 1.25rem;
+        display: inline-block;
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
+        animation: spin 1s linear infinite;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .spinner {
+            border-color: #9ca3af;
+            border-left-color: #f3f4f6;
+        }
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
     .audio-animation {
         animation: audio-animation 1.2s ease infinite alternate;
     }
