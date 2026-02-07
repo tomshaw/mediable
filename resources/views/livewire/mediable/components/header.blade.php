@@ -14,12 +14,12 @@ new class extends Component
 
     public function expandModal(): void
     {
-        $this->dispatch('panel:expand-modal');
+        $this->dispatch('mediable.expand');
     }
 
     public function closeModal(): void
     {
-        $this->dispatch('panel:close-modal');
+        $this->dispatch('mediable.close');
     }
 }; ?>
 

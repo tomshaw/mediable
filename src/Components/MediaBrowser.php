@@ -65,8 +65,6 @@ class MediaBrowser extends Component
 
     public function mount(): void
     {
-        $this->generateUniqueId();
-
         $this->modal = new ModalState;
 
         $this->alert = new AlertState;
@@ -269,6 +267,7 @@ class MediaBrowser extends Component
         $this->resetModal();
     }
 
+    #[On('mediable.expand')]
     public function expandModal(): void
     {
         $this->fullScreen = ! $this->fullScreen;
@@ -336,24 +335,6 @@ class MediaBrowser extends Component
     public function closeImageEditor(): void
     {
         $this->enableThumbMode();
-    }
-
-    #[On('panel:confirm-delete')]
-    public function handleConfirmDelete(array $selectedIds): void
-    {
-        $this->dispatch('mediable.confirm', type: 'delete.selected', message: 'Are you sure you want to delete selected attachments?', selectedIds: $selectedIds);
-    }
-
-    #[On('panel:unique-id-updated')]
-    public function handleUniqueIdUpdated(string $uniqueId): void
-    {
-        $this->uniqueId = $uniqueId;
-        $this->dispatch('panel:regenerate-unique-id', uniqueId: $uniqueId);
-    }
-
-    public function generateUniqueId(): void
-    {
-        $this->uniqueId = uniqid();
     }
 
     public function getUniqueId(): string
