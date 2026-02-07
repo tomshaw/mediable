@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.1](https://github.com/tomshaw/mediable/compare/v0.12.0...v0.12.1) (2026-02-07)
+
+
+### Bug Fixes
+
+* add server limits and enhance file metadata handling in uploads component ([83d08bf](https://github.com/tomshaw/mediable/commit/83d08bf8c63d317de0a53800831c9fb162d25c21))
+
 ## [0.12.0](https://github.com/tomshaw/mediable/compare/v0.11.0...v0.12.0) (2026-02-07)
 
 
