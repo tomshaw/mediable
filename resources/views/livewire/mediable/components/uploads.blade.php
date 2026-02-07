@@ -75,7 +75,7 @@ new class extends Component
             @endif
             <div class="overflow-x-auto md:overflow-visible">
                 <table class="border-collapse table-auto w-full text-sm shadow-md">
-                    <thead class="bg-[#E6E6E6]">
+                    <thead class="bg-gray-200">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-5">Id</th>
                             <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Name</th>
@@ -110,9 +110,9 @@ new class extends Component
     </div>
     @else
     <form>
-        <div class="h-auto max-w-125 py-6 px-7 text-center cursor-pointer border border-blue-500 border-dashed bg-blue-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-red-500': enter }" x-on:click.prevent="fileClick($event)">
+        <div class="h-auto max-w-125 py-6 px-7 text-center cursor-pointer border border-gray-400 border-dashed bg-gray-50 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-gray-600': enter }" x-on:click.prevent="fileClick($event)">
             <div class="m-0 p-2 flex items-center text-left">
-                <span class="text-blue-500 leading-none">
+                <span class="text-gray-500 leading-none">
                     <img src="{{ asset("vendor/mediable/images/upload.png") }}" class="w-full h-full object-cover" alt="Upload files" />
                 </span>
                 <div class="ml-4">
