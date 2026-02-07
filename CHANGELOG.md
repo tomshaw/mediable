@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.12.0](https://github.com/tomshaw/mediable/compare/v0.11.0...v0.12.0) (2026-02-07)
+
+
+### Features
+
+* enhance file upload component with error handling and mime type breakdown functionality ([2d5f34c](https://github.com/tomshaw/mediable/commit/2d5f34cb6faa55cd9ba69d5a12456d4ccda6d2ca))
+
+
+### Bug Fixes
+
+* implement attachment toggle functionality in components ([d76d524](https://github.com/tomshaw/mediable/commit/d76d52458cd5a116d3250706b335f52982fe09a9))
+* streamline file upload handling in toolbar and uploads components by removing redundant methods and integrating reset and submit buttons ([36b530a](https://github.com/tomshaw/mediable/commit/36b530a13af4bdeca5ac51dbec0a9c6bda14b22d))
+
 ## [0.11.0](https://github.com/tomshaw/mediable/compare/v0.10.2...v0.11.0) (2026-02-07)
 
 
