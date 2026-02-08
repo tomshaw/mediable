@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/tomshaw/mediable/compare/v0.12.3...v1.0.0) (2026-02-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* first stable release
+
+### Features
+
+* release v1.0.0 ([42d9435](https://github.com/tomshaw/mediable/commit/42d9435f7dc9faefe11979f34677e5067bbf0e19))
+
 ## [0.12.3](https://github.com/tomshaw/mediable/compare/v0.12.2...v0.12.3) (2026-02-08)
 
 
