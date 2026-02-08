@@ -4,6 +4,7 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Eloquent\Eloquent;
+use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 use TomShaw\Mediable\Models\Attachment;
 use TomShaw\Mediable\Traits\{WithFonts, WithGraphicDraw};
@@ -24,29 +25,30 @@ new class extends Component
     public function mount(string $uniqueId = ''): void
     {
         $this->uniqueId = $uniqueId;
-        $this->dispatch('form:request-active-id');
+        $this->dispatch(BrowserEvents::FORM_REQUEST_ACTIVE_ID->value);
     }
 
-    #[On('form:receive-active-id')]
+    #[On(BrowserEvents::FORM_RECEIVE_ACTIVE_ID->value)]
     public function handleReceiveActiveId(int $id): void
     {
+        \Log::info('[FORM] handleReceiveActiveId', ['originalId' => $id]);
         $this->loadSelectedAttachment($id);
         $this->prepareImageEditor();
     }
 
-    #[On('attachments:selection-changed')]
+    #[On(BrowserEvents::ATTACHMENTS_SELECTION_CHANGED->value)]
     public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
         $this->loadSelectedAttachment($activeId);
     }
 
-    #[On('attachment:active-changed')]
+    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CHANGED->value)]
     public function handleActiveAttachmentChanged(int $id): void
     {
         $this->loadSelectedAttachment($id);
     }
 
-    #[On('attachment:active-cleared')]
+    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CLEARED->value)]
     public function handleActiveAttachmentCleared(): void
     {
         $this->selectedAttachment = null;
@@ -84,7 +86,12 @@ new class extends Component
 
         $this->initializeScaleDimensions();
 
-        $this->dispatch('editor:attachment-updated', id: $this->attachment->getId());
+        \Log::info('[FORM] prepareImageEditor dispatching EDITOR_ATTACHMENT_UPDATED', [
+            'originalId' => $originalId,
+            'copyId' => $this->attachment->getId(),
+            'copyDir' => $this->attachment->file_dir,
+        ]);
+        $this->dispatch(BrowserEvents::EDITOR_ATTACHMENT_UPDATED->value, id: $this->attachment->getId());
     }
 
     public function initializeScaleDimensions(): void
@@ -106,7 +113,7 @@ new class extends Component
         }
     }
 
-    #[On('toolbar:close-image-editor')]
+    #[On(BrowserEvents::TOOLBAR_CLOSE_IMAGE_EDITOR->value)]
     public function handleEditorClosed(): void
     {
         $this->primaryId = null;
@@ -115,7 +122,7 @@ new class extends Component
         $this->selectedForm = '';
     }
 
-    #[On('panel:regenerate-unique-id')]
+    #[On(BrowserEvents::PANEL_REGENERATE_UNIQUE_ID->value)]
     public function handleRegenerateUniqueId(string $uniqueId): void
     {
         $this->uniqueId = $uniqueId;
@@ -124,7 +131,7 @@ new class extends Component
     public function generateUniqueId(): void
     {
         $this->uniqueId = uniqid();
-        $this->dispatch('panel:unique-id-updated', uniqueId: $this->uniqueId);
+        $this->dispatch(BrowserEvents::PANEL_UNIQUE_ID_UPDATED->value, uniqueId: $this->uniqueId);
     }
 
     public function saveEditorChanges(): void
@@ -139,7 +146,7 @@ new class extends Component
         $this->editHistory = [];
         $this->selectedForm = '';
 
-        $this->dispatch('form:editor-saved');
+        $this->dispatch(BrowserEvents::FORM_EDITOR_SAVED->value);
     }
 
     public function undoEditorChanges(): void
@@ -161,7 +168,7 @@ new class extends Component
 
         $this->generateUniqueId();
 
-        $this->dispatch('editor:attachment-updated', id: $this->attachment->getId());
+        $this->dispatch(BrowserEvents::EDITOR_ATTACHMENT_UPDATED->value, id: $this->attachment->getId());
     }
 
     public function mimeTypeImage(string $mimeType): bool

@@ -3,6 +3,7 @@
 use Livewire\Attributes\{On, Reactive};
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
+use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Models\Attachment;
 
 new class extends Component
@@ -12,19 +13,19 @@ new class extends Component
     #[Reactive]
     public string $uniqueId;
 
-    #[On('attachments:selection-changed')]
+    #[On(BrowserEvents::ATTACHMENTS_SELECTION_CHANGED->value)]
     public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
         $this->loadAttachment($activeId);
     }
 
-    #[On('attachment:active-changed')]
+    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CHANGED->value)]
     public function handleActiveAttachmentChanged(int $id): void
     {
         $this->loadAttachment($id);
     }
 
-    #[On('attachment:active-cleared')]
+    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CLEARED->value)]
     public function handleActiveAttachmentCleared(): void
     {
         $this->attachment = null;

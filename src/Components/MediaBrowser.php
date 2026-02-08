@@ -93,7 +93,7 @@ class MediaBrowser extends Component
         $this->uniqueMimeTypes = Eloquent::uniqueMimes();
     }
 
-    #[On('server:limits')]
+    #[On(BrowserEvents::SERVER_LIMITS->value)]
     public function getServerLimits(): array
     {
         return [
@@ -105,19 +105,19 @@ class MediaBrowser extends Component
         ];
     }
 
-    #[On('mediable.open')]
+    #[On(BrowserEvents::OPEN->value)]
     public function open(?string $id = null): void
     {
         $this->modal = new ModalState(true, $id ?? '');
     }
 
-    #[On('mediable.close')]
+    #[On(BrowserEvents::CLOSE->value)]
     public function close(): void
     {
         $this->closeModal();
     }
 
-    #[On('mediable.alert')]
+    #[On(BrowserEvents::ALERT->value)]
     public function alert($event): void
     {
         $this->alert = new AlertState(
@@ -127,7 +127,7 @@ class MediaBrowser extends Component
         );
     }
 
-    #[On('toolbar:enable-thumb-mode')]
+    #[On(BrowserEvents::TOOLBAR_ENABLE_THUMB_MODE->value)]
     public function enableThumbMode(): self
     {
         $this->panel = new PanelState(thumbMode: true);
@@ -142,7 +142,7 @@ class MediaBrowser extends Component
         return $this;
     }
 
-    #[On('toolbar:enable-editor-mode')]
+    #[On(BrowserEvents::TOOLBAR_ENABLE_EDITOR_MODE->value)]
     public function enableEditorMode(): self
     {
         $this->panel = new PanelState(editorMode: true);
@@ -150,7 +150,7 @@ class MediaBrowser extends Component
         return $this;
     }
 
-    #[On('toolbar:enable-upload-mode')]
+    #[On(BrowserEvents::TOOLBAR_ENABLE_UPLOAD_MODE->value)]
     public function enableUploadMode(): self
     {
         $this->panel = new PanelState(uploadMode: true);
@@ -158,7 +158,7 @@ class MediaBrowser extends Component
         return $this;
     }
 
-    #[On('toolbar:toggle-sidebar')]
+    #[On(BrowserEvents::TOOLBAR_TOGGLE_SIDEBAR->value)]
     public function toggleSidebar(): self
     {
         $this->show = new ShowState(showSidebar: ! $this->show->isShowSidebar(), showMetaInfo: $this->show->isShowMetaInfo());
@@ -166,7 +166,7 @@ class MediaBrowser extends Component
         return $this;
     }
 
-    #[On('toolbar:toggle-meta-info')]
+    #[On(BrowserEvents::TOOLBAR_TOGGLE_META_INFO->value)]
     public function toggleMetaInfo(): self
     {
         $this->show = new ShowState(showMetaInfo: ! $this->show->isShowMetaInfo(), showSidebar: $this->show->isShowSidebar());
@@ -174,7 +174,7 @@ class MediaBrowser extends Component
         return $this;
     }
 
-    #[On('uploads:completed')]
+    #[On(BrowserEvents::UPLOADS_COMPLETED->value)]
     public function handleUploadsCompleted(string $message): void
     {
         $this->alert = new AlertState(
@@ -191,24 +191,24 @@ class MediaBrowser extends Component
         $this->enableThumbMode();
     }
 
-    #[On('attachment:active-changed')]
+    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CHANGED->value)]
     public function handleActiveAttachmentChanged(int $id): void
     {
         $this->enablePreviewMode();
     }
 
-    #[On('attachment:active-cleared')]
+    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CLEARED->value)]
     public function handleActiveAttachmentCleared(): void
     {
         $this->enableThumbMode();
     }
 
-    #[On('toolbar:delete-attachment')]
+    #[On(BrowserEvents::TOOLBAR_DELETE_ATTACHMENT->value)]
     public function deleteAttachment(int $id): void
     {
         Eloquent::delete($id);
 
-        $this->dispatch('attachments:remove-item', id: $id);
+        $this->dispatch(BrowserEvents::ATTACHMENTS_REMOVE_ITEM->value, id: $id);
 
         $this->alert = new AlertState(
             show: true,
@@ -217,7 +217,7 @@ class MediaBrowser extends Component
         );
     }
 
-    #[On('delete.selected')]
+    #[On(BrowserEvents::DELETE_SELECTED->value)]
     public function deleteSelected(array $selectedIds): void
     {
         Attachment::whereIn('id', $selectedIds)->delete();
@@ -232,18 +232,18 @@ class MediaBrowser extends Component
             message: $message
         );
 
-        $this->dispatch('attachments:clear-selected');
+        $this->dispatch(BrowserEvents::ATTACHMENTS_CLEAR_SELECTED->value);
     }
 
     public function resetModal(): void
     {
-        $this->dispatch('uploads:reset');
-        $this->dispatch('attachments:clear-selected');
+        $this->dispatch(BrowserEvents::UPLOADS_RESET->value);
+        $this->dispatch(BrowserEvents::ATTACHMENTS_CLEAR_SELECTED->value);
         $this->enableThumbMode();
         $this->resetPage();
     }
 
-    #[On('panel:insert-media')]
+    #[On(BrowserEvents::PANEL_INSERT_MEDIA->value)]
     public function insertMedia(array $selectedIds): void
     {
         $selected = Attachment::whereIn('id', $selectedIds)->get()->toArray();
@@ -267,7 +267,7 @@ class MediaBrowser extends Component
         $this->resetModal();
     }
 
-    #[On('mediable.expand')]
+    #[On(BrowserEvents::EXPAND->value)]
     public function expandModal(): void
     {
         $this->fullScreen = ! $this->fullScreen;
@@ -288,25 +288,25 @@ class MediaBrowser extends Component
         $this->resetPage();
     }
 
-    #[On('toolbar:order-dir-changed')]
+    #[On(BrowserEvents::TOOLBAR_ORDER_DIR_CHANGED->value)]
     public function handleOrderDirChanged(string $orderDir): void
     {
         $this->orderDir = $orderDir;
     }
 
-    #[On('toolbar:order-by-changed')]
+    #[On(BrowserEvents::TOOLBAR_ORDER_BY_CHANGED->value)]
     public function handleOrderByChanged(string $orderBy): void
     {
         $this->orderBy = $orderBy;
     }
 
-    #[On('toolbar:column-width-changed')]
+    #[On(BrowserEvents::TOOLBAR_COLUMN_WIDTH_CHANGED->value)]
     public function handleColumnWidthChanged(int $defaultColumnWidth): void
     {
         $this->defaultColumnWidth = $defaultColumnWidth;
     }
 
-    #[On('toolbar:mime-type-changed')]
+    #[On(BrowserEvents::TOOLBAR_MIME_TYPE_CHANGED->value)]
     public function handleMimeTypeChanged(string $selectedMimeType): void
     {
         $this->selectedMimeType = $selectedMimeType;
@@ -320,10 +320,10 @@ class MediaBrowser extends Component
 
     public function updatingPage(): void
     {
-        $this->dispatch('attachments:reset-audio');
+        $this->dispatch(BrowserEvents::ATTACHMENTS_RESET_AUDIO->value);
     }
 
-    #[On('form:editor-saved')]
+    #[On(BrowserEvents::FORM_EDITOR_SAVED->value)]
     public function handleEditorSaved(): void
     {
         $this->resetPage();
@@ -331,10 +331,17 @@ class MediaBrowser extends Component
         $this->enableThumbMode();
     }
 
-    #[On('toolbar:close-image-editor')]
+    #[On(BrowserEvents::TOOLBAR_CLOSE_IMAGE_EDITOR->value)]
     public function closeImageEditor(): void
     {
         $this->enableThumbMode();
+    }
+
+    #[On(BrowserEvents::PANEL_UNIQUE_ID_UPDATED->value)]
+    public function handleUniqueIdUpdated(): void
+    {
+        // Triggers a re-render, which generates a new uniqueId via getUniqueId()
+        // and pushes it to child components with #[Reactive] props.
     }
 
     public function getUniqueId(): string

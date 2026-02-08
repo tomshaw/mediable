@@ -144,6 +144,7 @@
     </div>
 </div>
 
+@php use TomShaw\Mediable\Enums\BrowserEvents; @endphp
 @script
 <script>
     Alpine.data('initMediableBrowser', () => ({
@@ -151,11 +152,11 @@
         state: @entangle('modal').live,
 
         init() {
-            Livewire.on('mediable.insert', event => this.insert(event?.selected));
-            Livewire.on('mediable.scroll', event => this.scrollTo(event?.id));
-            Livewire.on('mediable.confirm', event => this.confirm(event));
-            Livewire.on('audio.start', event => this.audioStart(event?.id));
-            Livewire.on('audio.pause', event => this.audioPause(event?.id));
+            Livewire.on('{{ BrowserEvents::INSERT->value }}', event => this.insert(event?.selected));
+            Livewire.on('{{ BrowserEvents::SCROLL->value }}', event => this.scrollTo(event?.id));
+            Livewire.on('{{ BrowserEvents::CONFIRM->value }}', event => this.confirm(event));
+            Livewire.on('{{ BrowserEvents::AUDIO_START->value }}', event => this.audioStart(event?.id));
+            Livewire.on('{{ BrowserEvents::AUDIO_PAUSE->value }}', event => this.audioPause(event?.id));
 
             this.initTextCopy();
         },
@@ -198,7 +199,7 @@
                 });
 
                 audio.addEventListener('ended', () => {
-                    this.$dispatch('audio.pause', {
+                    this.$dispatch('{{ BrowserEvents::AUDIO_PAUSE->value }}', {
                         id: id
                     });
 

@@ -2,6 +2,7 @@
 
 use Livewire\Attributes\On;
 use Livewire\Component;
+use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Traits\WithFileSize;
 
 new class extends Component
@@ -23,7 +24,7 @@ new class extends Component
         $this->hydrateData($data);
     }
 
-    #[On('uploads-list:data')]
+    #[On(BrowserEvents::UPLOADS_LIST_DATA->value)]
     public function receiveData(array $files, int $totalSize, string $formattedTotalSize, array $mimeBreakdown, array $uploadErrors): void
     {
         $this->fileData = $files;
@@ -33,7 +34,7 @@ new class extends Component
         $this->uploadErrors = $uploadErrors;
     }
 
-    #[On('uploads-list:reset')]
+    #[On(BrowserEvents::UPLOADS_LIST_RESET->value)]
     public function resetData(): void
     {
         $this->fileData = [];
@@ -45,17 +46,17 @@ new class extends Component
 
     public function removeFile(int $index): void
     {
-        $this->dispatch('uploads-list:remove-file', index: $index);
+        $this->dispatch(BrowserEvents::UPLOADS_LIST_REMOVE_FILE->value, index: $index);
     }
 
     public function submitFiles(): void
     {
-        $this->dispatch('uploads-list:submit-files');
+        $this->dispatch(BrowserEvents::UPLOADS_LIST_SUBMIT_FILES->value);
     }
 
     public function clearFiles(): void
     {
-        $this->dispatch('uploads-list:clear-files');
+        $this->dispatch(BrowserEvents::UPLOADS_LIST_CLEAR_FILES->value);
     }
 
     protected function hydrateData(array $data): void

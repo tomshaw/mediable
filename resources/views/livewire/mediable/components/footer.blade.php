@@ -3,6 +3,7 @@
 use Illuminate\Support\Collection;
 use Livewire\Attributes\{Computed, On, Reactive};
 use Livewire\Component;
+use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Models\Attachment;
 
 new class extends Component
@@ -14,7 +15,7 @@ new class extends Component
 
     public ?int $activeId = null;
 
-    #[On('attachments:selection-changed')]
+    #[On(BrowserEvents::ATTACHMENTS_SELECTION_CHANGED->value)]
     public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
         $this->selectedIds = $selectedIds;
@@ -35,30 +36,30 @@ new class extends Component
     {
         if ($this->activeId === $id) {
             $this->activeId = null;
-            $this->dispatch('attachment:active-cleared');
+            $this->dispatch(BrowserEvents::ATTACHMENT_ACTIVE_CLEARED->value);
         } else {
             $this->activeId = $id;
-            $this->dispatch('attachment:active-changed', id: $id);
+            $this->dispatch(BrowserEvents::ATTACHMENT_ACTIVE_CHANGED->value, id: $id);
         }
     }
 
     public function confirmDelete(): void
     {
-        $this->dispatch('mediable.confirm',
+        $this->dispatch(BrowserEvents::CONFIRM->value,
             message: 'Are you sure you want to delete the selected attachments?',
-            type: 'delete.selected',
+            type: BrowserEvents::DELETE_SELECTED->value,
             selectedIds: $this->selectedIds,
         );
     }
 
     public function clearSelected(): void
     {
-        $this->dispatch('attachments:clear-selected');
+        $this->dispatch(BrowserEvents::ATTACHMENTS_CLEAR_SELECTED->value);
     }
 
     public function insertMedia(): void
     {
-        $this->dispatch('panel:insert-media', selectedIds: $this->selectedIds);
+        $this->dispatch(BrowserEvents::PANEL_INSERT_MEDIA->value, selectedIds: $this->selectedIds);
     }
 
     public function mimeTypeImage(string $mimeType): bool

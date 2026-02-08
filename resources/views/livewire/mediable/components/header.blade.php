@@ -3,6 +3,7 @@
 use Livewire\Attributes\{Modelable, Reactive};
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\ShowState;
+use TomShaw\Mediable\Enums\BrowserEvents;
 
 new class extends Component
 {
@@ -14,12 +15,12 @@ new class extends Component
 
     public function expandModal(): void
     {
-        $this->dispatch('mediable.expand');
+        $this->dispatch(BrowserEvents::EXPAND->value);
     }
 
     public function closeModal(): void
     {
-        $this->dispatch('mediable.close');
+        $this->dispatch(BrowserEvents::CLOSE->value);
     }
 }; ?>
 

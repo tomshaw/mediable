@@ -2,6 +2,7 @@
 
 use Livewire\Attributes\{On, Reactive};
 use Livewire\Component;
+use TomShaw\Mediable\Enums\BrowserEvents;
 
 new class extends Component
 {
@@ -32,7 +33,7 @@ new class extends Component
     public function playAudio(int $id): void
     {
         $this->audioElementId = $id;
-        $this->dispatch('audio.start', id: $id);
+        $this->dispatch(BrowserEvents::AUDIO_START->value, id: $id);
     }
 
     public function pauseAudio(int $id): void
@@ -40,10 +41,10 @@ new class extends Component
         if ($this->audioElementId === $id) {
             $this->audioElementId = null;
         }
-        $this->dispatch('audio.pause', id: $id);
+        $this->dispatch(BrowserEvents::AUDIO_PAUSE->value, id: $id);
     }
 
-    #[On('attachments:reset-audio')]
+    #[On(BrowserEvents::ATTACHMENTS_RESET_AUDIO->value)]
     public function resetAudio(): void
     {
         $this->audioElementId = null;
@@ -57,39 +58,39 @@ new class extends Component
             $this->selectedIds[] = $id;
         }
 
-        $this->dispatch('attachments:selection-changed',
+        $this->dispatch(BrowserEvents::ATTACHMENTS_SELECTION_CHANGED->value,
             selectedIds: $this->selectedIds,
             activeId: $id
         );
 
-        $this->dispatch('mediable.scroll', id: $id);
+        $this->dispatch(BrowserEvents::SCROLL->value, id: $id);
     }
 
-    #[On('attachments:toggle-item')]
+    #[On(BrowserEvents::ATTACHMENTS_TOGGLE_ITEM->value)]
     public function handleToggleItem(int $id): void
     {
         $this->toggleAttachment($id);
     }
 
-    #[On('attachments:clear-selected')]
+    #[On(BrowserEvents::ATTACHMENTS_CLEAR_SELECTED->value)]
     public function clearSelected(): void
     {
         $this->selectedIds = [];
 
-        $this->dispatch('attachments:selection-changed',
+        $this->dispatch(BrowserEvents::ATTACHMENTS_SELECTION_CHANGED->value,
             selectedIds: $this->selectedIds,
             activeId: null
         );
     }
 
-    #[On('attachments:remove-item')]
+    #[On(BrowserEvents::ATTACHMENTS_REMOVE_ITEM->value)]
     public function removeItem(int $id): void
     {
         $this->selectedIds = array_values(array_diff($this->selectedIds, [$id]));
 
         $activeId = count($this->selectedIds) ? end($this->selectedIds) : null;
 
-        $this->dispatch('attachments:selection-changed',
+        $this->dispatch(BrowserEvents::ATTACHMENTS_SELECTION_CHANGED->value,
             selectedIds: $this->selectedIds,
             activeId: $activeId
         );

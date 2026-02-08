@@ -74,3 +74,12 @@ it('sets the correct data', function () {
     $this->component->set('fullScreen', true);
     expect($this->component->get('fullScreen'))->toBe(true);
 });
+
+// Test that BrowserEvents enum values use the correct naming convention
+it('has correctly prefixed event values', function () {
+    $cases = BrowserEvents::cases();
+
+    foreach ($cases as $case) {
+        expect($case->value)->toStartWith('mediable::');
+    }
+});

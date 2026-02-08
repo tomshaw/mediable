@@ -5,6 +5,7 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Eloquent\Eloquent;
+use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Models\Attachment;
 
 new class extends Component
@@ -21,7 +22,7 @@ new class extends Component
 
     public string $description = '';
 
-    #[On('attachments:selection-changed')]
+    #[On(BrowserEvents::ATTACHMENTS_SELECTION_CHANGED->value)]
     public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
         $this->loadAttachment($activeId);
@@ -88,7 +89,7 @@ new class extends Component
         $validator = Validator::make($data, $rules);
 
         if ($validator->fails()) {
-            $this->dispatch('mediable.alert', [
+            $this->dispatch(BrowserEvents::ALERT->value, [
                 'type' => 'error',
                 'message' => $validator->errors()->first(),
             ]);
@@ -98,7 +99,7 @@ new class extends Component
 
         Eloquent::update($this->attachment->id, $validator->validated());
 
-        $this->dispatch('mediable.alert', [
+        $this->dispatch(BrowserEvents::ALERT->value, [
             'type' => 'success',
             'message' => 'Attachment updated successfully!',
         ]);

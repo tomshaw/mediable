@@ -4,6 +4,7 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\{Computed, On};
 use Livewire\{Component, WithFileUploads};
 use TomShaw\Mediable\Eloquent\Eloquent;
+use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Traits\{ServerLimits, WithFileSize, WithMimeTypes};
 
 new class extends Component
@@ -45,7 +46,7 @@ new class extends Component
         $this->dispatchFileCount();
     }
 
-    #[On('uploads-list:remove-file')]
+    #[On(BrowserEvents::UPLOADS_LIST_REMOVE_FILE->value)]
     public function removeFile(int $index): void
     {
         array_splice($this->files, $index, 1);
@@ -57,7 +58,7 @@ new class extends Component
         $this->dispatchFileCount();
     }
 
-    #[On('uploads-list:submit-files')]
+    #[On(BrowserEvents::UPLOADS_LIST_SUBMIT_FILES->value)]
     public function createAttachments(): void
     {
         Eloquent::create($this->files);
@@ -65,14 +66,14 @@ new class extends Component
         $count = count($this->files);
         $message = ($count > 1) ? "Created $count attachment(s) successfully!" : 'Created attachment successfully!';
 
-        $this->dispatch('uploads:completed', message: $message);
+        $this->dispatch(BrowserEvents::UPLOADS_COMPLETED->value, message: $message);
 
         $this->files = [];
         $this->dispatchFileCount();
     }
 
-    #[On('uploads-list:clear-files')]
-    #[On('uploads:reset')]
+    #[On(BrowserEvents::UPLOADS_LIST_CLEAR_FILES->value)]
+    #[On(BrowserEvents::UPLOADS_RESET->value)]
     public function clearFiles(): void
     {
         $this->files = [];
@@ -141,7 +142,7 @@ new class extends Component
 
     protected function dispatchListData(): void
     {
-        $this->dispatch('uploads-list:data',
+        $this->dispatch(BrowserEvents::UPLOADS_LIST_DATA->value,
             files: $this->fileMetadata,
             totalSize: $this->getTotalUploadSize(),
             formattedTotalSize: $this->formatBytes($this->getTotalUploadSize()),
@@ -152,7 +153,7 @@ new class extends Component
 
     protected function dispatchFileCount(): void
     {
-        $this->dispatch('uploads:files-changed', count: count($this->files));
+        $this->dispatch(BrowserEvents::UPLOADS_FILES_CHANGED->value, count: count($this->files));
     }
 }; ?>
 
@@ -237,7 +238,7 @@ new class extends Component
             this.maxUploadFileSizeCheck(files);
 
             if (this.error) {
-                this.$dispatch('mediable.alert', {
+                this.$dispatch('{{ BrowserEvents::ALERT->value }}', {
                     event: { type: 'error', message: this.error }
                 });
                 return;
@@ -251,7 +252,7 @@ new class extends Component
                     this.error = error;
                     this.progress = 0;
 
-                    this.$dispatch('mediable.alert', {
+                    this.$dispatch('{{ BrowserEvents::ALERT->value }}', {
                         event: { type: 'error', message: error || 'An error occurred while uploading the file' }
                     });
                 },

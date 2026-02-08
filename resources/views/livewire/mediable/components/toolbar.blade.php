@@ -3,6 +3,7 @@
 use Livewire\Attributes\{On, Reactive};
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\{PanelState, ShowState};
+use TomShaw\Mediable\Enums\BrowserEvents;
 
 new class extends Component
 {
@@ -36,30 +37,30 @@ new class extends Component
 
     public ?int $activeId = null;
 
-    #[On('attachments:selection-changed')]
+    #[On(BrowserEvents::ATTACHMENTS_SELECTION_CHANGED->value)]
     public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
         $this->selectedIds = $selectedIds;
         $this->activeId = $activeId;
     }
 
-    #[On('attachment:active-changed')]
+    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CHANGED->value)]
     public function handleActiveAttachmentChanged(int $id): void
     {
         $this->activeId = $id;
     }
 
-    #[On('attachment:active-cleared')]
+    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CLEARED->value)]
     public function handleActiveAttachmentCleared(): void
     {
         $this->activeId = null;
     }
 
-    #[On('form:request-active-id')]
+    #[On(BrowserEvents::FORM_REQUEST_ACTIVE_ID->value)]
     public function handleFormRequestActiveId(): void
     {
         if ($this->activeId) {
-            $this->dispatch('form:receive-active-id', id: $this->activeId);
+            $this->dispatch(BrowserEvents::FORM_RECEIVE_ACTIVE_ID->value, id: $this->activeId);
         }
     }
 
@@ -77,60 +78,60 @@ new class extends Component
 
     public function updatedOrderBy(): void
     {
-        $this->dispatch('toolbar:order-by-changed', orderBy: $this->orderBy);
+        $this->dispatch(BrowserEvents::TOOLBAR_ORDER_BY_CHANGED->value, orderBy: $this->orderBy);
     }
 
     public function updatedDefaultColumnWidth(): void
     {
-        $this->dispatch('toolbar:column-width-changed', defaultColumnWidth: $this->defaultColumnWidth);
+        $this->dispatch(BrowserEvents::TOOLBAR_COLUMN_WIDTH_CHANGED->value, defaultColumnWidth: $this->defaultColumnWidth);
     }
 
     public function updatedSelectedMimeType(): void
     {
-        $this->dispatch('toolbar:mime-type-changed', selectedMimeType: $this->selectedMimeType);
+        $this->dispatch(BrowserEvents::TOOLBAR_MIME_TYPE_CHANGED->value, selectedMimeType: $this->selectedMimeType);
     }
 
     public function enableThumbMode(): void
     {
-        $this->dispatch('toolbar:enable-thumb-mode');
+        $this->dispatch(BrowserEvents::TOOLBAR_ENABLE_THUMB_MODE->value);
     }
 
     public function enableUploadMode(): void
     {
-        $this->dispatch('toolbar:enable-upload-mode');
+        $this->dispatch(BrowserEvents::TOOLBAR_ENABLE_UPLOAD_MODE->value);
     }
 
     public function enableEditorMode(): void
     {
-        $this->dispatch('toolbar:enable-editor-mode');
+        $this->dispatch(BrowserEvents::TOOLBAR_ENABLE_EDITOR_MODE->value);
     }
 
     public function toggleMetaInfo(): void
     {
-        $this->dispatch('toolbar:toggle-meta-info');
+        $this->dispatch(BrowserEvents::TOOLBAR_TOGGLE_META_INFO->value);
     }
 
     public function toggleOrderDir(): void
     {
         $this->orderDir = strtoupper($this->orderDir) === 'ASC' ? 'DESC' : 'ASC';
-        $this->dispatch('toolbar:order-dir-changed', orderDir: $this->orderDir);
+        $this->dispatch(BrowserEvents::TOOLBAR_ORDER_DIR_CHANGED->value, orderDir: $this->orderDir);
     }
 
     public function toggleSidebar(): void
     {
-        $this->dispatch('toolbar:toggle-sidebar');
+        $this->dispatch(BrowserEvents::TOOLBAR_TOGGLE_SIDEBAR->value);
     }
 
     public function deleteAttachment(): void
     {
         if ($this->activeId) {
-            $this->dispatch('toolbar:delete-attachment', id: $this->activeId);
+            $this->dispatch(BrowserEvents::TOOLBAR_DELETE_ATTACHMENT->value, id: $this->activeId);
         }
     }
 
     public function closeImageEditor(): void
     {
-        $this->dispatch('toolbar:close-image-editor');
+        $this->dispatch(BrowserEvents::TOOLBAR_CLOSE_IMAGE_EDITOR->value);
     }
 }; ?>
 
