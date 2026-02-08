@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.2](https://github.com/tomshaw/mediable/compare/v0.12.1...v0.12.2) (2026-02-08)
+
+
+### Bug Fixes
+
+* update attachment selection background color for improved visual feedback in mediable components ([32efa98](https://github.com/tomshaw/mediable/commit/32efa98c7b1b49cebd73c4e913ad97693b70d1c2))
+
 ## [0.12.1](https://github.com/tomshaw/mediable/compare/v0.12.0...v0.12.1) (2026-02-07)
 
 
