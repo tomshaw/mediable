@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.3](https://github.com/tomshaw/mediable/compare/v0.12.2...v0.12.3) (2026-02-08)
+
+
+### Bug Fixes
+
+* update pagination component colors for improved visual consistency and user feedback ([83446a4](https://github.com/tomshaw/mediable/commit/83446a4ee1f3002cbabeb35a0fdbd89a8c99e318))
+
 ## [0.12.2](https://github.com/tomshaw/mediable/compare/v0.12.1...v0.12.2) (2026-02-08)
 
 
