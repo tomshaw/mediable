@@ -134,7 +134,7 @@ new class extends Component
         <li @class([
             "attachment relative flex m-0 p-0 cursor-pointer list-none text-center select-none border-b border-r transition-all duration-200",
             $this->isSelected($item['id'])
-                ? "bg-blue-50 border-blue-400 ring-2 ring-inset ring-blue-500/40"
+                ? "bg-gray-300 border-blue-400 ring-2 ring-inset ring-blue-500/40"
                 : "bg-gray-200 border-gray-300 hover:bg-gray-100"
         ]) id="attachment-id-{{$item['id']}}" wire:click="toggleAttachment({{ $item['id'] }})" style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
             <div class="relative cursor-pointer flex items-center justify-center min-w-full" style="padding: {{ $this->normalizeColumnPadding($columnWidths[$defaultColumnWidth]) }}rem;">
