@@ -13,15 +13,24 @@ new class extends Component
 
     public array $selectedIds = [];
 
+    public ?int $activeId = null;
+
     #[On('attachments:selection-changed')]
     public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
     {
         $this->selectedIds = $selectedIds;
+        $this->activeId = $activeId;
     }
 
-    public function toggleAttachment(int $id): void
+    public function setActiveAttachment(int $id): void
     {
-        $this->dispatch('attachments:toggle-item', id: $id);
+        if ($this->activeId === $id) {
+            $this->activeId = null;
+            $this->dispatch('attachment:active-cleared');
+        } else {
+            $this->activeId = $id;
+            $this->dispatch('attachment:active-changed', id: $id);
+        }
     }
 
     public function isSelected(int $id): bool
@@ -49,8 +58,8 @@ new class extends Component
     @if (count($attachments))
     <ul class="flex items-center justify-start gap-x-2">
         @foreach($attachments as $item)
-        <li class="shadow-md cursor-pointer" wire:click="toggleAttachment({{$item['id']}})">
-            <div @class(['border border-black w-16 h-16 overflow-hidden', $this->isSelected($item['id']) ? 'border-black' : 'border-black'])>
+        <li class="shadow-md cursor-pointer" wire:click="setActiveAttachment({{$item['id']}})">
+            <div @class(['border overflow-hidden transition-all duration-200', ($activeId && $item['id'] === $activeId) ? 'w-20 h-20 border-blue-500 ring-2 ring-blue-500/40' : 'w-16 h-16 border-black'])>
                 @if ($this->mimeTypeImage($item['file_type']))
                 <img src="{{ $item['file_url'] }}?id={{ $uniqueId }}" class="w-full h-full object-cover" alt="{{ $item['title'] }}" />
                 @elseif ($this->mimeTypeVideo($item['file_type']))

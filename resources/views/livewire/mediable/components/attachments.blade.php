@@ -132,25 +132,35 @@ new class extends Component
     <ul class="flex flex-wrap -mx-1 p-0 pl-1 w-full">
         @foreach($attachments as $item)
         <li @class([
-            "attachment relative flex m-0 p-0 cursor-pointer list-none text-center select-none border-b border-r border-gray-300",
-            $this->isSelected($item['id']) ? "bg-gray-200" : "bg-gray-200"
+            "attachment relative flex m-0 p-0 cursor-pointer list-none text-center select-none border-b border-r transition-all duration-200",
+            $this->isSelected($item['id'])
+                ? "bg-blue-50 border-blue-400 ring-2 ring-inset ring-blue-500/40"
+                : "bg-gray-200 border-gray-300 hover:bg-gray-100"
         ]) id="attachment-id-{{$item['id']}}" wire:click="toggleAttachment({{ $item['id'] }})" style="width: {{$columnWidths[$defaultColumnWidth]}}%;">
             <div class="relative cursor-pointer flex items-center justify-center min-w-full" style="padding: {{ $this->normalizeColumnPadding($columnWidths[$defaultColumnWidth]) }}rem;">
 
                 <div class="absolute left-2.5 top-1 cursor-pointer bg-transparent">
-                    <span class="text-left bg-transparent font-medium text-xs tracking-wider text-neutral-600">{{$item['id']}}</span>
+                    <span @class([
+                        "text-left bg-transparent font-medium text-xs tracking-wider",
+                        $this->isSelected($item['id']) ? "text-blue-700" : "text-neutral-600"
+                    ])>{{$item['id']}}</span>
                 </div>
 
                 @if($this->isSelected($item['id']))
-                <div class="absolute right-2.5 top-2 cursor-pointer bg-transparent text-neutral-600">
-                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 9.50006C1 10.3285 1.67157 11.0001 2.5 11.0001H4L4 10.0001H2.5C2.22386 10.0001 2 9.7762 2 9.50006L2 2.50006C2 2.22392 2.22386 2.00006 2.5 2.00006L9.5 2.00006C9.77614 2.00006 10 2.22392 10 2.50006V4.00002H5.5C4.67158 4.00002 4 4.67159 4 5.50002V12.5C4 13.3284 4.67158 14 5.5 14H12.5C13.3284 14 14 13.3284 14 12.5V5.50002C14 4.67159 13.3284 4.00002 12.5 4.00002H11V2.50006C11 1.67163 10.3284 1.00006 9.5 1.00006H2.5C1.67157 1.00006 1 1.67163 1 2.50006V9.50006ZM5 5.50002C5 5.22388 5.22386 5.00002 5.5 5.00002H12.5C12.7761 5.00002 13 5.22388 13 5.50002V12.5C13 12.7762 12.7761 13 12.5 13H5.5C5.22386 13 5 12.7762 5 12.5V5.50002Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
-                    </svg>
+                <div class="absolute right-2 top-1.5 z-10">
+                    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5">
+                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
                 </div>
                 @endif
 
                 @if ($this->mimeTypeImage($item['file_type']))
-                <img src="{{ asset($item['file_url']) }}?id={{ $uniqueId }}" class="attachment__item object-contain shadow-md border border-black" alt="{{ $item['file_original_name'] }}">
+                <img src="{{ asset($item['file_url']) }}?id={{ $uniqueId }}" @class([
+                    'attachment__item object-contain shadow-md border',
+                    $this->isSelected($item['id']) ? 'border-blue-500' : 'border-black'
+                ]) alt="{{ $item['file_original_name'] }}">
                 @elseif ($this->mimeTypeVideo($item['file_type']))
                 <video src="{{ asset($item['file_url']) }}" class="attachment__item" alt="{{ $item['file_original_name'] }}" controls></video>
                 @elseif ($this->mimeTypeAudio($item['file_type']))
