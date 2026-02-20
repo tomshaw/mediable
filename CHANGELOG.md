@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/tomshaw/mediable/compare/v1.0.0...v1.0.1) (2026-02-20)
+
+
+### Bug Fixes
+
+* update issue templates and remove unused ones; adjust PHP version requirements ([4b51af5](https://github.com/tomshaw/mediable/commit/4b51af56e1739d9af28c8719fa9797f16b49621d))
+
 ## [1.0.0](https://github.com/tomshaw/mediable/compare/v0.12.3...v1.0.0) (2026-02-08)
 
 
