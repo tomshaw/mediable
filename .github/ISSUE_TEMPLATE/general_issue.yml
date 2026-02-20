@@ -55,6 +55,6 @@ body:
     attributes:
       label: 💡 Additional Context
       description: "Add any other info: environment, OS, browser, logs, etc."
-      placeholder: "Windows 11, Chrome 125, Laravel v10.30"
+      placeholder: "OS, PHP version, Laravel version, package version"
     validations:
       required: false
