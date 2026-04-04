@@ -4,6 +4,7 @@ namespace TomShaw\Mediable\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $file_name
@@ -18,8 +19,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $sort_order
  * @property string $styles
  * @property bool $hidden
- * @property \Illuminate\Support\Carbon|string $created_at
- * @property \Illuminate\Support\Carbon|string $updated_at
+ * @property Carbon|string $created_at
+ * @property Carbon|string $updated_at
  */
 class Attachment extends Model
 {

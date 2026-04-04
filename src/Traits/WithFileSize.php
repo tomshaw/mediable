@@ -2,8 +2,10 @@
 
 namespace TomShaw\Mediable\Traits;
 
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+
 /**
- * @property array<\Livewire\Features\SupportFileUploads\TemporaryUploadedFile> $files
+ * @property array<TemporaryUploadedFile> $files
  */
 trait WithFileSize
 {

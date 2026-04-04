@@ -5,7 +5,7 @@ namespace TomShaw\Mediable\Eloquent;
 use Exception;
 use GdImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\{Builder, Collection};
 use Illuminate\Support\Facades\{DB, Storage};
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -332,7 +332,7 @@ class EloquentManager
         return ['disk' => $name, 'driver' => $disks[$name]];
     }
 
-    public function getMimeTypeStats(): \Illuminate\Database\Eloquent\Collection
+    public function getMimeTypeStats(): Collection
     {
         return Attachment::select('file_type', DB::raw('count(*) as total'), DB::raw('sum(file_size) as total_size'))
             ->groupBy('file_type')

@@ -2,6 +2,7 @@
 
 namespace TomShaw\Mediable\Components;
 
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\On;
 use Livewire\{Component, WithPagination};
 use TomShaw\Mediable\Concerns\{AlertState, ModalState, PanelState, ShowState};
@@ -349,7 +350,7 @@ class MediaBrowser extends Component
         return uniqid();
     }
 
-    public function render(): \Illuminate\Contracts\View\View
+    public function render(): View
     {
         Eloquent::query($this->orderBy, $this->orderDir, $this->selectedMimeType);
 

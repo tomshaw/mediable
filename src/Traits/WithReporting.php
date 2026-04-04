@@ -2,16 +2,18 @@
 
 namespace TomShaw\Mediable\Traits;
 
+use Illuminate\Database\Eloquent\Collection;
 use TomShaw\Mediable\Eloquent\Eloquent;
+use TomShaw\Mediable\Models\Attachment;
 
 trait WithReporting
 {
-    public function getMimeTypeStatsProperty(): \Illuminate\Database\Eloquent\Collection
+    public function getMimeTypeStatsProperty(): Collection
     {
         return Eloquent::getMimeTypeStats();
     }
 
-    public function getMimeTypeTotalsProperty(): ?\TomShaw\Mediable\Models\Attachment
+    public function getMimeTypeTotalsProperty(): ?Attachment
     {
         return Eloquent::getMimeTypeTotals();
     }
