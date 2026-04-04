@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/tomshaw/mediable/compare/v1.0.1...v1.1.0) (2026-04-04)
+
+
+### Features
+
+* standardize CI workflows and update dependencies for Laravel 13 ([e81243d](https://github.com/tomshaw/mediable/commit/e81243d6356526e7b0da869ea2b3d9a6af62fc5c))
+
+
+### Bug Fixes
+
+* restore double backslashes in namespace paths (corrupted JSON) ([98ed3da](https://github.com/tomshaw/mediable/commit/98ed3dab6a735237544d4ecf789081282d028066))
+
 ## [1.0.1](https://github.com/tomshaw/mediable/compare/v1.0.0...v1.0.1) (2026-02-20)
 
 
