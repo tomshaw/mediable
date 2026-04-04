@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/tomshaw/mediable/compare/v1.2.0...v1.3.0) (2026-04-04)
+
+
+### Features
+
+* apply pint code style fixes and update dependencies for Laravel 13 ([e6252ba](https://github.com/tomshaw/mediable/commit/e6252babfe53d68107a6a0c6b0b6840536e68006))
+
 ## [1.2.0](https://github.com/tomshaw/mediable/compare/v1.1.0...v1.2.0) (2026-04-04)
 
 
