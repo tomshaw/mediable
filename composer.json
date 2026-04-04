@@ -31,12 +31,12 @@
     },
     "autoload": {
         "psr-4": {
-            "TomShaw\Mediable\": "src"
+            "TomShaw\\Mediable\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "TomShaw\Mediable\Tests\": "tests"
+            "TomShaw\\Mediable\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -55,7 +55,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "TomShaw\Mediable\Providers\MediableServiceProvider"
+                "TomShaw\\Mediable\\Providers\\MediableServiceProvider"
             ]
         }
     },
