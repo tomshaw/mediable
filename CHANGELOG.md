@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.0](https://github.com/tomshaw/mediable/compare/v1.1.0...v1.2.0) (2026-04-04)
+
+
+### Features
+
+* apply pint code style fixes and update linting workflow ([21d0f3a](https://github.com/tomshaw/mediable/commit/21d0f3a08bacc716ddad3ac4ee60f8f44a1cbe43))
+* fix pint workflow to use project config and revert incorrect style changes ([5108738](https://github.com/tomshaw/mediable/commit/5108738f28234a3d60aeed754e6f19d6ace72d0f))
+* use project pint version in CI instead of external action ([cdaabcb](https://github.com/tomshaw/mediable/commit/cdaabcba8d4d6a8c41e0a8dbf955bc0e5bd0ca73))
+
 ## [1.1.0](https://github.com/tomshaw/mediable/compare/v1.0.1...v1.1.0) (2026-04-04)
 
 
