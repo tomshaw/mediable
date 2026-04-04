@@ -16,27 +16,27 @@
     ],
     "require": {
         "php": "^8.5",
-        "laravel/framework": "^12.0",
-        "illuminate/console": "^12.0",
-        "illuminate/contracts": "^12.0",
-        "illuminate/support": "^12.0",
+        "laravel/framework": "^13.0",
+        "illuminate/console": "^13.0",
+        "illuminate/contracts": "^13.0",
+        "illuminate/support": "^13.0",
         "livewire/livewire": "^4.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.25",
         "nunomaduro/collision": "^8.8",
-        "orchestra/testbench": "^10.0",
+        "orchestra/testbench": "^11.0",
         "pestphp/pest": "^4.0"
     },
     "autoload": {
         "psr-4": {
-            "TomShaw\\Mediable\\": "src"
+            "TomShaw\Mediable\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "TomShaw\\Mediable\\Tests\\": "tests"
+            "TomShaw\Mediable\Tests\": "tests"
         }
     },
     "scripts": {
@@ -55,7 +55,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "TomShaw\\Mediable\\Providers\\MediableServiceProvider"
+                "TomShaw\Mediable\Providers\MediableServiceProvider"
             ]
         }
     },
