@@ -5,11 +5,9 @@ namespace TomShaw\Mediable\Providers;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
-use TomShaw\Mediable\Assets\Scripts;
-use TomShaw\Mediable\Assets\Styles;
+use TomShaw\Mediable\Assets\{Scripts, Styles};
 use TomShaw\Mediable\Components\MediaBrowser;
-use TomShaw\Mediable\Console\Commands\InstallCommand;
-use TomShaw\Mediable\Console\Commands\UpdateCommand;
+use TomShaw\Mediable\Console\Commands\{InstallCommand, UpdateCommand};
 
 class MediableServiceProvider extends ServiceProvider
 {

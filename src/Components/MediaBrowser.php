@@ -3,22 +3,12 @@
 namespace TomShaw\Mediable\Components;
 
 use Livewire\Attributes\On;
-use Livewire\Component;
-use Livewire\WithPagination;
-use TomShaw\Mediable\Concerns\AlertState;
-use TomShaw\Mediable\Concerns\ModalState;
-use TomShaw\Mediable\Concerns\PanelState;
-use TomShaw\Mediable\Concerns\ShowState;
+use Livewire\{Component, WithPagination};
+use TomShaw\Mediable\Concerns\{AlertState, ModalState, PanelState, ShowState};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\ServerLimits;
-use TomShaw\Mediable\Traits\WithCache;
-use TomShaw\Mediable\Traits\WithColumnWidths;
-use TomShaw\Mediable\Traits\WithExtension;
-use TomShaw\Mediable\Traits\WithFileSize;
-use TomShaw\Mediable\Traits\WithMimeTypes;
-use TomShaw\Mediable\Traits\WithReporting;
+use TomShaw\Mediable\Traits\{ServerLimits, WithCache, WithColumnWidths, WithExtension, WithFileSize, WithMimeTypes, WithReporting};
 
 class MediaBrowser extends Component
 {
