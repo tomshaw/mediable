@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0](https://github.com/tomshaw/mediable/compare/v1.3.0...v1.4.0) (2026-05-07)
+
+
+### Features
+
+* 🚀 upgrade to Laravel 13 and PHP 8.5 ([fc89875](https://github.com/tomshaw/mediable/commit/fc898759825a1d36da592766cbe56eac0e07a495))
+
+
+### Bug Fixes
+
+* update GitHub Actions to use latest action versions ([35738e1](https://github.com/tomshaw/mediable/commit/35738e12806dd76b5902c93635d17e65efe0c7aa))
+
 ## [1.3.0](https://github.com/tomshaw/mediable/compare/v1.2.0...v1.3.0) (2026-04-04)
 
 
