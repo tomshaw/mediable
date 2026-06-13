@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0](https://github.com/tomshaw/mediable/compare/v1.4.0...v1.5.0) (2026-06-13)
+
+
+### Features
+
+* enhance type annotations and improve code clarity across multiple files ([c45d4ca](https://github.com/tomshaw/mediable/commit/c45d4ca15b8075bec87839fbd8b38cd76022bca7))
+* implement garbage collection for hidden attachments and add tests ([e07d96a](https://github.com/tomshaw/mediable/commit/e07d96a508bd4e88d514ba5ec599154b8e9cd6f3))
+
+
+### Bug Fixes
+
+* normalize order direction in query method to ensure consistent sorting ([735b52c](https://github.com/tomshaw/mediable/commit/735b52c4b0b2887cfd70e4e66760683031568fbb))
+
 ## [1.4.0](https://github.com/tomshaw/mediable/compare/v1.3.0...v1.4.0) (2026-05-07)
 
 
