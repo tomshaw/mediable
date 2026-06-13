@@ -30,10 +30,12 @@ class EloquentManager
 
     public function query(string $orderBy, string $orderDir, ?string $mimeType = null): void
     {
+        $direction = strtolower($orderDir) === 'asc' ? 'asc' : 'desc';
+
         if ($mimeType) {
-            $this->query = Attachment::where('hidden', '=', false)->where('file_type', '=', $mimeType)->orderBy($orderBy, $orderDir);
+            $this->query = Attachment::where('hidden', '=', false)->where('file_type', '=', $mimeType)->orderBy($orderBy, $direction);
         } else {
-            $this->query = Attachment::where('hidden', '=', false)->orderBy($orderBy, $orderDir);
+            $this->query = Attachment::where('hidden', '=', false)->orderBy($orderBy, $direction);
         }
     }
 
