@@ -25,7 +25,7 @@ class UpdateCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->info('This will overwrite Mediable (config, views, images, fonts).');
 
@@ -49,7 +49,7 @@ class UpdateCommand extends Command
         $this->info('Mediable updated successfully!');
     }
 
-    private function buildAssets()
+    private function buildAssets(): void
     {
         $process = new Process(['npm', 'run', 'build']);
 

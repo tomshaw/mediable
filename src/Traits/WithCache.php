@@ -18,7 +18,9 @@ trait WithCache
 
     public function getStoreAttachmentId(): ?int
     {
-        return Cache::get('attachment_id');
+        $id = Cache::get('attachment_id');
+
+        return is_int($id) ? $id : null;
     }
 
     public function deleteStoreAttachmentId(): void

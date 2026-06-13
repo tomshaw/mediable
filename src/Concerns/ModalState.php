@@ -11,6 +11,9 @@ final class ModalState implements Wireable
         public string $elementId = ''
     ) {}
 
+    /**
+     * @return array{show: bool, elementId: string}
+     */
     public function toLivewire(): array
     {
         return [
@@ -19,6 +22,9 @@ final class ModalState implements Wireable
         ];
     }
 
+    /**
+     * @param  array{show: bool, elementId: string}  $value
+     */
     public static function fromLivewire($value): self
     {
         return new self(

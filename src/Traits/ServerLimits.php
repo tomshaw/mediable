@@ -19,9 +19,9 @@ trait ServerLimits
      */
     public function getMaxUploadSize(): int
     {
-        $maxUpload = $this->convertToBytes(ini_get('upload_max_filesize'));
-        $maxPost = $this->convertToBytes(ini_get('post_max_size'));
-        $memoryLimit = $this->convertToBytes(ini_get('memory_limit'));
+        $maxUpload = $this->convertToBytes(ini_get('upload_max_filesize') ?: '0');
+        $maxPost = $this->convertToBytes(ini_get('post_max_size') ?: '0');
+        $memoryLimit = $this->convertToBytes(ini_get('memory_limit') ?: '0');
 
         $limits = array_filter(
             [$maxUpload, $maxPost, $memoryLimit],
@@ -55,7 +55,7 @@ trait ServerLimits
      */
     public function getMaxUploadFileSize(): int
     {
-        return $this->convertToBytes(ini_get('upload_max_filesize'));
+        return $this->convertToBytes(ini_get('upload_max_filesize') ?: '0');
     }
 
     /**
@@ -68,7 +68,7 @@ trait ServerLimits
      */
     public function getPostMaxSize(): int
     {
-        return $this->convertToBytes(ini_get('post_max_size'));
+        return $this->convertToBytes(ini_get('post_max_size') ?: '0');
     }
 
     /**
@@ -81,7 +81,7 @@ trait ServerLimits
      */
     public function getMemoryLimit(): int
     {
-        return $this->convertToBytes(ini_get('memory_limit'));
+        return $this->convertToBytes(ini_get('memory_limit') ?: '0');
     }
 
     /**

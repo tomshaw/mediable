@@ -6,7 +6,7 @@ use Exception;
 use GdImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\{Builder, Collection};
-use Illuminate\Support\Facades\{DB, Storage};
+use Illuminate\Support\Facades\{Config, DB, Storage};
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
@@ -16,6 +16,9 @@ use TomShaw\Mediable\Models\Attachment;
 
 class EloquentManager
 {
+    /**
+     * @param  Builder<Attachment>  $query
+     */
     public function __construct(
         public Builder $query,
     ) {}
@@ -34,13 +37,16 @@ class EloquentManager
         }
     }
 
+    /**
+     * @param  array<int, TemporaryUploadedFile|null>  $files
+     */
     public function create(array $files): void
     {
-        $diskConfig = $this->getAndValidateDisk(config('mediable.disk'));
+        $diskConfig = $this->getAndValidateDisk(Config::string('mediable.disk'));
 
         $disk = $diskConfig['disk'];
 
-        $folder = config('mediable.folder');
+        $folder = Config::string('mediable.folder');
 
         foreach ($files as $file) {
             if (is_null($file)) {
@@ -50,6 +56,10 @@ class EloquentManager
             $fileName = $this->prepareFileName($file->getClientOriginalName());
 
             $storagePath = $file->storePubliclyAs(path: $folder, name: $fileName, options: $disk);
+
+            if ($storagePath === false) {
+                continue;
+            }
 
             $fullPath = Storage::disk($disk)->path($storagePath);
 
@@ -63,16 +73,22 @@ class EloquentManager
 
             if (str_starts_with($file->getMimeType(), 'image/')) {
 
-                try {
-                    $image = imagecreatefromstring(file_get_contents($fullPath));
-                } catch (Exception $e) {
+                $contents = file_get_contents($fullPath);
+
+                if ($contents === false) {
+                    continue;
+                }
+
+                $image = imagecreatefromstring($contents);
+
+                if ($image === false) {
                     continue;
                 }
 
                 if (config('mediable.create_webp')) {
 
                     try {
-                        $path = $this->createImageResource($image, $storagePath, $disk, 'image/webp', config('mediable.webp_quality'));
+                        $path = $this->createImageResource($image, $storagePath, $disk, 'image/webp', Config::integer('mediable.webp_quality'));
                     } catch (Exception $e) {
                         continue;
                     }
@@ -95,7 +111,7 @@ class EloquentManager
                 if (config('mediable.create_avif')) {
 
                     try {
-                        $path = $this->createImageResource($image, $storagePath, $disk, 'image/avif', config('mediable.avif_quality'));
+                        $path = $this->createImageResource($image, $storagePath, $disk, 'image/avif', Config::integer('mediable.avif_quality'));
                     } catch (Exception $e) {
                         continue;
                     }
@@ -120,6 +136,9 @@ class EloquentManager
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function createDataArray(TemporaryUploadedFile $file, string $storagePath, string $fileName): array
     {
         return [
@@ -137,7 +156,7 @@ class EloquentManager
     {
         $extension = ($type === 'image/webp') ? 'webp' : 'avif';
 
-        $directory = config('mediable.folder');
+        $directory = Config::string('mediable.folder');
         $baseName = pathinfo($stored, PATHINFO_FILENAME);
         $path = $directory.'/'.$baseName.'.'.$extension;
 
@@ -147,13 +166,16 @@ class EloquentManager
         } else {
             imageavif($image, null, $quality);
         }
-        $content = ob_get_clean();
+        $content = ob_get_clean() ?: '';
 
         Storage::disk($disk)->put($path, $content);
 
         return $path;
     }
 
+    /**
+     * @param  array<string, mixed>  $data
+     */
     public function update(int $id, array $data = []): void
     {
         try {
@@ -185,7 +207,7 @@ class EloquentManager
 
     public function garbage(): void
     {
-        $disk = $this->getAndValidateDisk(config('mediable.disk'))['disk'];
+        $disk = $this->getAndValidateDisk(Config::string('mediable.disk'))['disk'];
 
         try {
             Attachment::where('hidden', true)->chunkById(100, function ($attachments) use ($disk): void {
@@ -206,7 +228,7 @@ class EloquentManager
 
     public function copyImageFromTo(string $source, string $destination): string
     {
-        $diskConfig = $this->getAndValidateDisk(config('mediable.disk'));
+        $diskConfig = $this->getAndValidateDisk(Config::string('mediable.disk'));
 
         $disk = $diskConfig['disk'];
 
@@ -229,7 +251,7 @@ class EloquentManager
 
     public function saveImageToDatabase(AttachmentState $attachment, string $destination): Attachment
     {
-        $diskConfig = $this->getAndValidateDisk(config('mediable.disk'));
+        $diskConfig = $this->getAndValidateDisk(Config::string('mediable.disk'));
 
         $disk = $diskConfig['disk'];
 
@@ -259,7 +281,7 @@ class EloquentManager
 
     public function getFilePath(string $filename): string
     {
-        $diskConfig = $this->getAndValidateDisk(config('mediable.disk'));
+        $diskConfig = $this->getAndValidateDisk(Config::string('mediable.disk'));
 
         $disk = $diskConfig['disk'];
 
@@ -298,6 +320,9 @@ class EloquentManager
         return $slug.'-'.time().'.'.$extension;
     }
 
+    /**
+     * @param  list<string>  $searchColumns
+     */
     public function search(string $searchTerm, array $searchColumns): void
     {
         if ($searchTerm) {
@@ -313,19 +338,30 @@ class EloquentManager
         }
     }
 
+    /**
+     * @return list<string>
+     */
     public function uniqueMimes(): array
     {
-        return Attachment::query()->distinct()->pluck('file_type')->sort()->values()->toArray();
+        $types = Attachment::query()->distinct()->orderBy('file_type')->pluck('file_type')->all();
+
+        return array_values(array_filter($types, 'is_string'));
     }
 
+    /**
+     * @return LengthAwarePaginator<int, Attachment>
+     */
     public function paginate(int $perPage): LengthAwarePaginator
     {
         return $this->query->paginate($perPage);
     }
 
+    /**
+     * @return array{disk: string, driver: mixed}
+     */
     public function getAndValidateDisk(string $name): array
     {
-        $disks = config('filesystems.disks');
+        $disks = Config::array('filesystems.disks');
 
         if (! array_key_exists($name, $disks)) {
             throw new MediaBrowserException('Storage disk not found.');
@@ -334,6 +370,9 @@ class EloquentManager
         return ['disk' => $name, 'driver' => $disks[$name]];
     }
 
+    /**
+     * @return Collection<int, Attachment>
+     */
     public function getMimeTypeStats(): Collection
     {
         return Attachment::select('file_type', DB::raw('count(*) as total'), DB::raw('sum(file_size) as total_size'))

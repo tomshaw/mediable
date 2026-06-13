@@ -47,6 +47,9 @@ final class AttachmentState implements Wireable
         );
     }
 
+    /**
+     * @return array{id: int|null, file_name: string, file_original_name: string, file_type: string, file_size: int, file_dir: string, file_url: string, title: string, caption: string, description: string, sort_order: int, styles: string, hidden: bool, created_at: string|null, updated_at: string|null}
+     */
     public function toLivewire(): array
     {
         return [
@@ -68,11 +71,17 @@ final class AttachmentState implements Wireable
         ];
     }
 
+    /**
+     * @param  array{id?: int|null, file_name?: string, file_original_name?: string, file_type?: string, file_size?: int, file_dir?: string, file_url?: string, title?: string, caption?: string, description?: string, sort_order?: int, styles?: string, hidden?: bool, created_at?: string|null, updated_at?: string|null}  $value
+     */
     public static function fromLivewire($value): self
     {
         return self::fromArray($value);
     }
 
+    /**
+     * @param  array{id?: int|null, file_name?: string, file_original_name?: string, file_type?: string, file_size?: int, file_dir?: string, file_url?: string, title?: string, caption?: string, description?: string, sort_order?: int, styles?: string, hidden?: bool, created_at?: string|null, updated_at?: string|null}  $value
+     */
     public static function fromArray(array $value): self
     {
         return new self(

@@ -39,6 +39,9 @@ final class PanelState implements Wireable
         return $this->formMode;
     }
 
+    /**
+     * @return array{thumbMode: bool, previewMode: bool, uploadMode: bool, editorMode: bool, formMode: bool}
+     */
     public function toLivewire(): array
     {
         return [
@@ -50,6 +53,9 @@ final class PanelState implements Wireable
         ];
     }
 
+    /**
+     * @param  array{thumbMode: bool, previewMode: bool, uploadMode: bool, editorMode: bool, formMode: bool}  $value
+     */
     public static function fromLivewire($value): self
     {
         return new self(

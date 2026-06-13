@@ -93,6 +93,9 @@ final class ShowState implements Wireable
         return $this->showAppStats;
     }
 
+    /**
+     * @return array{showPagination: bool, showPerPage: bool, showOrderBy: bool, showOrderDir: bool, showColumnWidth: bool, showUniqueMimeTypes: bool, showSidebar: bool, showSearch: bool, showUpload: bool, showEditor: bool, showPreview: bool, showImageStrip: bool, showMetaInfo: bool, showAppStats: bool}
+     */
     public function toLivewire(): array
     {
         return [
@@ -113,6 +116,9 @@ final class ShowState implements Wireable
         ];
     }
 
+    /**
+     * @param  array{showPagination: bool, showPerPage: bool, showOrderBy: bool, showOrderDir: bool, showColumnWidth: bool, showUniqueMimeTypes: bool, showSidebar: bool, showSearch: bool, showUpload: bool, showEditor: bool, showPreview: bool, showImageStrip: bool, showMetaInfo: bool, showAppStats: bool}  $value
+     */
     public static function fromLivewire($value): self
     {
         return new self(

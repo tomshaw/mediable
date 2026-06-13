@@ -34,24 +34,29 @@ class MediaBrowser extends Component
 
     public bool $fullScreen = false;
 
+    /** @var list<string> */
     public array $uniqueMimeTypes = [];
 
     public string $selectedMimeType = '';
 
     public string $searchTerm = '';
 
+    /** @var list<string> */
     public array $searchColumns = ['title', 'caption', 'description', 'file_original_name'];
 
+    /** @var array<string, string> */
     public array $orderColumns = ['id' => 'ID', 'file_name' => 'Name', 'file_type' => 'Type', 'file_size' => 'Size', 'file_dir' => 'Directory', 'file_url' => 'URL', 'title' => 'Title', 'caption' => 'Caption', 'description' => 'Description', 'sort_order' => 'Sort Order', 'created_at' => 'Created At', 'updated_at' => 'Updated At'];
 
     public int $perPage = 25;
 
+    /** @var list<int> */
     public array $perPageValues = [10, 25, 50, 75, 100, 0];
 
     public string $orderBy = 'id';
 
     public string $orderDir = 'DESC';
 
+    /** @var array<string, string> */
     public array $orderDirValues = ['ASC' => 'Ascending', 'DESC' => 'Descending'];
 
     public ?int $maxUploadSize = null;
@@ -94,6 +99,9 @@ class MediaBrowser extends Component
         $this->uniqueMimeTypes = Eloquent::uniqueMimes();
     }
 
+    /**
+     * @return array{maxUploadSize: int|null, maxFileUploads: int|null, maxUploadFileSize: int|null, postMaxSize: int|null, memoryLimit: int|null}
+     */
     #[On(BrowserEvents::SERVER_LIMITS->value)]
     public function getServerLimits(): array
     {
@@ -118,8 +126,11 @@ class MediaBrowser extends Component
         $this->closeModal();
     }
 
+    /**
+     * @param  array{type: string, message: string}  $event
+     */
     #[On(BrowserEvents::ALERT->value)]
-    public function alert($event): void
+    public function alert(array $event): void
     {
         $this->alert = new AlertState(
             show: true,
@@ -218,6 +229,9 @@ class MediaBrowser extends Component
         );
     }
 
+    /**
+     * @param  list<int>  $selectedIds
+     */
     #[On(BrowserEvents::DELETE_SELECTED->value)]
     public function deleteSelected(array $selectedIds): void
     {
@@ -244,6 +258,9 @@ class MediaBrowser extends Component
         $this->resetPage();
     }
 
+    /**
+     * @param  list<int>  $selectedIds
+     */
     #[On(BrowserEvents::PANEL_INSERT_MEDIA->value)]
     public function insertMedia(array $selectedIds): void
     {

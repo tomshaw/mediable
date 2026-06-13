@@ -8,6 +8,9 @@ use TomShaw\Mediable\Models\Attachment;
 
 trait WithReporting
 {
+    /**
+     * @return Collection<int, Attachment>
+     */
     public function getMimeTypeStatsProperty(): Collection
     {
         return Eloquent::getMimeTypeStats();

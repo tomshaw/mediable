@@ -12,6 +12,9 @@ final class AlertState implements Wireable
         public string $message = ''
     ) {}
 
+    /**
+     * @return array{show: bool, type: string, message: string}
+     */
     public function toLivewire(): array
     {
         return [
@@ -21,6 +24,9 @@ final class AlertState implements Wireable
         ];
     }
 
+    /**
+     * @param  array{show: bool, type: string, message: string}  $value
+     */
     public static function fromLivewire($value): self
     {
         return new self(

@@ -113,26 +113,41 @@ class GraphicDrawBase
         return imagecreatefromavif($filename);
     }
 
+    /**
+     * @param  resource|string|null  $file
+     */
     public function imagewebp(GdImage $image, $file = null, int $quality = -1): bool
     {
         return imagewebp($image, $file, $quality);
     }
 
+    /**
+     * @param  resource|string|null  $file
+     */
     public function imageavif(GdImage $image, $file = null, int $quality = -1): bool
     {
         return imageavif($image, $file, $quality);
     }
 
+    /**
+     * @param  resource|string|null  $file
+     */
     public function imagejpeg(GdImage $image, $file = null, int $quality = -1): bool
     {
         return imagejpeg($image, $file, $quality);
     }
 
+    /**
+     * @param  resource|string|null  $file
+     */
     public function imagepng(GdImage $image, $file = null, int $quality = -1, int $filters = -1): bool
     {
         return imagepng($image, $file, $quality, $filters);
     }
 
+    /**
+     * @param  resource|string|null  $file
+     */
     public function imagegif(GdImage $image, $file = null): bool
     {
         return imagegif($image, $file);
@@ -143,6 +158,10 @@ class GraphicDrawBase
         return imagedestroy($image);
     }
 
+    /**
+     * @param  array<string, mixed>  $image_info
+     * @return array<int|string, int|string>|false
+     */
     public function getimagesize(string $filename, array $image_info = []): array|false
     {
         return getimagesize($filename, $image_info);
@@ -165,7 +184,7 @@ class GraphicDrawBase
 
     public function getImageExtension(int $imageType): ?string
     {
-        return image_type_to_extension($imageType);
+        return image_type_to_extension($imageType) ?: null;
     }
 
     public function scale(GdImage $image, int $new_width, int $new_height = -1, int $mode = IMG_BILINEAR_FIXED): GdImage|false
@@ -173,6 +192,9 @@ class GraphicDrawBase
         return imagescale($image, $new_width, $new_height, $mode);
     }
 
+    /**
+     * @param  array{x: int, y: int, width: int, height: int}  $rect
+     */
     public function crop(GdImage $image, array $rect): GdImage|false
     {
         return imagecrop($image, $rect);
@@ -188,11 +210,17 @@ class GraphicDrawBase
         return imagerotate($image, $angle, $bgd_color);
     }
 
+    /**
+     * @param  list<int>  $args
+     */
     public function filter(GdImage $image, int $filter, array $args): bool
     {
         return imagefilter($image, $filter, ...$args);
     }
 
+    /**
+     * @return array<array-key, mixed>|false
+     */
     public function text(GdImage $image, float $size, float $angle, int $x, int $y, int $color, string $fontfile, string $text): array|false
     {
         return imagettftext($image, $size, $angle, $x, $y, $color, $fontfile, $text);

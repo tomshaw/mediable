@@ -25,7 +25,7 @@ class InstallCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->comment('Publishing Mediable Config...');
         $this->callSilent('vendor:publish', ['--tag' => 'mediable.config']);
@@ -45,7 +45,7 @@ class InstallCommand extends Command
         $this->info('Mediable installed successfully!');
     }
 
-    private function buildAssets()
+    private function buildAssets(): void
     {
         $process = new Process(['npm', 'run', 'build']);
 

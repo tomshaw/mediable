@@ -17,6 +17,9 @@ class GraphicDrawManager extends GraphicDrawBase
         return $this->save($filename, $image);
     }
 
+    /**
+     * @param  list<int>  $args
+     */
     public function filterAndSave(string $filename, int $filter, array $args = []): bool
     {
         $image = $this->create($filename);
@@ -64,6 +67,9 @@ class GraphicDrawManager extends GraphicDrawBase
         return $this->save($filename, $result);
     }
 
+    /**
+     * @param  array{x: int, y: int, width: int, height: int}  $rect
+     */
     public function cropAndSave(string $filename, array $rect): bool
     {
         $image = $this->create($filename);

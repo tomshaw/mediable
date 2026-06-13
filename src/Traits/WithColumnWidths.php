@@ -4,6 +4,7 @@ namespace TomShaw\Mediable\Traits;
 
 trait WithColumnWidths
 {
+    /** @var list<float|int> */
     public array $columnWidths = [100, 50, 33.3, 25, 20, 16.66, 14.28, 12.5, 11.11, 10, 9.09, 8.33];
 
     public int $defaultColumnWidth = 4;

@@ -5,6 +5,7 @@ namespace TomShaw\Mediable\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use TomShaw\Mediable\Database\Factories\AttachmentFactory;
 
 /**
  * @property string $file_name
@@ -24,6 +25,7 @@ use Illuminate\Support\Carbon;
  */
 class Attachment extends Model
 {
+    /** @use HasFactory<AttachmentFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -51,5 +53,10 @@ class Attachment extends Model
             'sort_order' => 'integer',
             'hidden' => 'boolean',
         ];
+    }
+
+    protected static function newFactory(): AttachmentFactory
+    {
+        return AttachmentFactory::new();
     }
 }
