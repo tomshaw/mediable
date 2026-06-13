@@ -185,13 +185,15 @@ class EloquentManager
 
     public function garbage(): void
     {
+        $disk = $this->getAndValidateDisk(config('mediable.disk'))['disk'];
+
         try {
-            Attachment::where('hidden', true)->chunkById(100, function ($attachments): void {
+            Attachment::where('hidden', true)->chunkById(100, function ($attachments) use ($disk): void {
                 foreach ($attachments as $attachment) {
                     $fileDir = $attachment->file_dir;
 
-                    if ($fileDir && Storage::exists($fileDir)) {
-                        Storage::delete($fileDir);
+                    if ($fileDir && Storage::disk($disk)->exists($fileDir)) {
+                        Storage::disk($disk)->delete($fileDir);
                     }
 
                     $attachment->delete();

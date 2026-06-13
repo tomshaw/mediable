@@ -23,7 +23,12 @@ trait ServerLimits
         $maxPost = $this->convertToBytes(ini_get('post_max_size'));
         $memoryLimit = $this->convertToBytes(ini_get('memory_limit'));
 
-        return min($maxUpload, $maxPost, $memoryLimit);
+        $limits = array_filter(
+            [$maxUpload, $maxPost, $memoryLimit],
+            fn (int $bytes): bool => $bytes > 0
+        );
+
+        return $limits === [] ? 0 : min($limits);
     }
 
     /**

@@ -31,7 +31,6 @@ new class extends Component
     #[On(BrowserEvents::FORM_RECEIVE_ACTIVE_ID->value)]
     public function handleReceiveActiveId(int $id): void
     {
-        \Log::info('[FORM] handleReceiveActiveId', ['originalId' => $id]);
         $this->loadSelectedAttachment($id);
         $this->prepareImageEditor();
     }
@@ -86,11 +85,6 @@ new class extends Component
 
         $this->initializeScaleDimensions();
 
-        \Log::info('[FORM] prepareImageEditor dispatching EDITOR_ATTACHMENT_UPDATED', [
-            'originalId' => $originalId,
-            'copyId' => $this->attachment->getId(),
-            'copyDir' => $this->attachment->file_dir,
-        ]);
         $this->dispatch(BrowserEvents::EDITOR_ATTACHMENT_UPDATED->value, id: $this->attachment->getId());
     }
 
