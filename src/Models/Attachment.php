@@ -2,8 +2,9 @@
 
 namespace TomShaw\Mediable\Models;
 
+use Illuminate\Database\Eloquent\Attributes\{Scope, UseFactory};
+use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use TomShaw\Mediable\Database\Factories\AttachmentFactory;
 
@@ -22,7 +23,11 @@ use TomShaw\Mediable\Database\Factories\AttachmentFactory;
  * @property bool $hidden
  * @property Carbon|string $created_at
  * @property Carbon|string $updated_at
+ *
+ * @method static Builder<static> visible()
+ * @method static Builder<static> hidden()
  */
+#[UseFactory(AttachmentFactory::class)]
 class Attachment extends Model
 {
     /** @use HasFactory<AttachmentFactory> */
@@ -55,8 +60,21 @@ class Attachment extends Model
         ];
     }
 
-    protected static function newFactory(): AttachmentFactory
+    /**
+     * @param  Builder<static>  $query
+     */
+    #[Scope]
+    protected function visible(Builder $query): void
     {
-        return AttachmentFactory::new();
+        $query->where('hidden', false);
+    }
+
+    /**
+     * @param  Builder<static>  $query
+     */
+    #[Scope]
+    protected function hidden(Builder $query): void
+    {
+        $query->where('hidden', true);
     }
 }

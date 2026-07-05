@@ -16,13 +16,13 @@ return new class extends Migration
             $table->string('file_name')->nullable();
             $table->string('file_original_name')->nullable();
             $table->string('file_type')->nullable();
-            $table->integer('file_size')->default('0')->nullable();
+            $table->unsignedBigInteger('file_size')->default(0)->nullable();
             $table->string('file_dir')->nullable();
             $table->string('file_url')->nullable();
             $table->string('title')->nullable();
             $table->string('caption')->nullable();
             $table->text('description')->nullable();
-            $table->integer('sort_order')->default('0')->nullable();
+            $table->integer('sort_order')->default(0)->nullable();
             $table->string('styles')->nullable();
             $table->boolean('hidden')->default(false);
             $table->timestamps();

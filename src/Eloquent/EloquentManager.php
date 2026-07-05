@@ -6,7 +6,7 @@ use Exception;
 use GdImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\{Builder, Collection};
-use Illuminate\Support\Facades\{Config, DB, Storage};
+use Illuminate\Support\Facades\{Config, Storage};
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
@@ -20,7 +20,7 @@ class EloquentManager
      * @param  Builder<Attachment>  $query
      */
     public function __construct(
-        public Builder $query,
+        public private(set) Builder $query,
     ) {}
 
     public function load(int $id): ?Attachment
@@ -32,11 +32,10 @@ class EloquentManager
     {
         $direction = strtolower($orderDir) === 'asc' ? 'asc' : 'desc';
 
-        if ($mimeType) {
-            $this->query = Attachment::where('hidden', '=', false)->where('file_type', '=', $mimeType)->orderBy($orderBy, $direction);
-        } else {
-            $this->query = Attachment::where('hidden', '=', false)->orderBy($orderBy, $direction);
-        }
+        $this->query = Attachment::query()
+            ->visible()
+            ->when($mimeType, fn (Builder $query) => $query->where('file_type', $mimeType))
+            ->orderBy($orderBy, $direction);
     }
 
     /**
@@ -70,7 +69,7 @@ class EloquentManager
             try {
                 Attachment::create($data);
             } catch (Exception $e) {
-                throw new MediaBrowserException($e->getMessage());
+                throw new MediaBrowserException($e->getMessage(), previous: $e);
             }
 
             if (str_starts_with($file->getMimeType(), 'image/')) {
@@ -87,7 +86,7 @@ class EloquentManager
                     continue;
                 }
 
-                if (config('mediable.create_webp')) {
+                if (Config::boolean('mediable.create_webp')) {
 
                     try {
                         $path = $this->createImageResource($image, $storagePath, $disk, 'image/webp', Config::integer('mediable.webp_quality'));
@@ -110,7 +109,7 @@ class EloquentManager
                     Attachment::create($create);
                 }
 
-                if (config('mediable.create_avif')) {
+                if (Config::boolean('mediable.create_avif')) {
 
                     try {
                         $path = $this->createImageResource($image, $storagePath, $disk, 'image/avif', Config::integer('mediable.avif_quality'));
@@ -181,20 +180,20 @@ class EloquentManager
     public function update(int $id, array $data = []): void
     {
         try {
-            Attachment::where('id', $id)->update($data);
+            Attachment::whereKey($id)->update($data);
         } catch (Exception $e) {
-            throw new MediaBrowserException($e->getMessage());
+            throw new MediaBrowserException($e->getMessage(), previous: $e);
         }
     }
 
     public function enable(int $id): void
     {
         try {
-            Attachment::where('id', $id)->update([
+            Attachment::whereKey($id)->update([
                 'hidden' => false,
             ]);
         } catch (Exception $e) {
-            throw new MediaBrowserException($e->getMessage());
+            throw new MediaBrowserException($e->getMessage(), previous: $e);
         }
     }
 
@@ -203,7 +202,7 @@ class EloquentManager
         try {
             Attachment::findOrFail($id)->delete();
         } catch (Exception $e) {
-            throw new MediaBrowserException($e->getMessage());
+            throw new MediaBrowserException($e->getMessage(), previous: $e);
         }
     }
 
@@ -212,7 +211,7 @@ class EloquentManager
         $disk = $this->getAndValidateDisk(Config::string('mediable.disk'))['disk'];
 
         try {
-            Attachment::where('hidden', true)->chunkById(100, function ($attachments) use ($disk): void {
+            Attachment::hidden()->chunkById(100, function ($attachments) use ($disk): void {
                 foreach ($attachments as $attachment) {
                     $fileDir = $attachment->file_dir;
 
@@ -224,7 +223,7 @@ class EloquentManager
                 }
             });
         } catch (Exception $e) {
-            throw new MediaBrowserException($e->getMessage());
+            throw new MediaBrowserException($e->getMessage(), previous: $e);
         }
     }
 
@@ -245,7 +244,7 @@ class EloquentManager
         try {
             Storage::disk($disk)->copy($source, $destination);
         } catch (Exception $e) {
-            throw new MediaBrowserException($e->getMessage());
+            throw new MediaBrowserException($e->getMessage(), previous: $e);
         }
 
         return $destination;
@@ -277,7 +276,7 @@ class EloquentManager
         try {
             return Attachment::create($create);
         } catch (Exception $e) {
-            throw new MediaBrowserException($e->getMessage());
+            throw new MediaBrowserException($e->getMessage(), previous: $e);
         }
     }
 
@@ -295,7 +294,7 @@ class EloquentManager
         try {
             $file = new File($path, $checkPath);
         } catch (Exception $e) {
-            throw new MediaBrowserException($e->getMessage());
+            throw new MediaBrowserException($e->getMessage(), previous: $e);
         }
 
         return $file;
@@ -328,15 +327,7 @@ class EloquentManager
     public function search(string $searchTerm, array $searchColumns): void
     {
         if ($searchTerm) {
-            $this->query->where(function (Builder $query) use ($searchTerm, $searchColumns): void {
-                foreach ($searchColumns as $index => $column) {
-                    if ($index === 0) {
-                        $query->where($column, 'like', "%{$searchTerm}%");
-                    } else {
-                        $query->orWhere($column, 'like', "%{$searchTerm}%");
-                    }
-                }
-            });
+            $this->query->whereAny($searchColumns, 'like', "%{$searchTerm}%");
         }
     }
 
@@ -377,13 +368,14 @@ class EloquentManager
      */
     public function getMimeTypeStats(): Collection
     {
-        return Attachment::select('file_type', DB::raw('count(*) as total'), DB::raw('sum(file_size) as total_size'))
+        return Attachment::query()
+            ->selectRaw('file_type, count(*) as total, sum(file_size) as total_size')
             ->groupBy('file_type')
             ->get();
     }
 
     public function getMimeTypeTotals(): ?Attachment
     {
-        return Attachment::select(DB::raw('count(*) as total'), DB::raw('sum(file_size) as total_size'))->first();
+        return Attachment::query()->selectRaw('count(*) as total, sum(file_size) as total_size')->first();
     }
 }

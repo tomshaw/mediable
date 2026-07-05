@@ -7,21 +7,31 @@ use Livewire\Wireable;
 final class ShowState implements Wireable
 {
     public function __construct(
-        public bool $showPagination = true,
-        public bool $showPerPage = true,
-        public bool $showOrderBy = true,
-        public bool $showOrderDir = true,
-        public bool $showColumnWidth = true,
-        public bool $showUniqueMimeTypes = true,
-        public bool $showSidebar = true,
-        public bool $showSearch = true,
-        public bool $showUpload = true,
-        public bool $showEditor = true,
-        public bool $showPreview = true,
-        public bool $showImageStrip = true,
-        public bool $showMetaInfo = true,
-        public bool $showAppStats = true,
+        public private(set) bool $showPagination = true,
+        public private(set) bool $showPerPage = true,
+        public private(set) bool $showOrderBy = true,
+        public private(set) bool $showOrderDir = true,
+        public private(set) bool $showColumnWidth = true,
+        public private(set) bool $showUniqueMimeTypes = true,
+        public private(set) bool $showSidebar = true,
+        public private(set) bool $showSearch = true,
+        public private(set) bool $showUpload = true,
+        public private(set) bool $showEditor = true,
+        public private(set) bool $showPreview = true,
+        public private(set) bool $showImageStrip = true,
+        public private(set) bool $showMetaInfo = true,
+        public private(set) bool $showAppStats = true,
     ) {}
+
+    public function toggleSidebar(): self
+    {
+        return clone ($this, ['showSidebar' => ! $this->showSidebar]);
+    }
+
+    public function toggleMetaInfo(): self
+    {
+        return clone ($this, ['showMetaInfo' => ! $this->showMetaInfo]);
+    }
 
     public function isShowPagination(): bool
     {
@@ -94,7 +104,7 @@ final class ShowState implements Wireable
     }
 
     /**
-     * @return array{showPagination: bool, showPerPage: bool, showOrderBy: bool, showOrderDir: bool, showColumnWidth: bool, showUniqueMimeTypes: bool, showSidebar: bool, showSearch: bool, showUpload: bool, showEditor: bool, showPreview: bool, showImageStrip: bool, showMetaInfo: bool, showAppStats: bool}
+     * @return array<string, bool>
      */
     public function toLivewire(): array
     {
@@ -117,25 +127,10 @@ final class ShowState implements Wireable
     }
 
     /**
-     * @param  array{showPagination: bool, showPerPage: bool, showOrderBy: bool, showOrderDir: bool, showColumnWidth: bool, showUniqueMimeTypes: bool, showSidebar: bool, showSearch: bool, showUpload: bool, showEditor: bool, showPreview: bool, showImageStrip: bool, showMetaInfo: bool, showAppStats: bool}  $value
+     * @param  array<string, bool>  $value
      */
     public static function fromLivewire($value): self
     {
-        return new self(
-            showPagination: $value['showPagination'],
-            showPerPage: $value['showPerPage'],
-            showOrderBy: $value['showOrderBy'],
-            showOrderDir: $value['showOrderDir'],
-            showColumnWidth: $value['showColumnWidth'],
-            showUniqueMimeTypes: $value['showUniqueMimeTypes'],
-            showSidebar: $value['showSidebar'],
-            showSearch: $value['showSearch'],
-            showUpload: $value['showUpload'],
-            showEditor: $value['showEditor'],
-            showPreview: $value['showPreview'],
-            showImageStrip: $value['showImageStrip'],
-            showMetaInfo: $value['showMetaInfo'],
-            showAppStats: $value['showAppStats'],
-        );
+        return new self(...$value);
     }
 }

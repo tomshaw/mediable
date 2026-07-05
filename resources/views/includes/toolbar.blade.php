@@ -1,140 +1,3 @@
-<?php
-
-use Livewire\Attributes\{On, Reactive};
-use Livewire\Component;
-use TomShaw\Mediable\Concerns\{PanelState, ShowState};
-use TomShaw\Mediable\Enums\BrowserEvents;
-
-new class extends Component
-{
-    #[Reactive]
-    public PanelState $panel;
-
-    #[Reactive]
-    public ShowState $show;
-
-    #[Reactive]
-    public array $attachments = [];
-
-    #[Reactive]
-    public array $orderColumns;
-
-    #[Reactive]
-    public array $columnWidths;
-
-    #[Reactive]
-    public array $uniqueMimeTypes;
-
-    public string $orderBy = 'id';
-
-    public string $orderDir = 'DESC';
-
-    public int $defaultColumnWidth = 4;
-
-    public string $selectedMimeType = '';
-
-    public array $selectedIds = [];
-
-    public ?int $activeId = null;
-
-    #[On(BrowserEvents::ATTACHMENTS_SELECTION_CHANGED->value)]
-    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
-    {
-        $this->selectedIds = $selectedIds;
-        $this->activeId = $activeId;
-    }
-
-    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CHANGED->value)]
-    public function handleActiveAttachmentChanged(int $id): void
-    {
-        $this->activeId = $id;
-    }
-
-    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CLEARED->value)]
-    public function handleActiveAttachmentCleared(): void
-    {
-        $this->activeId = null;
-    }
-
-    #[On(BrowserEvents::FORM_REQUEST_ACTIVE_ID->value)]
-    public function handleFormRequestActiveId(): void
-    {
-        if ($this->activeId) {
-            $this->dispatch(BrowserEvents::FORM_RECEIVE_ACTIVE_ID->value, id: $this->activeId);
-        }
-    }
-
-    public function mount(
-        string $orderBy = 'id',
-        string $orderDir = 'DESC',
-        int $defaultColumnWidth = 4,
-        string $selectedMimeType = ''
-    ): void {
-        $this->orderBy = $orderBy;
-        $this->orderDir = $orderDir;
-        $this->defaultColumnWidth = $defaultColumnWidth;
-        $this->selectedMimeType = $selectedMimeType;
-    }
-
-    public function updatedOrderBy(): void
-    {
-        $this->dispatch(BrowserEvents::TOOLBAR_ORDER_BY_CHANGED->value, orderBy: $this->orderBy);
-    }
-
-    public function updatedDefaultColumnWidth(): void
-    {
-        $this->dispatch(BrowserEvents::TOOLBAR_COLUMN_WIDTH_CHANGED->value, defaultColumnWidth: $this->defaultColumnWidth);
-    }
-
-    public function updatedSelectedMimeType(): void
-    {
-        $this->dispatch(BrowserEvents::TOOLBAR_MIME_TYPE_CHANGED->value, selectedMimeType: $this->selectedMimeType);
-    }
-
-    public function enableThumbMode(): void
-    {
-        $this->dispatch(BrowserEvents::TOOLBAR_ENABLE_THUMB_MODE->value);
-    }
-
-    public function enableUploadMode(): void
-    {
-        $this->dispatch(BrowserEvents::TOOLBAR_ENABLE_UPLOAD_MODE->value);
-    }
-
-    public function enableEditorMode(): void
-    {
-        $this->dispatch(BrowserEvents::TOOLBAR_ENABLE_EDITOR_MODE->value);
-    }
-
-    public function toggleMetaInfo(): void
-    {
-        $this->dispatch(BrowserEvents::TOOLBAR_TOGGLE_META_INFO->value);
-    }
-
-    public function toggleOrderDir(): void
-    {
-        $this->orderDir = strtoupper($this->orderDir) === 'ASC' ? 'DESC' : 'ASC';
-        $this->dispatch(BrowserEvents::TOOLBAR_ORDER_DIR_CHANGED->value, orderDir: $this->orderDir);
-    }
-
-    public function toggleSidebar(): void
-    {
-        $this->dispatch(BrowserEvents::TOOLBAR_TOGGLE_SIDEBAR->value);
-    }
-
-    public function deleteAttachment(): void
-    {
-        if ($this->activeId) {
-            $this->dispatch(BrowserEvents::TOOLBAR_DELETE_ATTACHMENT->value, id: $this->activeId);
-        }
-    }
-
-    public function closeImageEditor(): void
-    {
-        $this->dispatch(BrowserEvents::TOOLBAR_CLOSE_IMAGE_EDITOR->value);
-    }
-}; ?>
-
 <div class="flex items-center justify-between h-full w-full px-4">
 
   {{-- Left Section --}}
@@ -148,7 +11,7 @@ new class extends Component
     @endif
 
     {{-- Close/Back Button --}}
-    @if($panel->isUploadMode() && !empty($attachments))
+    @if($panel->isUploadMode() && !$this->paginator->isEmpty())
     <button wire:click="enableThumbMode" class="group relative inline-flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-neutral-900 font-medium text-xs tracking-wider text-gray-50 cursor-pointer transition active:scale-95">
       <x-icons.close />
     </button>
@@ -165,11 +28,11 @@ new class extends Component
     {{-- Thumb Mode Controls --}}
     @if($panel->isThumbMode())
 
-    @if($show->isShowOrderBy() && count($attachments))
+    @if($show->isShowOrderBy() && $this->paginator->isNotEmpty())
     <x-mediable::toolbar-select wire:model.live="orderBy" :options="$orderColumns" />
     @endif
 
-    @if($show->isShowOrderDir() && count($attachments))
+    @if($show->isShowOrderDir() && $this->paginator->isNotEmpty())
     <button type="button" class="relative flex items-center justify-between w-20 min-w-20 max-w-20 px-3 py-1.5 bg-neutral-900 rounded-full font-medium text-xs tracking-wider text-gray-50 cursor-pointer transition-all duration-100 ease-in" wire:click="toggleOrderDir()">
       @if(strtoupper($orderDir) == 'ASC')
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4">
@@ -184,12 +47,12 @@ new class extends Component
     </button>
     @endif
 
-    @if($show->isShowColumnWidth() && count($attachments))
+    @if($show->isShowColumnWidth() && $this->paginator->isNotEmpty())
     <x-mediable::toolbar-select wire:model.live="defaultColumnWidth" :options="array_reverse($columnWidths, true)" />
     @endif
 
-    @if($show->isShowUniqueMimeTypes() && count($uniqueMimeTypes) >= 1)
-    <x-mediable::toolbar-select wire:model.live="selectedMimeType" placeholder="Mimes" :options="array_combine($uniqueMimeTypes, $uniqueMimeTypes)" />
+    @if($show->isShowUniqueMimeTypes() && count($this->uniqueMimeTypes) >= 1)
+    <x-mediable::toolbar-select wire:model.live="selectedMimeType" placeholder="Mimes" :options="array_combine($this->uniqueMimeTypes, $this->uniqueMimeTypes)" />
     @endif
 
     @endif
@@ -208,7 +71,7 @@ new class extends Component
 
     {{-- Trash Button (preview mode only) --}}
     @if($panel->isPreviewMode() && $activeId)
-    <button wire:click="deleteAttachment" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 py-1.5 px-4 font-medium text-xs tracking-wider text-gray-50 cursor-pointer">
+    <button wire:click="deleteAttachment({{ $activeId }})" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 py-1.5 px-4 font-medium text-xs tracking-wider text-gray-50 cursor-pointer">
       <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
       <span class="relative">Trash</span>
     </button>

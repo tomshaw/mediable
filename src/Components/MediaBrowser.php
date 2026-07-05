@@ -2,18 +2,30 @@
 
 namespace TomShaw\Mediable\Components;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
-use Livewire\Attributes\On;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
+use Livewire\Attributes\{Computed, On};
 use Livewire\{Component, WithPagination};
-use TomShaw\Mediable\Concerns\{AlertState, ModalState, PanelState, ShowState};
+use TomShaw\Mediable\Concerns\{AlertState, AttachmentState, ModalState, PanelState, ShowState};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
+use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\{ServerLimits, WithCache, WithColumnWidths, WithExtension, WithFileSize, WithMimeTypes, WithReporting};
+use TomShaw\Mediable\Traits\{WithCache, WithColumnWidths, WithExtension, WithFileSize, WithMimeTypes, WithReporting};
 
+/**
+ * @property-read LengthAwarePaginator<int, Attachment> $paginator
+ * @property-read list<string> $uniqueMimeTypes
+ * @property-read AttachmentState|null $activeAttachment
+ * @property-read Collection<int, Attachment> $selectedAttachments
+ * @property-read AttachmentState|null $editorAttachment
+ * @property-read array{width: int, height: int}|null $activeImageDimensions
+ */
 class MediaBrowser extends Component
 {
-    use ServerLimits;
     use WithCache;
     use WithColumnWidths;
     use WithExtension;
@@ -30,12 +42,7 @@ class MediaBrowser extends Component
 
     public ShowState $show;
 
-    public string $uniqueId = '';
-
     public bool $fullScreen = false;
-
-    /** @var list<string> */
-    public array $uniqueMimeTypes = [];
 
     public string $selectedMimeType = '';
 
@@ -59,15 +66,26 @@ class MediaBrowser extends Component
     /** @var array<string, string> */
     public array $orderDirValues = ['ASC' => 'Ascending', 'DESC' => 'Descending'];
 
-    public ?int $maxUploadSize = null;
+    /** @var list<int> */
+    public array $selectedIds = [];
 
-    public ?int $maxFileUploads = null;
+    public ?int $activeId = null;
 
-    public ?int $maxUploadFileSize = null;
+    public ?int $audioElementId = null;
 
-    public ?int $postMaxSize = null;
+    public ?int $editorId = null;
 
-    public ?int $memoryLimit = null;
+    public int $editorVersion = 0;
+
+    public string $title = '';
+
+    public string $caption = '';
+
+    public int $sort_order = 0;
+
+    public string $styles = '';
+
+    public string $description = '';
 
     public function mount(): void
     {
@@ -79,39 +97,106 @@ class MediaBrowser extends Component
 
         $this->show = new ShowState;
 
-        $this->maxUploadSize = $this->getMaxUploadSize();
-        $this->maxFileUploads = $this->getMaxFileUploads();
-        $this->maxUploadFileSize = $this->getMaxUploadFileSize();
-        $this->postMaxSize = $this->getPostMaxSize();
-        $this->memoryLimit = $this->getMemoryLimit();
-
-        $this->resetModal();
-
         $this->hasExtension('gd');
 
         Eloquent::garbage();
 
         $this->deleteStoreAttachmentId();
-    }
 
-    public function boot(): void
-    {
-        $this->uniqueMimeTypes = Eloquent::uniqueMimes();
+        $this->resetModal();
     }
 
     /**
-     * @return array{maxUploadSize: int|null, maxFileUploads: int|null, maxUploadFileSize: int|null, postMaxSize: int|null, memoryLimit: int|null}
+     * @return LengthAwarePaginator<int, Attachment>
      */
-    #[On(BrowserEvents::SERVER_LIMITS->value)]
-    public function getServerLimits(): array
+    #[Computed]
+    public function paginator(): LengthAwarePaginator
     {
-        return [
-            'maxUploadSize' => $this->maxUploadSize,
-            'maxFileUploads' => $this->maxFileUploads,
-            'maxUploadFileSize' => $this->maxUploadFileSize,
-            'postMaxSize' => $this->postMaxSize,
-            'memoryLimit' => $this->memoryLimit,
-        ];
+        Eloquent::query($this->orderBy, $this->orderDir, $this->selectedMimeType);
+
+        Eloquent::search($this->searchTerm, $this->searchColumns);
+
+        return Eloquent::paginate($this->perPage);
+    }
+
+    /**
+     * @return list<string>
+     */
+    #[Computed]
+    public function uniqueMimeTypes(): array
+    {
+        return Eloquent::uniqueMimes();
+    }
+
+    #[Computed]
+    public function activeAttachment(): ?AttachmentState
+    {
+        if (! $this->activeId) {
+            return null;
+        }
+
+        $item = Attachment::find($this->activeId);
+
+        return $item ? AttachmentState::fromAttachment($item) : null;
+    }
+
+    /**
+     * @return Collection<int, Attachment>
+     */
+    #[Computed]
+    public function selectedAttachments(): Collection
+    {
+        if ($this->selectedIds === []) {
+            return new Collection;
+        }
+
+        return Attachment::whereIn('id', $this->selectedIds)->get();
+    }
+
+    #[Computed]
+    public function editorAttachment(): ?AttachmentState
+    {
+        if (! $this->editorId) {
+            return null;
+        }
+
+        $item = Attachment::find($this->editorId);
+
+        return $item ? AttachmentState::fromAttachment($item) : null;
+    }
+
+    /**
+     * @return array{width: int, height: int}|null
+     */
+    #[Computed]
+    public function activeImageDimensions(): ?array
+    {
+        $attachment = $this->activeAttachment;
+
+        if (! $attachment?->file_type || ! str_starts_with($attachment->file_type, 'image/')) {
+            return null;
+        }
+
+        $filePath = Eloquent::getFilePath($attachment->file_dir);
+
+        if (! file_exists($filePath)) {
+            return null;
+        }
+
+        $info = GraphicDraw::getimagesize($filePath);
+
+        if ($info === false) {
+            return null;
+        }
+
+        [$width, $height, $type] = $info;
+
+        return $type ? ['width' => (int) $width, 'height' => (int) $height] : null;
+    }
+
+    public function cacheKey(Carbon|string|null $updatedAt): string
+    {
+        return $updatedAt ? (string) Carbon::parse($updatedAt)->getTimestamp() : '0';
     }
 
     #[On(BrowserEvents::OPEN->value)]
@@ -139,7 +224,6 @@ class MediaBrowser extends Component
         );
     }
 
-    #[On(BrowserEvents::TOOLBAR_ENABLE_THUMB_MODE->value)]
     public function enableThumbMode(): self
     {
         $this->panel = new PanelState(thumbMode: true);
@@ -154,7 +238,6 @@ class MediaBrowser extends Component
         return $this;
     }
 
-    #[On(BrowserEvents::TOOLBAR_ENABLE_EDITOR_MODE->value)]
     public function enableEditorMode(): self
     {
         $this->panel = new PanelState(editorMode: true);
@@ -162,7 +245,6 @@ class MediaBrowser extends Component
         return $this;
     }
 
-    #[On(BrowserEvents::TOOLBAR_ENABLE_UPLOAD_MODE->value)]
     public function enableUploadMode(): self
     {
         $this->panel = new PanelState(uploadMode: true);
@@ -170,62 +252,92 @@ class MediaBrowser extends Component
         return $this;
     }
 
-    #[On(BrowserEvents::TOOLBAR_TOGGLE_SIDEBAR->value)]
     public function toggleSidebar(): self
     {
-        $this->show = new ShowState(showSidebar: ! $this->show->isShowSidebar(), showMetaInfo: $this->show->isShowMetaInfo());
+        $this->show = $this->show->toggleSidebar();
 
         return $this;
     }
 
-    #[On(BrowserEvents::TOOLBAR_TOGGLE_META_INFO->value)]
     public function toggleMetaInfo(): self
     {
-        $this->show = new ShowState(showMetaInfo: ! $this->show->isShowMetaInfo(), showSidebar: $this->show->isShowSidebar());
+        $this->show = $this->show->toggleMetaInfo();
 
         return $this;
     }
 
-    #[On(BrowserEvents::UPLOADS_COMPLETED->value)]
-    public function handleUploadsCompleted(string $message): void
+    public function toggleAttachment(int $id): void
     {
-        $this->alert = new AlertState(
-            show: true,
-            type: 'success',
-            message: $message
-        );
+        if (in_array($id, $this->selectedIds)) {
+            $this->selectedIds = array_values(array_diff($this->selectedIds, [$id]));
+        } else {
+            $this->selectedIds[] = $id;
+        }
 
-        $this->fill([
-            'orderBy' => 'id',
-            'orderDir' => 'DESC',
-        ]);
+        $this->setActive($id);
 
-        $this->enableThumbMode();
+        $this->dispatch(BrowserEvents::SCROLL->value, id: $id);
     }
 
-    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CHANGED->value)]
-    public function handleActiveAttachmentChanged(int $id): void
+    public function setActiveAttachment(int $id): void
     {
-        $this->enablePreviewMode();
+        if ($this->activeId === $id) {
+            $this->setActive(null);
+            $this->enableThumbMode();
+        } else {
+            $this->setActive($id);
+            $this->enablePreviewMode();
+        }
     }
 
-    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CLEARED->value)]
-    public function handleActiveAttachmentCleared(): void
+    public function clearSelected(): void
     {
-        $this->enableThumbMode();
+        $this->selectedIds = [];
+
+        $this->setActive(null);
     }
 
-    #[On(BrowserEvents::TOOLBAR_DELETE_ATTACHMENT->value)]
+    public function playAudio(int $id): void
+    {
+        $this->audioElementId = $id;
+
+        $this->dispatch(BrowserEvents::AUDIO_START->value, id: $id);
+    }
+
+    public function pauseAudio(int $id): void
+    {
+        if ($this->audioElementId === $id) {
+            $this->audioElementId = null;
+        }
+
+        $this->dispatch(BrowserEvents::AUDIO_PAUSE->value, id: $id);
+    }
+
     public function deleteAttachment(int $id): void
     {
         Eloquent::delete($id);
 
-        $this->dispatch(BrowserEvents::ATTACHMENTS_REMOVE_ITEM->value, id: $id);
+        $this->selectedIds = array_values(array_diff($this->selectedIds, [$id]));
+
+        if ($this->activeId === $id) {
+            $this->setActive($this->selectedIds === [] ? null : array_last($this->selectedIds));
+        }
+
+        unset($this->paginator, $this->selectedAttachments, $this->uniqueMimeTypes);
 
         $this->alert = new AlertState(
             show: true,
             type: 'success',
             message: 'Attachment deleted successfully!'
+        );
+    }
+
+    public function confirmDelete(): void
+    {
+        $this->dispatch(BrowserEvents::CONFIRM->value,
+            message: 'Are you sure you want to delete the selected attachments?',
+            type: BrowserEvents::DELETE_SELECTED->value,
+            selectedIds: $this->selectedIds,
         );
     }
 
@@ -247,24 +359,70 @@ class MediaBrowser extends Component
             message: $message
         );
 
-        $this->dispatch(BrowserEvents::ATTACHMENTS_CLEAR_SELECTED->value);
+        $this->clearSelected();
+
+        unset($this->paginator, $this->selectedAttachments, $this->uniqueMimeTypes);
+    }
+
+    public function updateAttachment(): void
+    {
+        if (! $this->activeId) {
+            return;
+        }
+
+        $data = [
+            'title' => $this->title,
+            'caption' => $this->caption,
+            'sort_order' => $this->sort_order,
+            'styles' => $this->styles,
+            'description' => $this->description,
+        ];
+
+        $rules = [
+            'title' => 'required|string|max:255',
+            'caption' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'sort_order' => 'required|integer',
+            'styles' => 'nullable|string|max:500',
+        ];
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            $this->alert = new AlertState(
+                show: true,
+                type: 'error',
+                message: $validator->errors()->first()
+            );
+
+            return;
+        }
+
+        Eloquent::update($this->activeId, $data);
+
+        unset($this->paginator, $this->activeAttachment, $this->selectedAttachments);
+
+        $this->alert = new AlertState(
+            show: true,
+            type: 'success',
+            message: 'Attachment updated successfully!'
+        );
     }
 
     public function resetModal(): void
     {
         $this->dispatch(BrowserEvents::UPLOADS_RESET->value);
-        $this->dispatch(BrowserEvents::ATTACHMENTS_CLEAR_SELECTED->value);
+        $this->clearSelected();
         $this->enableThumbMode();
         $this->resetPage();
     }
 
     /**
-     * @param  list<int>  $selectedIds
+     * @param  list<int>|null  $selectedIds
      */
-    #[On(BrowserEvents::PANEL_INSERT_MEDIA->value)]
-    public function insertMedia(array $selectedIds): void
+    public function insertMedia(?array $selectedIds = null): void
     {
-        $selected = Attachment::whereIn('id', $selectedIds)->get()->toArray();
+        $selected = Attachment::whereIn('id', $selectedIds ?? $this->selectedIds)->get()->toArray();
 
         if ($this->modal->hasElementId()) {
             $this->dispatch(BrowserEvents::INSERT->value, selected: $selected);
@@ -285,7 +443,6 @@ class MediaBrowser extends Component
         $this->resetModal();
     }
 
-    #[On(BrowserEvents::EXPAND->value)]
     public function expandModal(): void
     {
         $this->fullScreen = ! $this->fullScreen;
@@ -296,95 +453,104 @@ class MediaBrowser extends Component
         $this->alert = new AlertState;
     }
 
-    public function updatedFiles(): void
-    {
-        $this->validate(config('mediable.validation'));
-    }
-
     public function updatedSelectedMimeType(): void
     {
         $this->resetPage();
     }
 
-    #[On(BrowserEvents::TOOLBAR_ORDER_DIR_CHANGED->value)]
-    public function handleOrderDirChanged(string $orderDir): void
+    public function updatedSearchTerm(): void
     {
-        $this->orderDir = $orderDir;
-    }
-
-    #[On(BrowserEvents::TOOLBAR_ORDER_BY_CHANGED->value)]
-    public function handleOrderByChanged(string $orderBy): void
-    {
-        $this->orderBy = $orderBy;
-    }
-
-    #[On(BrowserEvents::TOOLBAR_COLUMN_WIDTH_CHANGED->value)]
-    public function handleColumnWidthChanged(int $defaultColumnWidth): void
-    {
-        $this->defaultColumnWidth = $defaultColumnWidth;
-    }
-
-    #[On(BrowserEvents::TOOLBAR_MIME_TYPE_CHANGED->value)]
-    public function handleMimeTypeChanged(string $selectedMimeType): void
-    {
-        $this->selectedMimeType = $selectedMimeType;
         $this->resetPage();
     }
 
     public function toggleOrderDir(): void
     {
-        $this->orderDir = $this->orderDir === 'asc' ? 'desc' : 'asc';
+        $this->orderDir = strtoupper($this->orderDir) === 'ASC' ? 'DESC' : 'ASC';
     }
 
     public function updatingPage(): void
     {
-        $this->dispatch(BrowserEvents::ATTACHMENTS_RESET_AUDIO->value);
+        $this->audioElementId = null;
+    }
+
+    #[On(BrowserEvents::UPLOADS_COMPLETED->value)]
+    public function handleUploadsCompleted(string $message): void
+    {
+        $this->alert = new AlertState(
+            show: true,
+            type: 'success',
+            message: $message
+        );
+
+        $this->fill([
+            'orderBy' => 'id',
+            'orderDir' => 'DESC',
+        ]);
+
+        unset($this->paginator, $this->uniqueMimeTypes);
+
+        $this->enableThumbMode();
+    }
+
+    #[On(BrowserEvents::EDITOR_ATTACHMENT_UPDATED->value)]
+    public function handleEditorAttachmentUpdated(int $id, int $version = 0): void
+    {
+        $this->editorId = $id;
+        $this->editorVersion = $version;
+
+        unset($this->editorAttachment);
     }
 
     #[On(BrowserEvents::FORM_EDITOR_SAVED->value)]
     public function handleEditorSaved(): void
     {
+        $this->editorId = null;
+        $this->editorVersion = 0;
+
+        unset($this->paginator, $this->editorAttachment);
+
         $this->resetPage();
 
         $this->enableThumbMode();
     }
 
-    #[On(BrowserEvents::TOOLBAR_CLOSE_IMAGE_EDITOR->value)]
     public function closeImageEditor(): void
     {
+        $this->editorId = null;
+        $this->editorVersion = 0;
+
         $this->enableThumbMode();
     }
 
-    #[On(BrowserEvents::PANEL_UNIQUE_ID_UPDATED->value)]
-    public function handleUniqueIdUpdated(): void
+    protected function setActive(?int $id): void
     {
-        // Triggers a re-render, which generates a new uniqueId via getUniqueId()
-        // and pushes it to child components with #[Reactive] props.
+        $this->activeId = $id;
+
+        unset($this->activeAttachment, $this->activeImageDimensions);
+
+        $this->syncDraftFromActive();
     }
 
-    public function getUniqueId(): string
+    protected function syncDraftFromActive(): void
     {
-        return uniqid();
+        $attachment = $this->activeAttachment;
+
+        $this->title = $attachment->title ?? '';
+        $this->caption = $attachment->caption ?? '';
+        $this->sort_order = $attachment->sort_order ?? 0;
+        $this->styles = $attachment->styles ?? '';
+        $this->description = $attachment->description ?? '';
     }
 
     public function render(): View
     {
-        Eloquent::query($this->orderBy, $this->orderDir, $this->selectedMimeType);
-
-        Eloquent::search($this->searchTerm, $this->searchColumns);
-
-        $paginator = Eloquent::paginate($this->perPage);
-
-        if ($paginator->isEmpty()) {
+        if ($this->paginator->isEmpty()) {
             $this->enableUploadMode();
         }
 
         /** @var view-string $view */
         $view = 'mediable::livewire.media-browser';
 
-        return view($view, [
-            'uniqueId' => $this->getUniqueId(),
-            'data' => $paginator,
-        ]);
+        return view($view);
     }
 }

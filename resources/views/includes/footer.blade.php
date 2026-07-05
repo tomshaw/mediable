@@ -1,83 +1,3 @@
-<?php
-
-use Illuminate\Support\Collection;
-use Livewire\Attributes\{Computed, On, Reactive};
-use Livewire\Component;
-use TomShaw\Mediable\Enums\BrowserEvents;
-use TomShaw\Mediable\Models\Attachment;
-
-new class extends Component
-{
-    #[Reactive]
-    public string $uniqueId;
-
-    public array $selectedIds = [];
-
-    public ?int $activeId = null;
-
-    #[On(BrowserEvents::ATTACHMENTS_SELECTION_CHANGED->value)]
-    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
-    {
-        $this->selectedIds = $selectedIds;
-        $this->activeId = $activeId;
-    }
-
-    #[Computed]
-    public function selected(): Collection
-    {
-        if (empty($this->selectedIds)) {
-            return collect();
-        }
-
-        return Attachment::whereIn('id', $this->selectedIds)->get();
-    }
-
-    public function setActiveAttachment(int $id): void
-    {
-        if ($this->activeId === $id) {
-            $this->activeId = null;
-            $this->dispatch(BrowserEvents::ATTACHMENT_ACTIVE_CLEARED->value);
-        } else {
-            $this->activeId = $id;
-            $this->dispatch(BrowserEvents::ATTACHMENT_ACTIVE_CHANGED->value, id: $id);
-        }
-    }
-
-    public function confirmDelete(): void
-    {
-        $this->dispatch(BrowserEvents::CONFIRM->value,
-            message: 'Are you sure you want to delete the selected attachments?',
-            type: BrowserEvents::DELETE_SELECTED->value,
-            selectedIds: $this->selectedIds,
-        );
-    }
-
-    public function clearSelected(): void
-    {
-        $this->dispatch(BrowserEvents::ATTACHMENTS_CLEAR_SELECTED->value);
-    }
-
-    public function insertMedia(): void
-    {
-        $this->dispatch(BrowserEvents::PANEL_INSERT_MEDIA->value, selectedIds: $this->selectedIds);
-    }
-
-    public function mimeTypeImage(string $mimeType): bool
-    {
-        return str_starts_with($mimeType, 'image/');
-    }
-
-    public function mimeTypeVideo(string $mimeType): bool
-    {
-        return str_starts_with($mimeType, 'video/');
-    }
-
-    public function mimeTypeAudio(string $mimeType): bool
-    {
-        return str_starts_with($mimeType, 'audio/');
-    }
-}; ?>
-
 <div class="flex items-center justify-between h-full px-4 gap-4">
 
     {{-- Left: count + thumbnails --}}
@@ -91,18 +11,18 @@ new class extends Component
         <div class="shrink-0 w-px h-6 bg-gray-400/60"></div>
 
         <div class="flex items-center gap-2 min-w-0">
-            @foreach($this->selected as $item)
-            <div wire:click="setActiveAttachment({{ $item->id }})" @class([
+            @foreach($this->selectedAttachments as $item)
+            <div wire:key="footer-{{ $item->id }}" wire:click="setActiveAttachment({{ $item->id }})" @class([
                 'shrink-0 cursor-pointer transition-all duration-200 border bg-white p-px',
                 ($activeId && $item->id === $activeId)
                     ? 'w-11 h-11 border-red-600'
                     : 'w-9 h-9 border-black'
             ])>
-                @if ($this->mimeTypeImage($item->file_type))
-                <img src="{{ $item->file_url }}?id={{ $uniqueId }}" class="w-full h-full object-cover" alt="{{ $item->title }}" />
-                @elseif ($this->mimeTypeVideo($item->file_type))
+                @if (str_starts_with($item->file_type, 'image/'))
+                <img src="{{ $item->file_url }}?v={{ $this->cacheKey($item->updated_at) }}" class="w-full h-full object-cover" alt="{{ $item->title }}" />
+                @elseif (str_starts_with($item->file_type, 'video/'))
                 <img src="{{ asset("vendor/mediable/images/video.png") }}" class="w-full h-full object-cover" alt="{{ $item->title }}" />
-                @elseif ($this->mimeTypeAudio($item->file_type))
+                @elseif (str_starts_with($item->file_type, 'audio/'))
                 <img src="{{ asset("vendor/mediable/images/audio.png") }}" class="w-full h-full object-cover" alt="{{ $item->title }}" />
                 @else
                 <img src="{{ asset("vendor/mediable/images/file.png") }}" class="w-full h-full object-cover" alt="{{ $item->title }}" />
@@ -118,7 +38,7 @@ new class extends Component
     {{-- Right: actions --}}
     @if (count($selectedIds))
     <div class="flex items-center shrink-0 gap-2">
-        <button wire:click="clearSelected" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-neutral-900 py-1.5 px-3 font-medium text-xs tracking-wider text-gray-50 cursor-pointer" title="Clear selection">
+        <button wire:click="clearSelected" wire:island="selection" class="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-neutral-900 py-1.5 px-3 font-medium text-xs tracking-wider text-gray-50 cursor-pointer" title="Clear selection">
             <span class="absolute h-0 w-0 rounded-full bg-blue-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
             <span class="relative inline-flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-3.5 h-3.5">

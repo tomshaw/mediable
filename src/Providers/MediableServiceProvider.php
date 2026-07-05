@@ -127,10 +127,12 @@ class MediableServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        $this->commands([
-            InstallCommand::class,
-            UpdateCommand::class,
-        ]);
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                InstallCommand::class,
+                UpdateCommand::class,
+            ]);
+        }
     }
 
     /**
@@ -138,16 +140,9 @@ class MediableServiceProvider extends ServiceProvider
      */
     protected function resolveLivewireViewPath(): string
     {
-        $appComponentsPath = resource_path('views/livewire/mediable/components');
-        if (is_dir($appComponentsPath)) {
-            return $appComponentsPath;
-        }
-
-        $publishedComponentsPath = resource_path('views/vendor/mediable/livewire/mediable/components');
-        if (is_dir($publishedComponentsPath)) {
-            return $publishedComponentsPath;
-        }
-
-        return __DIR__.'/../../resources/views/livewire/mediable/components';
+        return array_find([
+            resource_path('views/livewire/mediable/components'),
+            resource_path('views/vendor/mediable/livewire/mediable/components'),
+        ], fn (string $path): bool => is_dir($path)) ?? __DIR__.'/../../resources/views/livewire/mediable/components';
     }
 }

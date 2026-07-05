@@ -104,8 +104,6 @@ trait WithMimeTypes
 
     public function formatMimeType(string $mimeType): string
     {
-        $parts = explode('/', $mimeType);
-
-        return strtoupper(end($parts));
+        return strtoupper(array_last(explode('/', $mimeType)));
     }
 }

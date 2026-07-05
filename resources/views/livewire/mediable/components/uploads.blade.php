@@ -36,29 +36,18 @@ new class extends Component
         } catch (ValidationException $e) {
             $this->uploadErrors = collect($e->errors())->flatten()->all();
             $this->files = [];
-            $this->dispatchFileCount();
 
             return;
         }
 
         $this->uploadErrors = [];
-        $this->dispatchListData();
-        $this->dispatchFileCount();
     }
 
-    #[On(BrowserEvents::UPLOADS_LIST_REMOVE_FILE->value)]
     public function removeFile(int $index): void
     {
         array_splice($this->files, $index, 1);
-
-        if (count($this->files)) {
-            $this->dispatchListData();
-        }
-
-        $this->dispatchFileCount();
     }
 
-    #[On(BrowserEvents::UPLOADS_LIST_SUBMIT_FILES->value)]
     public function createAttachments(): void
     {
         Eloquent::create($this->files);
@@ -69,16 +58,13 @@ new class extends Component
         $this->dispatch(BrowserEvents::UPLOADS_COMPLETED->value, message: $message);
 
         $this->files = [];
-        $this->dispatchFileCount();
     }
 
-    #[On(BrowserEvents::UPLOADS_LIST_CLEAR_FILES->value)]
     #[On(BrowserEvents::UPLOADS_RESET->value)]
     public function clearFiles(): void
     {
         $this->files = [];
         $this->uploadErrors = [];
-        $this->dispatchFileCount();
     }
 
     /** @return array<int, array{index: int, name: string, extension: string, size: int, formattedSize: string}> */
@@ -116,19 +102,6 @@ new class extends Component
         return $breakdown;
     }
 
-    /** @return array{files: array, totalSize: int, formattedTotalSize: string, mimeBreakdown: array, uploadErrors: array} */
-    #[Computed]
-    public function listData(): array
-    {
-        return [
-            'files' => $this->fileMetadata,
-            'totalSize' => $this->getTotalUploadSize(),
-            'formattedTotalSize' => $this->formatBytes($this->getTotalUploadSize()),
-            'mimeBreakdown' => $this->mimeBreakdown,
-            'uploadErrors' => $this->uploadErrors,
-        ];
-    }
-
     protected function resolveMimeCategory(string $mimeType): string
     {
         foreach ($this->strategies as $category => $types) {
@@ -139,28 +112,140 @@ new class extends Component
 
         return 'Other';
     }
-
-    protected function dispatchListData(): void
-    {
-        $this->dispatch(BrowserEvents::UPLOADS_LIST_DATA->value,
-            files: $this->fileMetadata,
-            totalSize: $this->getTotalUploadSize(),
-            formattedTotalSize: $this->formatBytes($this->getTotalUploadSize()),
-            mimeBreakdown: $this->mimeBreakdown,
-            uploadErrors: $this->uploadErrors,
-        );
-    }
-
-    protected function dispatchFileCount(): void
-    {
-        $this->dispatch(BrowserEvents::UPLOADS_FILES_CHANGED->value, count: count($this->files));
-    }
 }; ?>
 
 <div @class(['flex items-center justify-center p-0 m-0 w-full', count($files) ? 'h-auto' : 'h-full']) x-data="initMediableUploads()">
 
     @if (count($files))
-        <livewire:mediable::uploads-list :data="$this->listData" :key="'uploads-list'" />
+    <div class="flex flex-col lg:flex-row items-start justify-start gap-4 w-full p-4" x-data="initMediableUploadsList()">
+
+        {{-- LEFT COLUMN: File Table --}}
+        <div class="w-full lg:w-2/3 overflow-auto max-h-[80vh]">
+            <div class="border border-gray-300 rounded-lg shadow-sm">
+                <table class="border-collapse table-auto w-full text-sm">
+                    <thead class="bg-gray-200 sticky top-0 z-10">
+                        <tr>
+                            <th class="px-4 py-2.5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-12">#</th>
+                            <th class="px-4 py-2.5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Name</th>
+                            <th class="px-4 py-2.5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider hidden md:table-cell">Type</th>
+                            <th class="px-4 py-2.5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Size</th>
+                            <th class="px-4 py-2.5 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-24"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-gray-100 divide-y divide-gray-200">
+                        @foreach($this->fileMetadata as $file)
+                        <tr class="hover:bg-gray-200 transition-colors duration-150" wire:key="upload-file-{{ $file['index'] }}">
+                            <td class="px-4 py-2 text-gray-500 text-xs">{{ $file['index'] + 1 }}</td>
+                            <td class="px-4 py-2 text-gray-700 truncate max-w-xs" title="{{ $file['name'] }}">{{ Str::limit($file['name'], 40, '...') }}</td>
+                            <td class="px-4 py-2 hidden md:table-cell">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-600 uppercase">{{ $file['extension'] }}</span>
+                            </td>
+                            <td class="px-4 py-2 text-gray-500 text-xs whitespace-nowrap">{{ $file['formattedSize'] }}</td>
+                            <td class="px-4 py-2 text-center">
+                                <button wire:click="removeFile({{ $file['index'] }})" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 py-1 px-3 text-xs font-normal text-white cursor-pointer">
+                                    <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
+                                    <span class="relative">Remove</span>
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {{-- RIGHT COLUMN: Summary Panel --}}
+        <div class="w-full lg:w-1/3 lg:sticky lg:top-0 lg:self-start flex flex-col gap-4">
+
+            {{-- Error Messages --}}
+            @if(count($uploadErrors))
+            <div class="flex flex-col gap-1.5 rounded-lg border border-red-200 bg-red-50 p-3">
+                @foreach($uploadErrors as $uploadError)
+                <div class="flex items-start gap-2">
+                    <svg class="h-4 w-4 text-red-500 mt-0.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                    </svg>
+                    <p class="text-xs text-red-700">{{ $uploadError }}</p>
+                </div>
+                @endforeach
+            </div>
+            @endif
+
+            {{-- Upload Summary --}}
+            <div class="rounded-lg border border-gray-300 bg-gray-100 p-4 shadow-sm">
+                <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Upload Summary</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Total Files</span>
+                        <span class="text-sm font-semibold text-gray-800">{{ count($this->fileMetadata) }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600">Total Size</span>
+                        <span class="text-sm font-semibold text-gray-800">{{ $this->formatBytes($this->getTotalUploadSize()) }}</span>
+                    </div>
+                    @if(count($this->mimeBreakdown))
+                    <div class="border-t border-gray-300 pt-2 mt-2">
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">By Type</span>
+                        <div class="mt-1.5 space-y-1">
+                            @foreach($this->mimeBreakdown as $category => $data)
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-500">{{ $category }}</span>
+                                <span class="text-xs text-gray-700">{{ $data['count'] }} {{ $data['count'] === 1 ? 'file' : 'files' }} &middot; {{ $data['formattedSize'] }}</span>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Server Limits --}}
+            <div class="rounded-lg border border-gray-300 bg-gray-100 p-4 shadow-sm">
+                <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Server Limits</h3>
+                <div class="space-y-3">
+                    {{-- File Count Limit --}}
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs text-gray-500">Files</span>
+                            <span class="text-xs text-gray-700">{{ count($this->fileMetadata) }} / <span x-text="maxFileUploads"></span></span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                            <div class="h-1.5 rounded-full transition-all duration-300"
+                                x-bind:class="({{ count($this->fileMetadata) }} / maxFileUploads) > 0.8 ? 'bg-red-400' : 'bg-gray-500'"
+                                x-bind:style="'width: ' + Math.min(({{ count($this->fileMetadata) }} / maxFileUploads) * 100, 100) + '%'"></div>
+                        </div>
+                    </div>
+                    {{-- Upload Size Limit --}}
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs text-gray-500">Upload Size</span>
+                            <span class="text-xs text-gray-700">{{ $this->formatBytes($this->getTotalUploadSize()) }} / <span x-text="Mediable.formatBytes(maxUploadSize)"></span></span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                            <div class="h-1.5 rounded-full transition-all duration-300"
+                                x-bind:class="({{ $this->getTotalUploadSize() }} / maxUploadSize) > 0.8 ? 'bg-red-400' : 'bg-gray-500'"
+                                x-bind:style="'width: ' + Math.min(({{ $this->getTotalUploadSize() }} / maxUploadSize) * 100, 100) + '%'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Action Buttons --}}
+            <div class="flex flex-col gap-2">
+                <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 w-full py-2.5 px-4 font-medium text-xs tracking-wider text-gray-50 cursor-pointer" x-on:click="submitting = true; $wire.createAttachments()" x-bind:disabled="submitting">
+                    <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
+                    <span class="spinner relative" x-show="submitting" x-cloak></span>
+                    <span class="relative" x-show="!submitting">Submit</span>
+                </button>
+                <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 w-full py-2.5 px-4 font-medium text-xs tracking-wider text-gray-50 cursor-pointer" wire:click="clearFiles">
+                    <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-full"></span>
+                    <span class="relative">Reset</span>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
     @else
     <form>
         <div class="h-auto max-w-125 py-6 px-7 text-center cursor-pointer border border-gray-400 border-dashed bg-gray-100 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-gray-600': enter }" x-on:click.prevent="fileClick($event)">
@@ -196,6 +281,20 @@ new class extends Component
 
 @script
 <script>
+    Alpine.data('initMediableUploadsList', () => ({
+        submitting: false,
+        maxFileUploads: 0,
+        maxUploadFileSize: 0,
+        maxUploadSize: 0,
+
+        async init() {
+            const limits = await this.$wire.getServerLimits();
+            this.maxUploadSize = limits.maxUploadSize;
+            this.maxFileUploads = limits.maxFileUploads;
+            this.maxUploadFileSize = limits.maxUploadFileSize;
+        }
+    }));
+
     Alpine.data('initMediableUploads', () => ({
         error: null,
         enter: false,

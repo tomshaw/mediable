@@ -9,21 +9,21 @@ use TomShaw\Mediable\Models\Attachment;
 final class AttachmentState implements Wireable
 {
     public function __construct(
-        public ?int $id = null,
-        public string $file_name = '',
-        public string $file_original_name = '',
-        public string $file_type = '',
-        public int $file_size = 0,
-        public string $file_dir = '',
-        public string $file_url = '',
-        public string $title = '',
-        public string $caption = '',
-        public string $description = '',
-        public int $sort_order = 0,
-        public string $styles = '',
-        public bool $hidden = false,
-        public ?string $created_at = null,
-        public ?string $updated_at = null
+        public private(set) ?int $id = null,
+        public private(set) string $file_name = '',
+        public private(set) string $file_original_name = '',
+        public private(set) string $file_type = '',
+        public private(set) int $file_size = 0,
+        public private(set) string $file_dir = '',
+        public private(set) string $file_url = '',
+        public private(set) string $title = '',
+        public private(set) string $caption = '',
+        public private(set) string $description = '',
+        public private(set) int $sort_order = 0,
+        public private(set) string $styles = '',
+        public private(set) bool $hidden = false,
+        public private(set) ?string $created_at = null,
+        public private(set) ?string $updated_at = null
     ) {}
 
     public static function fromAttachment(Attachment $attachment): self

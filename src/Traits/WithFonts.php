@@ -32,11 +32,7 @@ trait WithFonts
 
         $options = [];
         foreach ($fonts as $font) {
-            $fontName = basename($font, '.ttf');
-            $fontName = str_replace('-', ' ', $fontName);
-            $fontName = str_replace('_', ' ', $fontName);
-
-            $options[$font] = $fontName;
+            $options[$font] = str_replace(['-', '_'], ' ', basename($font, '.ttf'));
         }
 
         return $options;

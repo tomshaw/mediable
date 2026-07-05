@@ -7,11 +7,11 @@ use Livewire\Wireable;
 final class PanelState implements Wireable
 {
     public function __construct(
-        public bool $thumbMode = false,
-        public bool $previewMode = false,
-        public bool $uploadMode = false,
-        public bool $editorMode = false,
-        public bool $formMode = false
+        public private(set) bool $thumbMode = false,
+        public private(set) bool $previewMode = false,
+        public private(set) bool $uploadMode = false,
+        public private(set) bool $editorMode = false,
+        public private(set) bool $formMode = false
     ) {}
 
     public function isThumbMode(): bool

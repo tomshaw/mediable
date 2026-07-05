@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is **tomshaw/mediable**, a Laravel Livewire media manager package. It provides a modal-based file browser for uploading, managing, and selecting media attachments. The package supports images, videos, audio, and documents with automatic WebP/AVIF conversion for images.
 
-**Requirements:** PHP 8.3+, Laravel 12, Livewire 4
+**Requirements:** PHP 8.5+, Laravel 13, Livewire 4
 
 ## Essential Commands
 
@@ -31,18 +31,18 @@ composer run baseline
 
 ### Package Structure
 
-- `src/Components/MediaBrowser.php` - Main Livewire component with all media browser functionality
+- `src/Components/MediaBrowser.php` - Main Livewire component; owns ALL browser state (selection, active item, ordering, sidebar draft fields) and exposes it to views via `#[Computed]` properties (`paginator`, `activeAttachment`, `selectedAttachments`, `editorAttachment`, `uniqueMimeTypes`)
 - `src/Providers/MediableServiceProvider.php` - Registers views, migrations, Blade directives, and publishable resources
-- `src/Models/Attachment.php` - Eloquent model for stored file metadata
+- `src/Models/Attachment.php` - Eloquent model for stored file metadata; uses `#[UseFactory]` and `#[Scope]` attributes (`visible()`/`hidden()` scopes)
 
 ### State Management (src/Concerns/)
 
 Uses PHP classes implementing Livewire's `Wireable` interface for typed, serializable state:
-- `AttachmentState` - Current attachment selection/editing state
-- `ModalState` - Modal visibility and target element ID
-- `PanelState` - Current view mode (thumb, preview, editor, upload)
-- `AlertState` - Alert messages
-- `ShowState` - Sidebar/meta panel visibility
+- `AttachmentState` - Immutable attachment snapshot (`private(set)` properties)
+- `ModalState` - Modal visibility and target element ID (publicly writable: JS entangles `modal.show`)
+- `PanelState` - Current view mode (thumb, preview, editor, upload); `private(set)`
+- `AlertState` - Alert messages (publicly writable: JS entangles `alert.show` for the auto-dismiss timer)
+- `ShowState` - Panel visibility flags; `private(set)` with `toggleSidebar()`/`toggleMetaInfo()` clone-with helpers
 
 ### Facades
 
@@ -51,18 +51,15 @@ Uses PHP classes implementing Livewire's `Wireable` interface for typed, seriali
 
 ### Traits (src/Traits/)
 
-Functionality mixed into MediaBrowser: `WithFileSize`, `WithExtension`, `WithStorage`, `WithCache`, `WithMimeTypes`, `WithGraphicDraw`, `WithFonts`, `ServerLimits`, `WithReporting`, `WithColumnWidths`
+Mixed into MediaBrowser: `WithFileSize`, `WithExtension`, `WithCache`, `WithMimeTypes`, `WithReporting`, `WithColumnWidths`. Mixed into the `form` view component: `WithGraphicDraw` (image edit actions; calls `$this->refreshWorkingCopy()` after each save), `WithFonts`. Mixed into the `uploads` view component: `ServerLimits`, `WithFileSize`, `WithMimeTypes`. `WithStorage` is currently unused.
 
-### Events
+### Events (src/Enums/BrowserEvents.php)
 
-The component uses Livewire events for communication:
-- `mediable.open` - Opens the modal (optionally with target element ID)
-- `mediable.close` - Closes the modal
-- `mediable.on` - Dispatched when files are selected (for handling in parent components)
+The event surface is intentionally small. Public API: `OPEN`, `CLOSE`, `ALERT`, `INSERT`, `DEFAULT`. JS bridge (handled in the parent view's `@script` block): `SCROLL`, `CONFIRM`, `AUDIO_START`, `AUDIO_PAUSE`, `DELETE_SELECTED`. Child-to-parent: `UPLOADS_COMPLETED`, `UPLOADS_RESET`, `EDITOR_ATTACHMENT_UPDATED`, `FORM_EDITOR_SAVED`. All other UI interaction goes through direct `wire:click`/`wire:model` bindings on MediaBrowser — do NOT reintroduce broadcast events for sibling communication.
 
 ### Views
 
-Views are in `resources/views/tailwind/` with a component-based structure. The main view is `media-browser.blade.php` with includes in the `includes/` subdirectory.
+The main view is `resources/views/livewire/media-browser.blade.php`. Browser chrome (header, toolbar, alert, attachments grid, preview, editor pane, meta, sidebar, strip, footer) are plain Blade partials in `resources/views/includes/` rendered in the parent component's context. Only three Livewire view components remain in `resources/views/livewire/mediable/components/`: `uploads` (file-upload lifecycle), `form` (image editor; receives `activeId` as a mount prop, keyed `form-editor`), and `stats` (optional, unmounted by default). Image URLs are cache-busted with `?v=` derived from `updated_at` (plus an edit-version counter in editor mode) — there is no `uniqueId` mechanism.
 
 ## Testing
 

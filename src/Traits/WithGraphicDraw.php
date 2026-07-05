@@ -3,6 +3,7 @@
 namespace TomShaw\Mediable\Traits;
 
 use Illuminate\Support\Facades\Storage;
+use TomShaw\Mediable\Enums\BrowserEvents;
 use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 
 trait WithGraphicDraw
@@ -175,11 +176,7 @@ trait WithGraphicDraw
             return;
         }
 
-        GraphicDraw::flipAndSave($path, $this->flipMode);
-
-        $this->generateUniqueId();
-
-        $this->editHistory[] = $this->getDrawSettings();
+        $this->finishEdit(GraphicDraw::flipAndSave($path, $this->flipMode));
     }
 
     public function scaleImage(): void
@@ -190,11 +187,7 @@ trait WithGraphicDraw
             return;
         }
 
-        GraphicDraw::scaleAndSave($path, $this->scaleWidth, $this->scaleHeight, $this->scaleMode);
-
-        $this->generateUniqueId();
-
-        $this->editHistory[] = $this->getDrawSettings();
+        $this->finishEdit(GraphicDraw::scaleAndSave($path, $this->scaleWidth, $this->scaleHeight, $this->scaleMode));
     }
 
     public function filterImage(): void
@@ -222,11 +215,7 @@ trait WithGraphicDraw
             $args[] = $this->pixelateBlockSize;
         }
 
-        GraphicDraw::filterAndSave($path, $this->filterMode, $args);
-
-        $this->generateUniqueId();
-
-        $this->editHistory[] = $this->getDrawSettings();
+        $this->finishEdit(GraphicDraw::filterAndSave($path, $this->filterMode, $args));
     }
 
     public function rotateImage(): void
@@ -239,11 +228,7 @@ trait WithGraphicDraw
 
         $backgroundColor = $this->normalizeHexValue($this->rotateBgColor);
 
-        GraphicDraw::rotateAndSave($path, $this->rotateAngle, $backgroundColor);
-
-        $this->generateUniqueId();
-
-        $this->editHistory[] = $this->getDrawSettings();
+        $this->finishEdit(GraphicDraw::rotateAndSave($path, $this->rotateAngle, $backgroundColor));
     }
 
     public function cropImage(): void
@@ -256,11 +241,7 @@ trait WithGraphicDraw
 
         $rect = ['x' => $this->cropX, 'y' => $this->cropY, 'width' => $this->cropWidth, 'height' => $this->cropHeight];
 
-        GraphicDraw::cropAndSave($path, $rect);
-
-        $this->generateUniqueId();
-
-        $this->editHistory[] = $this->getDrawSettings();
+        $this->finishEdit(GraphicDraw::cropAndSave($path, $rect));
     }
 
     public function addText(): void
@@ -290,11 +271,7 @@ trait WithGraphicDraw
             return;
         }
 
-        GraphicDraw::textAndSave($path, $this->imageFontSize, $this->imageTextAngle, $centered[0], $centered[1], $color, $this->imageFont, $this->imageText);
-
-        $this->generateUniqueId();
-
-        $this->editHistory[] = $this->getDrawSettings();
+        $this->finishEdit(GraphicDraw::textAndSave($path, $this->imageFontSize, $this->imageTextAngle, $centered[0], $centered[1], $color, $this->imageFont, $this->imageText));
     }
 
     public function normalizeColors(): void
@@ -339,6 +316,22 @@ trait WithGraphicDraw
         $y = ($imageHeight / 2) - ($textHeight / 2);
 
         return [$x, $y];
+    }
+
+    protected function finishEdit(bool $saved): void
+    {
+        if (! $saved) {
+            $this->dispatch(BrowserEvents::ALERT->value, [
+                'type' => 'error',
+                'message' => 'Failed to save image changes.',
+            ]);
+
+            return;
+        }
+
+        $this->refreshWorkingCopy();
+
+        $this->editHistory[] = $this->getDrawSettings();
     }
 
     public function getDrawSettings(): array

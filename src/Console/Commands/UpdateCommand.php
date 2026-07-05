@@ -3,11 +3,11 @@
 namespace TomShaw\Mediable\Console\Commands;
 
 use Illuminate\Console\Command;
-use RuntimeException;
-use Symfony\Component\Process\Process;
 
 class UpdateCommand extends Command
 {
+    use BuildsAssets;
+
     /**
      * The name and signature of the console command.
      *
@@ -47,24 +47,5 @@ class UpdateCommand extends Command
         }
 
         $this->info('Mediable updated successfully!');
-    }
-
-    private function buildAssets(): void
-    {
-        $process = new Process(['npm', 'run', 'build']);
-
-        $process->setWorkingDirectory(base_path())
-            ->setTimeout(null)
-            ->run(function ($type, $buffer) {
-                if ($type === Process::ERR) {
-                    $this->error($buffer);
-                } else {
-                    $this->line($buffer);
-                }
-            });
-
-        if (! $process->isSuccessful()) {
-            throw new RuntimeException($process->getErrorOutput());
-        }
     }
 }

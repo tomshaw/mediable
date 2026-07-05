@@ -1,6 +1,5 @@
 <?php
 
-use Livewire\Attributes\On;
 use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Eloquent\Eloquent;
@@ -20,37 +19,14 @@ new class extends Component
 
     public ?int $primaryId = null;
 
-    public string $uniqueId = '';
+    public int $editVersion = 0;
 
-    public function mount(string $uniqueId = ''): void
+    public function mount(?int $activeId = null): void
     {
-        $this->uniqueId = $uniqueId;
-        $this->dispatch(BrowserEvents::FORM_REQUEST_ACTIVE_ID->value);
-    }
-
-    #[On(BrowserEvents::FORM_RECEIVE_ACTIVE_ID->value)]
-    public function handleReceiveActiveId(int $id): void
-    {
-        $this->loadSelectedAttachment($id);
-        $this->prepareImageEditor();
-    }
-
-    #[On(BrowserEvents::ATTACHMENTS_SELECTION_CHANGED->value)]
-    public function handleSelectionChanged(array $selectedIds, ?int $activeId): void
-    {
-        $this->loadSelectedAttachment($activeId);
-    }
-
-    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CHANGED->value)]
-    public function handleActiveAttachmentChanged(int $id): void
-    {
-        $this->loadSelectedAttachment($id);
-    }
-
-    #[On(BrowserEvents::ATTACHMENT_ACTIVE_CLEARED->value)]
-    public function handleActiveAttachmentCleared(): void
-    {
-        $this->selectedAttachment = null;
+        if ($activeId) {
+            $this->loadSelectedAttachment($activeId);
+            $this->prepareImageEditor();
+        }
     }
 
     protected function loadSelectedAttachment(?int $id): void
@@ -85,7 +61,7 @@ new class extends Component
 
         $this->initializeScaleDimensions();
 
-        $this->dispatch(BrowserEvents::EDITOR_ATTACHMENT_UPDATED->value, id: $this->attachment->getId());
+        $this->dispatch(BrowserEvents::EDITOR_ATTACHMENT_UPDATED->value, id: $this->attachment->getId(), version: $this->editVersion);
     }
 
     public function initializeScaleDimensions(): void
@@ -107,25 +83,23 @@ new class extends Component
         }
     }
 
-    #[On(BrowserEvents::TOOLBAR_CLOSE_IMAGE_EDITOR->value)]
-    public function handleEditorClosed(): void
+    protected function refreshWorkingCopy(): void
     {
-        $this->primaryId = null;
-        $this->attachment = null;
-        $this->editHistory = [];
-        $this->selectedForm = '';
-    }
+        if (! $this->attachment?->id) {
+            return;
+        }
 
-    #[On(BrowserEvents::PANEL_REGENERATE_UNIQUE_ID->value)]
-    public function handleRegenerateUniqueId(string $uniqueId): void
-    {
-        $this->uniqueId = $uniqueId;
-    }
+        Attachment::whereKey($this->attachment->id)->touch();
 
-    public function generateUniqueId(): void
-    {
-        $this->uniqueId = uniqid();
-        $this->dispatch(BrowserEvents::PANEL_UNIQUE_ID_UPDATED->value, uniqueId: $this->uniqueId);
+        $item = Attachment::find($this->attachment->id);
+
+        $this->attachment = $item ? AttachmentState::fromAttachment($item) : null;
+
+        $this->editVersion++;
+
+        if ($this->attachment) {
+            $this->dispatch(BrowserEvents::EDITOR_ATTACHMENT_UPDATED->value, id: $this->attachment->id, version: $this->editVersion);
+        }
     }
 
     public function saveEditorChanges(): void
@@ -160,9 +134,11 @@ new class extends Component
         $this->attachment = AttachmentState::fromAttachment($item);
         $this->editHistory = [];
 
-        $this->generateUniqueId();
+        $this->editVersion++;
 
-        $this->dispatch(BrowserEvents::EDITOR_ATTACHMENT_UPDATED->value, id: $this->attachment->getId());
+        $this->initializeScaleDimensions();
+
+        $this->dispatch(BrowserEvents::EDITOR_ATTACHMENT_UPDATED->value, id: $this->attachment->getId(), version: $this->editVersion);
     }
 
     public function mimeTypeImage(string $mimeType): bool
@@ -186,7 +162,7 @@ new class extends Component
 
                 @if ($attachment && $this->mimeTypeImage($attachment->file_type))
                 <figure class="w-full mb-3">
-                    <img src="{{ $attachment->file_url }}?id={{ $uniqueId }}" class="w-full object-cover" />
+                    <img src="{{ $attachment->file_url }}?v={{ ($attachment->updated_at ? strtotime($attachment->updated_at) : 0) }}.{{ $editVersion }}" class="w-full object-cover" />
                 </figure>
                 @endif
 

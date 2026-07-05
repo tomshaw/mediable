@@ -7,14 +7,14 @@ use GdImage;
 class GraphicDrawBase
 {
     /** @var array<int, string> */
-    public array $flipModes = [
+    public protected(set) array $flipModes = [
         IMG_FLIP_HORIZONTAL => 'Horizontal',
         IMG_FLIP_VERTICAL => 'Vertical',
         IMG_FLIP_BOTH => 'Both',
     ];
 
     /** @var array<int, string> */
-    public array $filterModes = [
+    public protected(set) array $filterModes = [
         IMG_FILTER_NEGATE => 'Negate',
         IMG_FILTER_GRAYSCALE => 'Grayscale',
         IMG_FILTER_BRIGHTNESS => 'Brightness',
@@ -30,7 +30,7 @@ class GraphicDrawBase
     ];
 
     /** @var array<int, string> */
-    public array $scaleModes = [
+    public protected(set) array $scaleModes = [
         IMG_NEAREST_NEIGHBOUR => 'Nearest Neighbour',
         IMG_BILINEAR_FIXED => 'Bilinear Fixed',
         IMG_BICUBIC => 'Bicubic',

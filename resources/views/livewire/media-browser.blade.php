@@ -1,89 +1,61 @@
 <div class="mediable fixed inset-0 h-full w-full z-50 will-change-transform" x-data="initMediableBrowser()" x-show="state.show" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90">
 
-    <div class="absolute inset-0 bg-black bg-opacity-40" @click="show = false"></div>
+    <div class="absolute inset-0 bg-black bg-opacity-40" @click="state.show = false"></div>
 
     <div @class(['bg-white flex justify-start fixed overflow-hidden', 'rounded-lg shadow-lg top-8 left-8 right-8 bottom-8'=> !$fullScreen, 'rounded-none shadow-none top-0 left-0 right-0 bottom-0' => $fullScreen])>
         <div class="flex h-full bg-white grow overflow-hidden">
             <div class="relative flex flex-col justify-between w-full h-full overflow-hidden">
 
                 <div class="bg-gray-100 h-12 min-h-12 max-h-12 xl:h-14 xl:min-h-14 xl:max-h-14 2xl:h-16 2xl:min-h-16 2xl:max-h-16 w-full">
-                    <livewire:mediable::header
-                        :show="$show"
-                        wire:model.live="searchTerm"
-                        :key="'header-'.$uniqueId"
-                    />
+                    @include('mediable::includes.header')
                 </div>
 
                 <div class="bg-gray-200 h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
 
-                    @if($show->isShowMetaInfo() && !$panel->isUploadMode() && !$data->isEmpty())
+                    @island(name: 'selection', always: true)
+                    @if($show->isShowMetaInfo() && !$panel->isUploadMode() && !$this->paginator->isEmpty())
                     <div class="relative bg-gray-200 border-r border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
                         <div class="relative flex items-center justify-center h-full overflow-hidden">
                             @if(!$panel->isEditorMode())
-                            <livewire:mediable::meta
-                                :unique-id="$uniqueId"
-                                :key="'meta-'.$uniqueId"
-                            />
+                            @include('mediable::includes.meta')
                             @else
                             <livewire:mediable::form
-                                :unique-id="$uniqueId"
+                                :active-id="$activeId"
                                 :key="'form-editor'"
                             />
                             @endif
                         </div>
                     </div>
                     @endif
+                    @endisland
 
                     <div class="bg-gray-200 w-full h-full overflow-y-auto">
                         <div class="flex flex-col h-full">
 
                             <div class="relative flex items-center justify-center h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
-                                <livewire:mediable::toolbar
-                                    :panel="$panel"
-                                    :show="$show"
-                                    :attachments="$data->getCollection()->toArray()"
-                                    :order-columns="$orderColumns"
-                                    :column-widths="$columnWidths"
-                                    :unique-mime-types="$uniqueMimeTypes"
-                                    :order-by="$orderBy"
-                                    :order-dir="$orderDir"
-                                    :default-column-width="$defaultColumnWidth"
-                                    :selected-mime-type="$selectedMimeType"
-                                    :key="'toolbar-'.$uniqueId"
-                                />
-                                <livewire:mediable::alert
-                                    :alert="$alert"
-                                    :key="'alert-'.$uniqueId"
-                                />
+                                @island(name: 'selection', always: true)
+                                @include('mediable::includes.toolbar')
+                                @endisland
+                                @include('mediable::includes.alert')
                             </div>
 
                             <div class="flex items-center justify-center grow overflow-auto border-t border-b border-gray-300">
                                 <div class="w-full h-full overflow-y-auto">
                                     <div class="relative p-0 m-0 h-full w-full">
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isThumbMode()])>
-                                            <livewire:mediable::attachments
-                                                :attachments="$data->getCollection()->toArray()"
-                                                :unique-id="$uniqueId"
-                                                :column-widths="$columnWidths"
-                                                :default-column-width="$defaultColumnWidth"
-                                                :key="'attachments-'.$uniqueId"
-                                            />
+                                            @island(name: 'selection', always: true)
+                                            @include('mediable::includes.attachments')
+                                            @endisland
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isPreviewMode()])>
-                                            <livewire:mediable::preview
-                                                :unique-id="$uniqueId"
-                                                :key="'preview-'.$uniqueId"
-                                            />
+                                            @include('mediable::includes.preview')
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isEditorMode()])>
-                                            <livewire:mediable::editor
-                                                :unique-id="$uniqueId"
-                                                :key="'editor'"
-                                            />
+                                            @include('mediable::includes.editor')
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isUploadMode()])>
                                             <livewire:mediable::uploads
-                                                :key="'uploads-'.$uniqueId"
+                                                :key="'uploads'"
                                             />
                                         </div>
                                     </div>
@@ -93,10 +65,10 @@
                             @if(!$panel->isUploadMode() && !$panel->isEditorMode())
                             <div class="relative flex items-center justify-center h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
                                 <div class="flex items-center justify-between h-full w-full px-4">
-                                    @if($show->isShowPagination() && method_exists($data, 'links'))
-                                    {!! $data->links("mediable::includes.pagination") !!}
+                                    @if($show->isShowPagination())
+                                    {!! $this->paginator->links("mediable::includes.pagination") !!}
                                     @endif
-                                    @if($show->isShowPerPage() && method_exists($data, 'links') && $data->hasPages())
+                                    @if($show->isShowPerPage() && $this->paginator->hasPages())
                                     <div class="hidden xl:block">
                                         <x-mediable::toolbar-select wire:model.live="perPage" :options="collect($perPageValues)->mapWithKeys(fn ($v) => [$v => $v == 0 ? 'All' : $v])->all()" />
                                     </div>
@@ -108,36 +80,33 @@
                         </div>
                     </div>
 
-                    @if($show->isShowSidebar() && !$panel->isUploadMode() && !$data->isEmpty())
+                    @island(name: 'selection', always: true)
+                    @if($show->isShowSidebar() && !$panel->isUploadMode() && !$this->paginator->isEmpty())
                     <div class="relative bg-gray-200 border-l border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
-                        <livewire:mediable::sidebar
-                            :key="'sidebar-'.$uniqueId"
-                        />
+                        @include('mediable::includes.sidebar')
                     </div>
                     @endif
+                    @endisland
 
                 </div>
 
-                @if($show->isShowImageStrip() && !$panel->isUploadMode() && !$panel->isEditorMode() && !$data->isEmpty())
+                @island(name: 'selection', always: true)
+                @if($show->isShowImageStrip() && !$panel->isUploadMode() && !$panel->isEditorMode() && !$this->paginator->isEmpty())
                 <div class="hidden 2xl:block bg-gray-200 border-b border-gray-300 h-25 max-h-25 min-h-25 w-full overflow-hidden">
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
-                        <livewire:mediable::strip
-                            :attachments="$data->getCollection()->toArray()"
-                            :unique-id="$uniqueId"
-                            :key="'strip-'.$uniqueId"
-                        />
+                        @include('mediable::includes.strip')
                     </div>
                 </div>
                 @endif
+                @endisland
 
-                @if(!$panel->isUploadMode() && !$panel->isEditorMode() && !$data->isEmpty())
+                @island(name: 'selection', always: true)
+                @if(!$panel->isUploadMode() && !$panel->isEditorMode() && !$this->paginator->isEmpty())
                 <div class="bg-gray-200 h-15 max-h-15 min-h-15 w-full">
-                    <livewire:mediable::footer
-                        :unique-id="$uniqueId"
-                        :key="'footer-'.$uniqueId"
-                    />
+                    @include('mediable::includes.footer')
                 </div>
                 @endif
+                @endisland
 
             </div>
         </div>
@@ -147,6 +116,30 @@
 @php use TomShaw\Mediable\Enums\BrowserEvents; @endphp
 @script
 <script>
+    Alpine.data('initModalAlert', () => ({
+        alert: @entangle('alert').live,
+        timer: null,
+        startTimer() {
+            if (this.alert.show) {
+                this.timer = setTimeout(() => {
+                    this.alert.show = false;
+                }, 3000);
+            }
+        },
+        clearTimer() {
+            clearTimeout(this.timer);
+        },
+        init() {
+            this.$watch('alert.show', value => {
+                if (value) {
+                    this.startTimer();
+                } else {
+                    this.clearTimer();
+                }
+            });
+        },
+    }));
+
     Alpine.data('initMediableBrowser', () => ({
 
         state: @entangle('modal').live,

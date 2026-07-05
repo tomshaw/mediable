@@ -15,6 +15,11 @@ class AttachmentFactory extends Factory
      */
     protected $model = Attachment::class;
 
+    public function hidden(): static
+    {
+        return $this->state(['hidden' => true]);
+    }
+
     /**
      * @return array<string, mixed>
      */
