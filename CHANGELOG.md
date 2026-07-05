@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.1](https://github.com/tomshaw/mediable/compare/v1.5.0...v1.5.1) (2026-07-05)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/checkout from 6 to 7 ([d021b48](https://github.com/tomshaw/mediable/commit/d021b48d4a119df287dc5e29009fa6ed9006e2ae))
+* **deps:** bump actions/checkout from 6 to 7 ([2c5fc41](https://github.com/tomshaw/mediable/commit/2c5fc41a4d49dd3bb4bc7879d7aeeede8db862fb))
+
 ## [1.5.0](https://github.com/tomshaw/mediable/compare/v1.4.0...v1.5.0) (2026-06-13)
 
 
