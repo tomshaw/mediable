@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/tomshaw/mediable/compare/v1.5.1...v1.6.0) (2026-07-05)
+
+
+### Features
+
+* improve UI components and enhance accessibility ([9737da7](https://github.com/tomshaw/mediable/commit/9737da73365f05d0c0cbde4daf42814094426430))
+
 ## [1.5.1](https://github.com/tomshaw/mediable/compare/v1.5.0...v1.5.1) (2026-07-05)
 
 
