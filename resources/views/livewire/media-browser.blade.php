@@ -1,20 +1,20 @@
-<div class="mediable fixed inset-0 h-full w-full z-50 will-change-transform" x-data="initMediableBrowser()" x-show="state.show" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90">
+<div class="mediable fixed inset-0 h-full w-full z-50 will-change-transform scheme-light dark:scheme-dark" x-data="initMediableBrowser()" x-show="state.show" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-90">
 
-    <div class="absolute inset-0 bg-black bg-opacity-40" @click="state.show = false"></div>
+    <div class="absolute inset-0 bg-zinc-950/60 backdrop-blur-[2px]" @click="state.show = false"></div>
 
-    <div @class(['bg-white flex justify-start fixed overflow-hidden', 'rounded-lg shadow-lg top-8 left-8 right-8 bottom-8'=> !$fullScreen, 'rounded-none shadow-none top-0 left-0 right-0 bottom-0' => $fullScreen])>
-        <div class="flex h-full bg-white grow overflow-hidden">
+    <div @class(['fixed flex justify-start overflow-hidden bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100 ring-1 ring-zinc-950/10 dark:ring-white/10', 'rounded-2xl shadow-2xl top-6 left-6 right-6 bottom-6' => !$fullScreen, 'rounded-none shadow-none inset-0' => $fullScreen])>
+        <div class="flex h-full grow overflow-hidden">
             <div class="relative flex flex-col justify-between w-full h-full overflow-hidden">
 
-                <div class="bg-gray-100 h-12 min-h-12 max-h-12 xl:h-14 xl:min-h-14 xl:max-h-14 2xl:h-16 2xl:min-h-16 2xl:max-h-16 w-full">
+                <div class="bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 h-14 min-h-14 max-h-14 w-full">
                     @include('mediable::includes.header')
                 </div>
 
-                <div class="bg-gray-200 h-full overflow-hidden flex justify-between border-t border-b border-gray-300 w-full">
+                <div class="h-full overflow-hidden flex justify-between w-full">
 
                     @island(name: 'selection', always: true)
                     @if($show->isShowMetaInfo() && !$panel->isUploadMode() && !$this->paginator->isEmpty())
-                    <div class="relative bg-gray-200 border-r border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
+                    <div class="relative bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 w-60 min-w-60 max-w-60 xl:w-64 xl:min-w-64 xl:max-w-64 2xl:w-72 2xl:min-w-72 2xl:max-w-72 h-full">
                         <div class="relative flex items-center justify-center h-full overflow-hidden">
                             @if(!$panel->isEditorMode())
                             @include('mediable::includes.meta')
@@ -29,23 +29,22 @@
                     @endif
                     @endisland
 
-                    <div class="bg-gray-200 w-full h-full overflow-y-auto">
+                    <div class="bg-zinc-100 dark:bg-zinc-950 w-full h-full overflow-y-auto">
                         <div class="flex flex-col h-full">
 
-                            <div class="relative flex items-center justify-center h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
+                            <div class="relative flex items-center justify-center bg-white dark:bg-zinc-900 h-12 min-h-12 max-h-12 w-full">
                                 @island(name: 'selection', always: true)
                                 @include('mediable::includes.toolbar')
                                 @endisland
                                 @include('mediable::includes.alert')
                             </div>
 
-                            <div class="flex items-center justify-center grow overflow-auto border-t border-b border-gray-300">
+                            <div class="flex items-center justify-center grow overflow-auto border-t border-b border-zinc-200 dark:border-zinc-800">
                                 <div class="w-full h-full overflow-y-auto">
+                                    @island(name: 'selection', always: true)
                                     <div class="relative p-0 m-0 h-full w-full">
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isThumbMode()])>
-                                            @island(name: 'selection', always: true)
                                             @include('mediable::includes.attachments')
-                                            @endisland
                                         </div>
                                         <div @class(["absolute top-0 left-0 bottom-0 right-0 h-full w-full p-0 m-0 overflow-auto scrollY opacity-0 invisible transition-opacity duration-300 delay-200", "opacity-100 !visible z-10"=> $panel->isPreviewMode()])>
                                             @include('mediable::includes.preview')
@@ -59,30 +58,33 @@
                                             />
                                         </div>
                                     </div>
+                                    @endisland
                                 </div>
                             </div>
 
+                            @island(name: 'selection', always: true)
                             @if(!$panel->isUploadMode() && !$panel->isEditorMode())
-                            <div class="relative flex items-center justify-center h-10 min-h-10 max-h-10 xl:h-11 xl:min-h-11 xl:max-h-11 2xl:h-12 2xl:min-h-12 2xl:max-h-12 w-full">
+                            <div class="relative flex items-center justify-center bg-white dark:bg-zinc-900 h-12 min-h-12 max-h-12 w-full">
                                 <div class="flex items-center justify-between h-full w-full px-4">
                                     @if($show->isShowPagination())
                                     {!! $this->paginator->links("mediable::includes.pagination") !!}
                                     @endif
                                     @if($show->isShowPerPage() && $this->paginator->hasPages())
                                     <div class="hidden xl:block">
-                                        <x-mediable::toolbar-select wire:model.live="perPage" :options="collect($perPageValues)->mapWithKeys(fn ($v) => [$v => $v == 0 ? 'All' : $v])->all()" />
+                                        <x-mediable::toolbar-select wire:model.live="perPage" :options="collect($perPageValues)->mapWithKeys(fn ($v) => [$v => $v == 0 ? 'All' : $v.' / page'])->all()" />
                                     </div>
                                     @endif
                                 </div>
                             </div>
                             @endif
+                            @endisland
 
                         </div>
                     </div>
 
                     @island(name: 'selection', always: true)
                     @if($show->isShowSidebar() && !$panel->isUploadMode() && !$this->paginator->isEmpty())
-                    <div class="relative bg-gray-200 border-l border-gray-300 w-56 min-w-56 max-w-56 xl:w-60 xl:min-w-60 xl:max-w-60 2xl:w-64 2xl:min-w-64 2xl:max-w-64 h-full">
+                    <div class="relative bg-zinc-50 dark:bg-zinc-900 border-l border-zinc-200 dark:border-zinc-800 w-60 min-w-60 max-w-60 xl:w-64 xl:min-w-64 xl:max-w-64 2xl:w-72 2xl:min-w-72 2xl:max-w-72 h-full">
                         @include('mediable::includes.sidebar')
                     </div>
                     @endif
@@ -92,7 +94,7 @@
 
                 @island(name: 'selection', always: true)
                 @if($show->isShowImageStrip() && !$panel->isUploadMode() && !$panel->isEditorMode() && !$this->paginator->isEmpty())
-                <div class="hidden 2xl:block bg-gray-200 border-b border-gray-300 h-25 max-h-25 min-h-25 w-full overflow-hidden">
+                <div class="hidden 2xl:block bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 h-24 max-h-24 min-h-24 w-full overflow-hidden">
                     <div class="flex items-center justify-start h-full w-full px-4 overflow-x-auto scrollX">
                         @include('mediable::includes.strip')
                     </div>
@@ -102,7 +104,7 @@
 
                 @island(name: 'selection', always: true)
                 @if(!$panel->isUploadMode() && !$panel->isEditorMode() && !$this->paginator->isEmpty())
-                <div class="bg-gray-200 h-15 max-h-15 min-h-15 w-full">
+                <div class="bg-zinc-50 dark:bg-zinc-900 h-16 max-h-16 min-h-16 w-full">
                     @include('mediable::includes.footer')
                 </div>
                 @endif
@@ -238,16 +240,25 @@
         },
 
         initTextCopy() {
-            document.querySelectorAll('[data-textcopy]').forEach(function(element) {
-                element.addEventListener('click', function() {
-                    var text = this.innerText;
-                    var textarea = document.createElement('textarea');
+            document.addEventListener('click', (e) => {
+                const el = e.target.closest('[data-textcopy]');
+
+                if (!el || !this.$root.contains(el)) {
+                    return;
+                }
+
+                const text = el.innerText.trim();
+
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(text);
+                } else {
+                    const textarea = document.createElement('textarea');
                     textarea.value = text;
                     document.body.appendChild(textarea);
                     textarea.select();
                     document.execCommand('copy');
                     document.body.removeChild(textarea);
-                });
+                }
             });
         }
     }))

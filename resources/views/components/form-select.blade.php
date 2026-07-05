@@ -6,10 +6,10 @@
 ])
 
 <div class="mb-1 w-full">
-    <label for="{{ $id }}" class="inline-block text-gray-700 mb-1 text-xs font-normal">{{ $label }}</label>
+    <label for="{{ $id }}" class="inline-block text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1">{{ $label }}</label>
     <select
         id="{{ $id }}"
-        {{ $attributes->merge(['class' => 'block text-gray-700 border border-gray-400 w-full py-1 px-2 appearance-none rounded-md text-xs font-medium leading-5']) }}
+        {{ $attributes->merge(['class' => 'block w-full cursor-pointer rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 py-1.5 px-2 text-xs font-medium leading-5 text-zinc-700 dark:text-zinc-200 transition-colors focus:border-indigo-400 dark:focus:border-indigo-500']) }}
     >
         @if($placeholder)
             <option value="">{{ $placeholder }}</option>

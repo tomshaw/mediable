@@ -121,30 +121,29 @@ new class extends Component
 
         {{-- LEFT COLUMN: File Table --}}
         <div class="w-full lg:w-2/3 overflow-auto max-h-[80vh]">
-            <div class="border border-gray-300 rounded-lg shadow-sm">
+            <div class="rounded-xl ring-1 ring-zinc-200 dark:ring-zinc-800 bg-white dark:bg-zinc-900 shadow-sm overflow-hidden">
                 <table class="border-collapse table-auto w-full text-sm">
-                    <thead class="bg-gray-200 sticky top-0 z-10">
+                    <thead class="bg-zinc-50 dark:bg-zinc-800/50 sticky top-0 z-10">
                         <tr>
-                            <th class="px-4 py-2.5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-12">#</th>
-                            <th class="px-4 py-2.5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Name</th>
-                            <th class="px-4 py-2.5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider hidden md:table-cell">Type</th>
-                            <th class="px-4 py-2.5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Size</th>
-                            <th class="px-4 py-2.5 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-24"></th>
+                            <th class="px-4 py-2.5 text-left text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider w-12">#</th>
+                            <th class="px-4 py-2.5 text-left text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Name</th>
+                            <th class="px-4 py-2.5 text-left text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider hidden md:table-cell">Type</th>
+                            <th class="px-4 py-2.5 text-left text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Size</th>
+                            <th class="px-4 py-2.5 text-center text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider w-24"></th>
                         </tr>
                     </thead>
-                    <tbody class="bg-gray-100 divide-y divide-gray-200">
+                    <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
                         @foreach($this->fileMetadata as $file)
-                        <tr class="hover:bg-gray-200 transition-colors duration-150" wire:key="upload-file-{{ $file['index'] }}">
-                            <td class="px-4 py-2 text-gray-500 text-xs">{{ $file['index'] + 1 }}</td>
-                            <td class="px-4 py-2 text-gray-700 truncate max-w-xs" title="{{ $file['name'] }}">{{ Str::limit($file['name'], 40, '...') }}</td>
+                        <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors duration-150" wire:key="upload-file-{{ $file['index'] }}">
+                            <td class="px-4 py-2 text-zinc-400 dark:text-zinc-500 text-xs tabular-nums">{{ $file['index'] + 1 }}</td>
+                            <td class="px-4 py-2 text-zinc-700 dark:text-zinc-200 text-xs truncate max-w-xs" title="{{ $file['name'] }}">{{ Str::limit($file['name'], 40, '...') }}</td>
                             <td class="px-4 py-2 hidden md:table-cell">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-600 uppercase">{{ $file['extension'] }}</span>
+                                <span class="inline-flex items-center px-1.5 py-0.5 rounded-md font-mono text-[10px] font-medium bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 uppercase tracking-wider">{{ $file['extension'] }}</span>
                             </td>
-                            <td class="px-4 py-2 text-gray-500 text-xs whitespace-nowrap">{{ $file['formattedSize'] }}</td>
+                            <td class="px-4 py-2 text-zinc-500 dark:text-zinc-400 text-xs whitespace-nowrap tabular-nums">{{ $file['formattedSize'] }}</td>
                             <td class="px-4 py-2 text-center">
-                                <button wire:click="removeFile({{ $file['index'] }})" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 py-1 px-3 text-xs font-normal text-white cursor-pointer">
-                                    <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-32"></span>
-                                    <span class="relative">Remove</span>
+                                <button wire:click="removeFile({{ $file['index'] }})" class="inline-flex items-center h-7 rounded-md px-2.5 text-xs font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40 cursor-pointer transition-colors">
+                                    Remove
                                 </button>
                             </td>
                         </tr>
@@ -159,38 +158,38 @@ new class extends Component
 
             {{-- Error Messages --}}
             @if(count($uploadErrors))
-            <div class="flex flex-col gap-1.5 rounded-lg border border-red-200 bg-red-50 p-3">
+            <div class="flex flex-col gap-1.5 rounded-xl ring-1 ring-red-200 dark:ring-red-900 bg-red-50 dark:bg-red-950 p-3">
                 @foreach($uploadErrors as $uploadError)
                 <div class="flex items-start gap-2">
                     <svg class="h-4 w-4 text-red-500 mt-0.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
                     </svg>
-                    <p class="text-xs text-red-700">{{ $uploadError }}</p>
+                    <p class="text-xs text-red-700 dark:text-red-300">{{ $uploadError }}</p>
                 </div>
                 @endforeach
             </div>
             @endif
 
             {{-- Upload Summary --}}
-            <div class="rounded-lg border border-gray-300 bg-gray-100 p-4 shadow-sm">
-                <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Upload Summary</h3>
+            <div class="rounded-xl ring-1 ring-zinc-200 dark:ring-zinc-800 bg-white dark:bg-zinc-900 p-4 shadow-sm">
+                <h3 class="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3">Upload summary</h3>
                 <div class="space-y-2">
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-600">Total Files</span>
-                        <span class="text-sm font-semibold text-gray-800">{{ count($this->fileMetadata) }}</span>
+                        <span class="text-xs text-zinc-500 dark:text-zinc-400">Total files</span>
+                        <span class="text-xs font-semibold text-zinc-800 dark:text-zinc-100 tabular-nums">{{ count($this->fileMetadata) }}</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-600">Total Size</span>
-                        <span class="text-sm font-semibold text-gray-800">{{ $this->formatBytes($this->getTotalUploadSize()) }}</span>
+                        <span class="text-xs text-zinc-500 dark:text-zinc-400">Total size</span>
+                        <span class="text-xs font-semibold text-zinc-800 dark:text-zinc-100 tabular-nums">{{ $this->formatBytes($this->getTotalUploadSize()) }}</span>
                     </div>
                     @if(count($this->mimeBreakdown))
-                    <div class="border-t border-gray-300 pt-2 mt-2">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">By Type</span>
+                    <div class="border-t border-zinc-100 dark:border-zinc-800 pt-2 mt-2">
+                        <span class="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">By type</span>
                         <div class="mt-1.5 space-y-1">
                             @foreach($this->mimeBreakdown as $category => $data)
                             <div class="flex justify-between items-center">
-                                <span class="text-xs text-gray-500">{{ $category }}</span>
-                                <span class="text-xs text-gray-700">{{ $data['count'] }} {{ $data['count'] === 1 ? 'file' : 'files' }} &middot; {{ $data['formattedSize'] }}</span>
+                                <span class="text-xs text-zinc-500 dark:text-zinc-400">{{ $category }}</span>
+                                <span class="text-xs text-zinc-700 dark:text-zinc-200 tabular-nums">{{ $data['count'] }} {{ $data['count'] === 1 ? 'file' : 'files' }} &middot; {{ $data['formattedSize'] }}</span>
                             </div>
                             @endforeach
                         </div>
@@ -200,30 +199,30 @@ new class extends Component
             </div>
 
             {{-- Server Limits --}}
-            <div class="rounded-lg border border-gray-300 bg-gray-100 p-4 shadow-sm">
-                <h3 class="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Server Limits</h3>
+            <div class="rounded-xl ring-1 ring-zinc-200 dark:ring-zinc-800 bg-white dark:bg-zinc-900 p-4 shadow-sm">
+                <h3 class="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3">Server limits</h3>
                 <div class="space-y-3">
                     {{-- File Count Limit --}}
                     <div>
                         <div class="flex justify-between items-center mb-1">
-                            <span class="text-xs text-gray-500">Files</span>
-                            <span class="text-xs text-gray-700">{{ count($this->fileMetadata) }} / <span x-text="maxFileUploads"></span></span>
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400">Files</span>
+                            <span class="text-xs text-zinc-700 dark:text-zinc-200 tabular-nums">{{ count($this->fileMetadata) }} / <span x-text="maxFileUploads"></span></span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div class="w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-1.5">
                             <div class="h-1.5 rounded-full transition-all duration-300"
-                                x-bind:class="({{ count($this->fileMetadata) }} / maxFileUploads) > 0.8 ? 'bg-red-400' : 'bg-gray-500'"
+                                x-bind:class="({{ count($this->fileMetadata) }} / maxFileUploads) > 0.8 ? 'bg-red-500' : 'bg-indigo-500'"
                                 x-bind:style="'width: ' + Math.min(({{ count($this->fileMetadata) }} / maxFileUploads) * 100, 100) + '%'"></div>
                         </div>
                     </div>
                     {{-- Upload Size Limit --}}
                     <div>
                         <div class="flex justify-between items-center mb-1">
-                            <span class="text-xs text-gray-500">Upload Size</span>
-                            <span class="text-xs text-gray-700">{{ $this->formatBytes($this->getTotalUploadSize()) }} / <span x-text="Mediable.formatBytes(maxUploadSize)"></span></span>
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400">Upload size</span>
+                            <span class="text-xs text-zinc-700 dark:text-zinc-200 tabular-nums">{{ $this->formatBytes($this->getTotalUploadSize()) }} / <span x-text="Mediable.formatBytes(maxUploadSize)"></span></span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div class="w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-1.5">
                             <div class="h-1.5 rounded-full transition-all duration-300"
-                                x-bind:class="({{ $this->getTotalUploadSize() }} / maxUploadSize) > 0.8 ? 'bg-red-400' : 'bg-gray-500'"
+                                x-bind:class="({{ $this->getTotalUploadSize() }} / maxUploadSize) > 0.8 ? 'bg-red-500' : 'bg-indigo-500'"
                                 x-bind:style="'width: ' + Math.min(({{ $this->getTotalUploadSize() }} / maxUploadSize) * 100, 100) + '%'"></div>
                         </div>
                     </div>
@@ -232,14 +231,12 @@ new class extends Component
 
             {{-- Action Buttons --}}
             <div class="flex flex-col gap-2">
-                <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 w-full py-2.5 px-4 font-medium text-xs tracking-wider text-gray-50 cursor-pointer" x-on:click="submitting = true; $wire.createAttachments()" x-bind:disabled="submitting">
-                    <span class="absolute h-0 w-0 rounded-full bg-blue-400 transition-all duration-300 group-hover:h-full group-hover:w-full"></span>
-                    <span class="spinner relative" x-show="submitting" x-cloak></span>
-                    <span class="relative" x-show="!submitting">Submit</span>
+                <button type="button" class="inline-flex items-center justify-center h-9 rounded-lg bg-indigo-600 px-4 text-xs font-medium text-white hover:bg-indigo-500 cursor-pointer transition-colors shadow-sm disabled:opacity-60 disabled:cursor-wait" x-on:click="submitting = true; $wire.createAttachments()" x-bind:disabled="submitting">
+                    <span class="spinner" x-show="submitting" x-cloak></span>
+                    <span x-show="!submitting">Upload {{ count($this->fileMetadata) }} {{ count($this->fileMetadata) === 1 ? 'file' : 'files' }}</span>
                 </button>
-                <button type="button" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-neutral-900 w-full py-2.5 px-4 font-medium text-xs tracking-wider text-gray-50 cursor-pointer" wire:click="clearFiles">
-                    <span class="absolute h-0 w-0 rounded-full bg-red-500 transition-all duration-300 group-hover:h-56 group-hover:w-full"></span>
-                    <span class="relative">Reset</span>
+                <button type="button" class="inline-flex items-center justify-center h-9 rounded-lg px-4 text-xs font-medium text-zinc-600 hover:bg-zinc-200/70 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 cursor-pointer transition-colors" wire:click="clearFiles">
+                    Reset
                 </button>
             </div>
 
@@ -248,25 +245,27 @@ new class extends Component
     </div>
     @else
     <form>
-        <div class="h-auto max-w-125 py-6 px-7 text-center cursor-pointer border border-gray-400 border-dashed bg-gray-100 rounded-lg" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ 'border-gray-600': enter }" x-on:click.prevent="fileClick($event)">
-            <div class="m-0 p-2 flex items-center text-left">
-                <span class="text-gray-500 leading-none">
-                    <img src="{{ asset("vendor/mediable/images/upload.png") }}" class="w-full h-full object-cover" alt="Upload files" />
+        <div class="group h-auto w-md max-w-full py-8 px-8 text-center cursor-pointer border-2 border-dashed border-zinc-300 dark:border-zinc-700 bg-white/60 dark:bg-zinc-900/60 rounded-2xl transition-colors hover:border-indigo-400 dark:hover:border-indigo-500" @dragover.prevent @dragenter="dragEnter" @dragleave="dragLeave" @drop="drop" x-bind:class="{ '!border-indigo-500 bg-indigo-50/60 dark:bg-indigo-950/30': enter }" x-on:click.prevent="fileClick($event)">
+            <div class="m-0 p-2 flex flex-col items-center text-center gap-3">
+                <span class="flex items-center justify-center w-14 h-14 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 transition-colors group-hover:text-indigo-500 dark:group-hover:text-indigo-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z" />
+                    </svg>
                 </span>
-                <div class="ml-4">
-                    <h3 class="text-gray-800 font-bold text-lg mb-1">Drop files here or click to upload.</h3>
-                    <span class="text-gray-400 font-semibold text-sm">Upload up to <span x-text="maxFileUploads"></span> files not to exceed <span x-text="Mediable.formatBytes(maxUploadSize)"></span>. Maximum single file size is <span x-text="Mediable.formatBytes(maxUploadFileSize)"></span>.</span>
+                <div>
+                    <h3 class="text-zinc-800 dark:text-zinc-100 font-semibold text-base mb-1">Drop files here or click to browse</h3>
+                    <span class="block text-zinc-400 dark:text-zinc-500 text-xs leading-relaxed">Up to <span x-text="maxFileUploads"></span> files, <span x-text="Mediable.formatBytes(maxUploadSize)"></span> in total. Maximum single file size is <span x-text="Mediable.formatBytes(maxUploadFileSize)"></span>.</span>
                 </div>
             </div>
             {{-- Upload Progress --}}
             <template x-if="progress > 0 && progress < 100">
                 <div class="mt-4 px-2">
                     <div class="flex justify-between items-center mb-1">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Uploading</span>
-                        <span class="text-xs text-gray-600" x-text="progress + '%'"></span>
+                        <span class="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Uploading</span>
+                        <span class="text-xs text-zinc-600 dark:text-zinc-300 tabular-nums" x-text="progress + '%'"></span>
                     </div>
-                    <div class="w-full bg-gray-100 rounded-full h-1.5">
-                        <div class="bg-gray-500 h-1.5 rounded-full transition-all duration-300" x-bind:style="'width: ' + progress + '%'"></div>
+                    <div class="w-full bg-zinc-100 dark:bg-zinc-800 rounded-full h-1.5">
+                        <div class="bg-indigo-500 h-1.5 rounded-full transition-all duration-300" x-bind:style="'width: ' + progress + '%'"></div>
                     </div>
                 </div>
             </template>

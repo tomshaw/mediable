@@ -281,13 +281,8 @@ class MediaBrowser extends Component
 
     public function setActiveAttachment(int $id): void
     {
-        if ($this->activeId === $id) {
-            $this->setActive(null);
-            $this->enableThumbMode();
-        } else {
-            $this->setActive($id);
-            $this->enablePreviewMode();
-        }
+        $this->setActive($id);
+        $this->enablePreviewMode();
     }
 
     public function clearSelected(): void

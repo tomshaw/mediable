@@ -108,7 +108,7 @@ it('scopes selection actions to the selection island', function () {
     expect($this->component->get('selectedIds'))->toBe([1]);
 });
 
-// Test that setting an active attachment enables preview mode and toggling it off returns to thumb mode
+// Test that setting an active attachment always enables preview mode, even when already active
 it('activates preview mode through setActiveAttachment', function () {
     $this->component->call('setActiveAttachment', 1);
 
@@ -117,8 +117,8 @@ it('activates preview mode through setActiveAttachment', function () {
 
     $this->component->call('setActiveAttachment', 1);
 
-    expect($this->component->get('activeId'))->toBeNull();
-    expect($this->component->get('panel')->isThumbMode())->toBeTrue();
+    expect($this->component->get('activeId'))->toBe(1);
+    expect($this->component->get('panel')->isPreviewMode())->toBeTrue();
 });
 
 // Test that deleting the active attachment prunes the selection
@@ -195,4 +195,12 @@ it('preserves show state flags when toggling the sidebar', function () {
 it('inserts the current selection by default', function () {
     $this->component->call('toggleAttachment', 1);
     $this->component->call('insertMedia')->assertDispatched(BrowserEvents::DEFAULT->value);
+});
+
+// Test that preview mode renders the image lightbox overlay for enlarging images
+it('renders the lightbox overlay in preview mode for images', function () {
+    $this->component->call('setActiveAttachment', 1);
+
+    $this->component->assertSeeHtml('x-show="lightbox"');
+    $this->component->assertSeeHtml('cursor-zoom-in');
 });
