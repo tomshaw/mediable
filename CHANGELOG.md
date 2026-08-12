@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/tomshaw/mediable/compare/v1.6.0...v1.7.0) (2026-08-12)
+
+
+### Features
+
+* update Laravel version and add image conversion support for WebP and AVIF formats ([58cb367](https://github.com/tomshaw/mediable/commit/58cb36778cbf21174a199b1cb5881e64ab3cb821))
+
 ## [1.6.0](https://github.com/tomshaw/mediable/compare/v1.5.1...v1.6.0) (2026-07-05)
 
 
