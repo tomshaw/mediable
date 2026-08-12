@@ -3,10 +3,9 @@
 namespace TomShaw\Mediable\Eloquent;
 
 use Exception;
-use GdImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\{Builder, Collection};
-use Illuminate\Support\Facades\{Config, Storage};
+use Illuminate\Support\Facades\{Config, Image, Storage};
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
@@ -62,8 +61,6 @@ class EloquentManager
                 continue;
             }
 
-            $fullPath = Storage::disk($disk)->path($storagePath);
-
             $data = $this->createDataArray($file, $storagePath, $fileName);
 
             try {
@@ -72,67 +69,16 @@ class EloquentManager
                 throw new MediaBrowserException($e->getMessage(), previous: $e);
             }
 
-            if (str_starts_with($file->getMimeType(), 'image/')) {
+            if (! str_starts_with($file->getMimeType(), 'image/')) {
+                continue;
+            }
 
-                $contents = file_get_contents($fullPath);
+            if (Config::boolean('mediable.create_webp')) {
+                $this->createImageDerivative($file, $storagePath, $fileName, $disk, $folder, 'webp', Config::integer('mediable.webp_quality'));
+            }
 
-                if ($contents === false) {
-                    continue;
-                }
-
-                $image = imagecreatefromstring($contents);
-
-                if ($image === false) {
-                    continue;
-                }
-
-                if (Config::boolean('mediable.create_webp')) {
-
-                    try {
-                        $path = $this->createImageResource($image, $storagePath, $disk, 'image/webp', Config::integer('mediable.webp_quality'));
-                    } catch (Exception $e) {
-                        continue;
-                    }
-
-                    $create = $this->createDataArray($file, $path, $fileName);
-
-                    $create['file_type'] = 'image/webp';
-
-                    if (Storage::disk($disk)->exists($path)) {
-                        $create['file_dir'] = $storagePath;
-                        $create['title'] = pathinfo($path, PATHINFO_FILENAME);
-                        $create['file_name'] = pathinfo($path, PATHINFO_BASENAME);
-                        $create['file_original_name'] = pathinfo($path, PATHINFO_BASENAME);
-                        $create['file_size'] = Storage::disk($disk)->size($path);
-                    }
-
-                    Attachment::create($create);
-                }
-
-                if (Config::boolean('mediable.create_avif')) {
-
-                    try {
-                        $path = $this->createImageResource($image, $storagePath, $disk, 'image/avif', Config::integer('mediable.avif_quality'));
-                    } catch (Exception $e) {
-                        continue;
-                    }
-
-                    $create = $this->createDataArray($file, $path, $fileName);
-
-                    $create['file_type'] = 'image/avif';
-
-                    if (Storage::disk($disk)->exists($path)) {
-                        $create['file_dir'] = $storagePath;
-                        $create['title'] = pathinfo($path, PATHINFO_FILENAME);
-                        $create['file_name'] = pathinfo($path, PATHINFO_BASENAME);
-                        $create['file_original_name'] = pathinfo($path, PATHINFO_BASENAME);
-                        $create['file_size'] = Storage::disk($disk)->size($path);
-                    }
-
-                    Attachment::create($create);
-                }
-
-                imagedestroy($image);
+            if (Config::boolean('mediable.create_avif')) {
+                $this->createImageDerivative($file, $storagePath, $fileName, $disk, $folder, 'avif', Config::integer('mediable.avif_quality'));
             }
         }
     }
@@ -153,25 +99,42 @@ class EloquentManager
         ];
     }
 
-    private function createImageResource(GdImage $image, string $stored, string $disk, string $type = 'image/webp', int $quality = -1): string
+    /**
+     * Encode a stored image upload into the given format and record it as its own attachment.
+     *
+     * Failures are swallowed so an unsupported encoder never aborts the upload itself.
+     */
+    private function createImageDerivative(TemporaryUploadedFile $file, string $storagePath, string $fileName, string $disk, string $folder, string $format, int $quality): void
     {
-        $extension = ($type === 'image/webp') ? 'webp' : 'avif';
+        $name = pathinfo($storagePath, PATHINFO_FILENAME).'.'.$format;
 
-        $directory = Config::string('mediable.folder');
-        $baseName = pathinfo($stored, PATHINFO_FILENAME);
-        $path = $directory.'/'.$baseName.'.'.$extension;
+        try {
+            $image = Image::fromStorage($storagePath, $disk)->orient();
 
-        ob_start();
-        if ($type === 'image/webp') {
-            imagewebp($image, null, $quality);
-        } else {
-            imageavif($image, null, $quality);
+            $image = match ($format) {
+                'avif' => $image->toAvif(),
+                default => $image->toWebp(),
+            };
+
+            $path = $image->quality(max(1, min(100, $quality)))->storePubliclyAs(path: $folder, name: $name, disk: $disk);
+        } catch (Exception $e) {
+            return;
         }
-        $content = ob_get_clean() ?: '';
 
-        Storage::disk($disk)->put($path, $content);
+        if ($path === false) {
+            return;
+        }
 
-        return $path;
+        $data = $this->createDataArray($file, $path, $fileName);
+
+        $data['file_type'] = 'image/'.$format;
+        $data['file_dir'] = $storagePath;
+        $data['title'] = pathinfo($path, PATHINFO_FILENAME);
+        $data['file_name'] = pathinfo($path, PATHINFO_BASENAME);
+        $data['file_original_name'] = pathinfo($path, PATHINFO_BASENAME);
+        $data['file_size'] = Storage::disk($disk)->size($path);
+
+        Attachment::create($data);
     }
 
     /**

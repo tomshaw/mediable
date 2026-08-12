@@ -11,8 +11,9 @@ Mediable is a light weight easy to use Laravel Livewire Media Manager. Mediable 
 ## Requirements
 
 - PHP 8.5
-- Laravel 13.0
+- Laravel 13.20
 - Livewire 4.x
+- The `gd` or `imagick` PHP extension (WebP/AVIF conversion uses Laravel's image manipulation API)
 
 #### Screenshot
 ![Mediable](https://raw.github.com/tomshaw/mediable/master/docs/mediable.jpg)

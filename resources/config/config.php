@@ -58,11 +58,15 @@ return [
     | These can be set to true or false. By default, both are set to true.
     |
     | 'webp_quality' and 'avif_quality' control the quality of the WebP and AVIF versions, respectively.
-    | These can be set to any integer between 0 and 100. By default, both are set to 80.
+    | These can be set to any integer between 1 and 100. By default, both are set to 80.
+    |
+    | Conversions run through Laravel's image manipulation API. The encoder is selected by the
+    | 'images.default' config option (the IMAGE_DRIVER environment variable), which supports
+    | 'gd' and 'imagick'. AVIF requires an encoder built with AVIF support.
     |
     */
     'create_webp' => env('MEDIABLE_CREATE_WEBP', true),
     'create_avif' => env('MEDIABLE_CREATE_AVIF', true),
-    'webp_quality' => env('MEDIABLE_WEBP_QUALITY', 80),
-    'avif_quality' => env('MEDIABLE_AVIF_QUALITY', 80),
+    'webp_quality' => (int) env('MEDIABLE_WEBP_QUALITY', 80),
+    'avif_quality' => (int) env('MEDIABLE_AVIF_QUALITY', 80),
 ];

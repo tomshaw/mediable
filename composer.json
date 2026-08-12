@@ -16,10 +16,11 @@
     ],
     "require": {
         "php": "^8.5",
-        "laravel/framework": "^13.0",
-        "illuminate/console": "^13.0",
-        "illuminate/contracts": "^13.0",
-        "illuminate/support": "^13.0",
+        "illuminate/console": "^13.20",
+        "illuminate/contracts": "^13.20",
+        "illuminate/support": "^13.20",
+        "intervention/image": "^4.0",
+        "laravel/framework": "^13.20",
         "livewire/livewire": "^4.3"
     },
     "require-dev": {
