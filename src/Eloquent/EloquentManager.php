@@ -243,6 +243,27 @@ class EloquentManager
         }
     }
 
+    /**
+     * Point an attachment at a newly written file, discarding the file it replaces.
+     */
+    public function replaceAttachmentFile(int $id, string $previousPath, string $path): void
+    {
+        $disk = $this->getAndValidateDisk(Config::string('mediable.disk'))['disk'];
+
+        if ($previousPath !== $path && Storage::disk($disk)->exists($previousPath)) {
+            Storage::disk($disk)->delete($previousPath);
+        }
+
+        $this->update($id, [
+            'file_name' => basename($path),
+            'file_original_name' => basename($path),
+            'file_type' => Storage::disk($disk)->mimeType($path),
+            'file_size' => Storage::disk($disk)->size($path),
+            'file_dir' => $path,
+            'file_url' => asset('storage/'.$path),
+        ]);
+    }
+
     public function getFilePath(string $filename): string
     {
         $diskConfig = $this->getAndValidateDisk(Config::string('mediable.disk'));

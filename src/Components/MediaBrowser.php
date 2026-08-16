@@ -12,7 +12,7 @@ use Livewire\{Component, WithPagination};
 use TomShaw\Mediable\Concerns\{AlertState, AttachmentState, ModalState, PanelState, ShowState};
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
-use TomShaw\Mediable\GraphicDraw\GraphicDraw;
+use TomShaw\Mediable\Image\ImageEditor;
 use TomShaw\Mediable\Models\Attachment;
 use TomShaw\Mediable\Traits\{WithCache, WithColumnWidths, WithExtension, WithFileSize, WithMimeTypes, WithReporting};
 
@@ -177,21 +177,7 @@ class MediaBrowser extends Component
             return null;
         }
 
-        $filePath = Eloquent::getFilePath($attachment->file_dir);
-
-        if (! file_exists($filePath)) {
-            return null;
-        }
-
-        $info = GraphicDraw::getimagesize($filePath);
-
-        if ($info === false) {
-            return null;
-        }
-
-        [$width, $height, $type] = $info;
-
-        return $type ? ['width' => (int) $width, 'height' => (int) $height] : null;
+        return ImageEditor::dimensions($attachment->file_dir);
     }
 
     public function cacheKey(Carbon|string|null $updatedAt): string

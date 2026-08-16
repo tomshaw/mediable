@@ -2,12 +2,13 @@
 
 namespace TomShaw\Mediable\Providers;
 
-use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\{Blade, Image};
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use TomShaw\Mediable\Assets\{Scripts, Styles};
 use TomShaw\Mediable\Components\MediaBrowser;
 use TomShaw\Mediable\Console\Commands\{InstallCommand, UpdateCommand};
+use TomShaw\Mediable\Image\ImageTransformations;
 
 class MediableServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,7 @@ class MediableServiceProvider extends ServiceProvider
         $this->registerBladeComponents();
         $this->registerPublishableResources();
         $this->registerBladeDirectives();
+        $this->registerImageTransformations();
     }
 
     /**
@@ -112,6 +114,20 @@ class MediableServiceProvider extends ServiceProvider
         Blade::directive('mediableScripts', function () {
             return "<?php echo view('mediable::assets.scripts')->render(); ?>";
         });
+    }
+
+    /**
+     * Register the editor transformations Laravel's image API does not ship with.
+     */
+    protected function registerImageTransformations(): void
+    {
+        $handlers = ImageTransformations::handlers();
+
+        foreach (ImageTransformations::DRIVERS as $driver) {
+            foreach ($handlers as $transformation => $handler) {
+                Image::transformUsing($driver, $transformation, $handler);
+            }
+        }
     }
 
     /**

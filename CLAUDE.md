@@ -47,11 +47,21 @@ Uses PHP classes implementing Livewire's `Wireable` interface for typed, seriali
 ### Facades
 
 - `Eloquent` - Database operations via `EloquentManager` (CRUD, search, pagination, file storage)
-- `GraphicDraw` - GD-based image manipulation via `GraphicDrawManager`
+- `ImageEditor` - Image manipulation via `ImageEditorManager`
+
+### Image Editing (src/Image/)
+
+All image manipulation goes through Laravel's `Image` facade (`intervention/image` under the hood) — there is no direct GD usage in the package.
+
+- `ImageEditorManager` - Editor operations (`flip`, `fit`, `crop`, `rotate`, `orient`, `filter`, `text`, `convert`, `dimensions`). Paths are **disk relative** (an attachment's `file_dir`), read via `Image::fromStorage()` and written back with `storePubliclyAs()`, so the editor works on any filesystem disk. Failures return `false` rather than throwing; the calling component turns that into an error alert.
+- `Transformations/` - `Brightness`, `Contrast`, `Colorize`, `Gamma`, `Invert`, `Pixelate`, `Text` — the operations Laravel's image API does not ship with. They are plain `Illuminate\Contracts\Image\Transformation` value objects.
+- `ImageTransformations::handlers()` - Maps those transformations to Intervention calls; `MediableServiceProvider::registerImageTransformations()` registers each handler against both the `gd` and `imagick` drivers via `Image::transformUsing()`.
+
+Every editor write re-encodes the file at `config('mediable.editor_quality')`.
 
 ### Traits (src/Traits/)
 
-Mixed into MediaBrowser: `WithFileSize`, `WithExtension`, `WithCache`, `WithMimeTypes`, `WithReporting`, `WithColumnWidths`. Mixed into the `form` view component: `WithGraphicDraw` (image edit actions; calls `$this->refreshWorkingCopy()` after each save), `WithFonts`. Mixed into the `uploads` view component: `ServerLimits`, `WithFileSize`, `WithMimeTypes`. `WithStorage` is currently unused.
+Mixed into MediaBrowser: `WithFileSize`, `WithExtension`, `WithCache`, `WithMimeTypes`, `WithReporting`, `WithColumnWidths`. Mixed into the `form` view component: `WithImageEditor` (image edit actions; calls `$this->refreshWorkingCopy()` after each save), `WithFonts`. Mixed into the `uploads` view component: `ServerLimits`, `WithFileSize`, `WithMimeTypes`. `WithStorage` is currently unused.
 
 ### Events (src/Enums/BrowserEvents.php)
 
@@ -64,9 +74,11 @@ The main view is `resources/views/livewire/media-browser.blade.php`. Browser chr
 ## Testing
 
 Tests use Pest with Orchestra Testbench for Laravel package testing:
-- `tests/Pest.php` - Configures the test suite to use `TestCase`
+- `tests/Pest.php` - Configures the test suite to use `TestCase`, plus shared image fixture helpers (`fixtureImage()`, `solidImage()`, `dominantColor()`, `font()`)
 - `tests/Support/TestCase.php` - Base test case extending Orchestra's TestCase
 - `tests/MediableTest.php` - Component tests using `Livewire::test()`
+- `tests/ImageEditorTest.php` - `ImageEditorManager` operations against a faked `public` disk
+- `tests/FormEditorTest.php` - Editor component wiring via `Livewire::test('mediable::form')`
 
 Tests run against an in-memory SQLite database (configured in `phpunit.xml.dist`).
 
@@ -79,6 +91,7 @@ The package config (`resources/config/config.php`) controls:
 - `folder` - Upload folder (env: `MEDIABLE_DISK_FOLDER`)
 - `create_webp` / `create_avif` - Auto-generate WebP/AVIF versions
 - `webp_quality` / `avif_quality` - Conversion quality (0-100)
+- `editor_quality` - Re-encode quality for image editor writes (env: `MEDIABLE_EDITOR_QUALITY`, default 90)
 
 ## Code Style
 

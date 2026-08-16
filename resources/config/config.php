@@ -69,4 +69,16 @@ return [
     'create_avif' => env('MEDIABLE_CREATE_AVIF', true),
     'webp_quality' => (int) env('MEDIABLE_WEBP_QUALITY', 80),
     'avif_quality' => (int) env('MEDIABLE_AVIF_QUALITY', 80),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Image Editor Quality
+    |--------------------------------------------------------------------------
+    |
+    | Every image editor operation re-encodes the file it writes back to disk. This
+    | setting controls the quality of that encode, and can be set to any integer
+    | between 1 and 100. Formats without a quality setting ignore it.
+    |
+    */
+    'editor_quality' => (int) env('MEDIABLE_EDITOR_QUALITY', 90),
 ];

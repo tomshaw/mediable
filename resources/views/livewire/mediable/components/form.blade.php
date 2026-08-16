@@ -4,14 +4,13 @@ use Livewire\Component;
 use TomShaw\Mediable\Concerns\AttachmentState;
 use TomShaw\Mediable\Eloquent\Eloquent;
 use TomShaw\Mediable\Enums\BrowserEvents;
-use TomShaw\Mediable\GraphicDraw\GraphicDraw;
 use TomShaw\Mediable\Models\Attachment;
-use TomShaw\Mediable\Traits\{WithFonts, WithGraphicDraw};
+use TomShaw\Mediable\Traits\{WithFonts, WithImageEditor};
 
 new class extends Component
 {
     use WithFonts;
-    use WithGraphicDraw;
+    use WithImageEditor;
 
     public ?AttachmentState $selectedAttachment = null;
 
@@ -59,28 +58,30 @@ new class extends Component
         $this->attachment = AttachmentState::fromAttachment($item);
         $this->primaryId = $originalId;
 
-        $this->initializeScaleDimensions();
+        $this->initializeEditorDimensions();
 
         $this->dispatch(BrowserEvents::EDITOR_ATTACHMENT_UPDATED->value, id: $this->attachment->getId(), version: $this->editVersion);
     }
 
-    public function initializeScaleDimensions(): void
+    /**
+     * Seed the dimension driven panels with the working copy's current size.
+     */
+    public function initializeEditorDimensions(): void
     {
         if (! $this->attachment || ! $this->mimeTypeImage($this->attachment->file_type ?? '')) {
             return;
         }
 
-        $filePath = Eloquent::getFilePath($this->attachment->file_dir);
-        if (! file_exists($filePath)) {
+        $dimensions = $this->getImageDimensions();
+
+        if (! $dimensions) {
             return;
         }
 
-        [$width, $height, $type] = GraphicDraw::getimagesize($filePath);
-
-        if ($type) {
-            $this->scaleWidth = $width;
-            $this->scaleHeight = $height;
-        }
+        $this->fitWidth = $dimensions['width'];
+        $this->fitHeight = $dimensions['height'];
+        $this->cropWidth = $dimensions['width'];
+        $this->cropHeight = $dimensions['height'];
     }
 
     protected function refreshWorkingCopy(): void
@@ -114,6 +115,8 @@ new class extends Component
         $this->editHistory = [];
         $this->selectedForm = '';
 
+        $this->fillEditorProperties();
+
         $this->dispatch(BrowserEvents::FORM_EDITOR_SAVED->value);
     }
 
@@ -136,7 +139,7 @@ new class extends Component
 
         $this->editVersion++;
 
-        $this->initializeScaleDimensions();
+        $this->initializeEditorDimensions();
 
         $this->dispatch(BrowserEvents::EDITOR_ATTACHMENT_UPDATED->value, id: $this->attachment->getId(), version: $this->editVersion);
     }
@@ -179,6 +182,29 @@ new class extends Component
                     </div>
                 @endif
 
+                @if($selectedForm == 'image-fit')
+                    <x-mediable::form-select
+                        label="Fit mode"
+                        id="fitMode"
+                        :options="$this->getFitModes()"
+                        wire:model.live="fitMode"
+                    />
+                    <x-mediable::form-input label="Width" id="fitWidth" type="number" min="1" wire:model.live.debounce.500ms="fitWidth" />
+                    <x-mediable::form-input label="Height" id="fitHeight" type="number" min="1" wire:model.live.debounce.500ms="fitHeight" />
+                    @if($fitMode == 'contain')
+                        <x-mediable::form-input label="Background color" id="fitBackground" type="color" wire:model="fitBackground" />
+                    @endif
+                    <x-mediable::form-actions action="fitImage" target="fitImage" :showHistory="count($editHistory) > 0" />
+                @endif
+
+                @if($selectedForm == 'image-crop')
+                    <x-mediable::form-input label="X coordinate" id="cropX" type="number" wire:model="cropX" />
+                    <x-mediable::form-input label="Y coordinate" id="cropY" type="number" wire:model="cropY" />
+                    <x-mediable::form-input label="Width" id="cropWidth" type="number" min="1" wire:model="cropWidth" />
+                    <x-mediable::form-input label="Height" id="cropHeight" type="number" min="1" wire:model="cropHeight" />
+                    <x-mediable::form-actions action="cropImage" target="cropImage" :showHistory="count($editHistory) > 0" />
+                @endif
+
                 @if($selectedForm == 'image-flip')
                     <x-mediable::form-select
                         label="Image flip"
@@ -190,18 +216,17 @@ new class extends Component
                     <x-mediable::form-actions action="flipImage" target="flipImage" :showHistory="count($editHistory) > 0" />
                 @endif
 
-                @if($selectedForm == 'image-scale')
-                    <x-mediable::form-select
-                        label="Scale mode"
-                        id="scaleMode"
-                        placeholder="Scale modes"
-                        :options="$this->getScaleModes()"
-                        wire:model="scaleMode"
-                        wire:change="scaleImage"
-                    />
-                    <x-mediable::form-input label="Width" id="scaleWidth" type="number" wire:model.live.debounce.500ms="scaleWidth" />
-                    <x-mediable::form-input label="Height" id="scaleHeight" type="number" wire:model.live.debounce.500ms="scaleHeight" />
-                    <x-mediable::form-actions action="scaleImage" target="scaleImage" :showHistory="count($editHistory) > 0" />
+                @if($selectedForm == 'image-rotate')
+                    <x-mediable::form-input label="Rotation (degrees)" id="rotateAngle" type="range" wire:model="rotateAngle" min="0" max="360" />
+                    <x-mediable::form-input label="Background color" id="rotateBgColor" type="color" wire:model="rotateBgColor" />
+                    <x-mediable::form-actions action="rotateImage" target="rotateImage" :showHistory="count($editHistory) > 0" />
+                @endif
+
+                @if($selectedForm == 'image-orient')
+                    <p class="mb-1 w-full text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+                        Rotates the image upright using the orientation recorded in its EXIF data.
+                    </p>
+                    <x-mediable::form-actions action="orientImage" target="orientImage" :showHistory="count($editHistory) > 0" />
                 @endif
 
                 @if($selectedForm == 'image-filter')
@@ -212,37 +237,30 @@ new class extends Component
                         :options="$this->getFilterModes()"
                         wire:model.live="filterMode"
                     />
-                    @if($filterMode == IMG_FILTER_CONTRAST)
-                        <x-mediable::form-input label="Contrast" id="contrast" type="number" wire:model="contrast" min="-100" max="100" step="1" />
+                    @if($filterMode == 'brightness')
+                        <x-mediable::form-input label="Brightness" id="brightness" type="range" wire:model="brightness" min="-100" max="100" step="1" />
                     @endif
-                    @if($filterMode == IMG_FILTER_BRIGHTNESS)
-                        <x-mediable::form-input label="Brightness" id="brightness" type="number" wire:model="brightness" min="-255" max="255" step="1" />
+                    @if($filterMode == 'contrast')
+                        <x-mediable::form-input label="Contrast" id="contrast" type="range" wire:model="contrast" min="-100" max="100" step="1" />
                     @endif
-                    @if($filterMode == IMG_FILTER_COLORIZE)
-                        <x-mediable::form-input label="Colorize color" id="colorize" type="color" wire:model="colorize" />
+                    @if($filterMode == 'colorize')
+                        <x-mediable::form-input label="Red" id="colorizeRed" type="range" wire:model="colorizeRed" min="-100" max="100" step="1" />
+                        <x-mediable::form-input label="Green" id="colorizeGreen" type="range" wire:model="colorizeGreen" min="-100" max="100" step="1" />
+                        <x-mediable::form-input label="Blue" id="colorizeBlue" type="range" wire:model="colorizeBlue" min="-100" max="100" step="1" />
                     @endif
-                    @if($filterMode == IMG_FILTER_SMOOTH)
-                        <x-mediable::form-input label="Smooth level" id="smoothLevel" type="number" wire:model="smoothLevel" min="-10" max="10" step="1" />
+                    @if($filterMode == 'gamma')
+                        <x-mediable::form-input label="Gamma" id="gamma" type="number" wire:model="gamma" min="0.1" max="10" step="0.1" />
                     @endif
-                    @if($filterMode == IMG_FILTER_PIXELATE)
-                        <x-mediable::form-input label="Pixelate block size" id="pixelateBlockSize" type="number" wire:model="pixelateBlockSize" min="1" step="1" />
+                    @if($filterMode == 'blur')
+                        <x-mediable::form-input label="Blur amount" id="blurAmount" type="range" wire:model="blurAmount" min="1" max="100" step="1" />
+                    @endif
+                    @if($filterMode == 'sharpen')
+                        <x-mediable::form-input label="Sharpen amount" id="sharpenAmount" type="range" wire:model="sharpenAmount" min="1" max="100" step="1" />
+                    @endif
+                    @if($filterMode == 'pixelate')
+                        <x-mediable::form-input label="Pixelate block size" id="pixelateSize" type="number" wire:model="pixelateSize" min="1" step="1" />
                     @endif
                     <x-mediable::form-actions action="filterImage" target="filterImage" :showHistory="count($editHistory) > 0" />
-                @endif
-
-                @if($selectedForm == 'image-rotate')
-                    <x-mediable::form-input label="Rotation (degrees)" id="rotateAngle" type="range" wire:model="rotateAngle" min="0" max="360" />
-                    <x-mediable::form-input label="Background color" id="rotateBgColor" type="color" wire:model="rotateBgColor" />
-                    <x-mediable::form-checkbox label="Ignore transparent" id="rotateIgnoreTransparent" wire:model="rotateIgnoreTransparent" />
-                    <x-mediable::form-actions action="rotateImage" target="rotateImage" :showHistory="count($editHistory) > 0" />
-                @endif
-
-                @if($selectedForm == 'image-crop')
-                    <x-mediable::form-input label="X coordinate" id="cropX" type="number" wire:model="cropX" />
-                    <x-mediable::form-input label="Y coordinate" id="cropY" type="number" wire:model="cropY" />
-                    <x-mediable::form-input label="Width" id="cropWidth" type="number" wire:model="cropWidth" />
-                    <x-mediable::form-input label="Height" id="cropHeight" type="number" wire:model="cropHeight" />
-                    <x-mediable::form-actions action="cropImage" target="cropImage" :showHistory="count($editHistory) > 0" />
                 @endif
 
                 @if($selectedForm == 'image-text')
@@ -254,10 +272,24 @@ new class extends Component
                         :options="$this->buildFontList()"
                         wire:model="imageFont"
                     />
-                    <x-mediable::form-input label="Font size" id="imageFontSize" type="text" wire:model="imageFontSize" />
+                    <x-mediable::form-input label="Font size" id="imageFontSize" type="number" min="1" step="1" wire:model="imageFontSize" />
                     <x-mediable::form-input label="Font color" id="imageTextColor" type="color" wire:model="imageTextColor" />
                     <x-mediable::form-input label="Font angle" id="imageTextAngle" type="range" wire:model="imageTextAngle" min="0" max="360" />
                     <x-mediable::form-actions action="addText" target="addText" :showHistory="count($editHistory) > 0" />
+                @endif
+
+                @if($selectedForm == 'image-convert')
+                    <x-mediable::form-select
+                        label="Convert to"
+                        id="convertFormat"
+                        :options="$this->getFormats()"
+                        wire:model.live="convertFormat"
+                    />
+                    <x-mediable::form-input label="Quality ({{ $convertQuality }})" id="convertQuality" type="range" wire:model.live="convertQuality" min="1" max="100" step="1" />
+                    <p class="mb-1 w-full text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+                        Re-encodes the working copy as {{ $this->getFormats()[$convertFormat] ?? $convertFormat }}, replacing the file it was made from.
+                    </p>
+                    <x-mediable::form-actions action="convertImage" target="convertImage" :showHistory="count($editHistory) > 0" />
                 @endif
 
             </div>
