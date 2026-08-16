@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/tomshaw/mediable/compare/v1.7.0...v1.8.0) (2026-08-16)
+
+
+### Features
+
+* Implement image editing capabilities with transformations ([c0effa8](https://github.com/tomshaw/mediable/commit/c0effa854689ac2bd5edf3b85cfca134ea8b1faa))
+
 ## [1.7.0](https://github.com/tomshaw/mediable/compare/v1.6.0...v1.7.0) (2026-08-12)
 
 
